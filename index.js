@@ -18,7 +18,7 @@ const login = require("./src/routes/loginrouter");
 app.use("/login", login);
 
 app.get("/", (req, res) => {
-  res.send("Hello india");
+  res.send("Try");
 });
 
 app.listen(PORT, (err) => {
