@@ -8,11 +8,9 @@ app.use("/static", express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 mongoose.set("strictQuery", true);
+const connectDB = require("./src/config/db");
 
-mongoose
-  .connect("mongodb://localhost:27017/testevent")
-  .then((res) => console.log("MongoDB Connected"))
-  .catch((err) => console.log("Error : " + err));
+connectDB();
 
 const login = require("./src/routes/loginrouter");
 app.use("/login", login);
