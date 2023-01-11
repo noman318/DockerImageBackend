@@ -4,16 +4,13 @@ const env = require("dotenv").config();
 const PORT = process.env.PORT;
 const path = require("path");
 const mongoose = require("mongoose");
-app.use("/static", express.static(path.join(__dirname, "public")));
+app.use("/static", express.static(path.join(__dirname, "uploads")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 mongoose.set("strictQuery", true);
-const connectDB = require("./src/config/db");
+const connectDB = require("./src/utils/db");
 
 connectDB();
-
-const login = require("./src/routes/loginrouter");
-app.use("/login", login);
 
 app.get("/", (req, res) => {
   res.send("Try");
