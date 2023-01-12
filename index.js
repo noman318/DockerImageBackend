@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const env = require("dotenv").config();
-const PORT = process.env.PORT;
+const PORT = 9000;
 const path = require("path");
 const mongoose = require("mongoose");
 app.use("/static", express.static(path.join(__dirname, "uploads")));
