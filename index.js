@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const env = require("dotenv").config();
-const PORT = 9000;
+const PORT = process.env.PORT;
 const path = require("path");
 const mongoose = require("mongoose");
 app.use("/static", express.static(path.join(__dirname, "uploads")));
@@ -12,9 +12,8 @@ const connectDB = require("./src/utils/db");
 
 connectDB();
 
-app.get("/", (req, res) => {
-  res.send("Try");
-});
+const userRoute = require("./src/routes/loginrouter");
+app.use("/", userRoute);
 
 app.listen(PORT, (err) => {
   if (err) throw err;
