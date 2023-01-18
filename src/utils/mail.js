@@ -1,6 +1,8 @@
 const nodemailer = require("nodemailer");
+const { errormsg } = require("./error");
+const { successmsg } = require("./success");
 
-function mymail(req, res, email) {
+async function sendMailer(email) {
   let mailTransporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -15,12 +17,6 @@ function mymail(req, res, email) {
     subject: "Reset Password Link",
     html: " <p> <a href='http://localhost:3000/changepasswordscreen'>Click Here </a> </p>",
   };
-  mailTransporter.sendMail(mailDetails, function (err, data) {
-    if (err) {
-      res.json("Error Occurs");
-    } else {
-      res.json("Email sent successfully");
-    }
-  });
+  return await mailTransporter.sendMail(mailDetails);
 }
-module.exports = { mymail };
+module.exports = { sendMailer };

@@ -1,35 +1,40 @@
 const User = require("../model/User");
-const { authHandler } = require("./authservice");
+const { authService } = require("./authservice");
+const { errormsg } = require("../utils/error");
+const { successmsg } = require("../utils/success");
 
-const userhandler = {
+const userService = {
   finduser: async function (email) {
-    let userdata = await User.findOne({ email: email });
-    if (userdata) return userdata;
-    else
-      return { msg: "Try any other email, this email is already registered!" };
+    const userdata = User.findOne({ email });
+    if (userdata) {
+      return userdata;
+    }
+    return false;
   },
+
   usercreate: async function (data) {
     const userdata = await User.create(data);
     if (userdata) return userdata;
-    else return false;
+    return false;
   },
 
   signup: async function (data) {
     const userdata = await this.finduser(data.email);
     if (userdata) {
-      return res.json({
-        err: "1",
-        msg: "Try any other email, this email is already registered!",
-      });
+      const msg = "Try any other email, this email is already registered!";
+      return errormsg(msg);
     }
     try {
-      const userdata = await this.usercreate(data);
-      await authHandler.authCreate(userdata, data.password);
-      return res.json({ err: 0, msg: "User Registered" });
+      const userdata1 = await this.usercreate(data);
+      const authData = await authService.authCreate(userdata1, data.password);
+      if (authData) {
+        const msg = "User Registered";
+        return successmsg(msg);
+      }
     } catch (err) {
-      res.status(400).json(err.message);
+      return errormsg(err.message);
     }
   },
 };
 
-module.exports = { userhandler };
+module.exports = { userService };

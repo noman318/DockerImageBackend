@@ -2,13 +2,29 @@ const express = require("express");
 const router = express.Router();
 const {
   userValidationRules,
+  loginValidationRules,
+  resetValidationRules,
+  changepassValidationRules,
   validate,
-} = require("../middleware/signupvalidation");
-const { signUp, signIn } = require("../controller/authController");
-const { resetpassword } = require("../controller/resetpassword");
-const { changepassword } = require("../controller/changepassword");
+} = require("../middleware/formvalidation");
+const {
+  signUp,
+  signIn,
+  resetpassword,
+  changepassword,
+} = require("../controller/authController");
 router.post("/api/signup", userValidationRules(), validate, signUp);
-router.post("/api/signin", signIn);
-router.post("/api/resetpassword", resetpassword);
-router.post("/api/changepassword", changepassword);
+router.post("/api/signin", loginValidationRules(), validate, signIn);
+router.post(
+  "/api/resetpassword",
+  resetValidationRules(),
+  validate,
+  resetpassword
+);
+router.post(
+  "/api/changepassword",
+  changepassValidationRules(),
+  validate,
+  changepassword
+);
 module.exports = router;
