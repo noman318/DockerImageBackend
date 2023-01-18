@@ -1,5 +1,5 @@
-const errormsg = function (msg) {
-  error = { err: 1, errmsg: msg };
+const errormsg = function (msg, code) {
+  error = { statuscode: code, err: 1, errmsg: msg };
   return error;
 };
 module.exports = { errormsg };

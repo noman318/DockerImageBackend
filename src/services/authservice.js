@@ -63,7 +63,7 @@ const authService = {
       );
       if (!validPassword) {
         const msg = "Invalid Credentials!";
-        return errormsg(msg);
+        return errormsg(msg, 401);
       } else {
         try {
           const user = await this.authpopulate(userdata.email);
@@ -82,7 +82,7 @@ const authService = {
       }
     } else {
       const msg = "This email has not been registered!";
-      return errormsg(msg);
+      return errormsg(msg, 204);
     }
   },
 
@@ -101,7 +101,7 @@ const authService = {
       }
     } else {
       const msg = "This email has not been registered!";
-      return errormsg(msg);
+      return errormsg(msg, 204);
     }
   },
 
@@ -115,7 +115,7 @@ const authService = {
         );
         if (!validPassword) {
           const msg = "Invalid Credentials!";
-          return errormsg(msg);
+          return errormsg(msg, 203);
         } else {
           const hashpass = passWord.encpass(userdata.newpass);
           await this.authupdateone(userdata.id, hashpass);
@@ -124,7 +124,7 @@ const authService = {
         }
       } else {
         const msg = "id does not exist";
-        return errormsg(msg);
+        return errormsg(msg, 204);
       }
     } catch (err) {
       return errormsg(err.message);

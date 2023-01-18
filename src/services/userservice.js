@@ -22,7 +22,7 @@ const userService = {
     const userdata = await this.finduser(data.email);
     if (userdata) {
       const msg = "Try any other email, this email is already registered!";
-      return errormsg(msg);
+      return errormsg(msg, 409);
     }
     try {
       const userdata1 = await this.usercreate(data);
