@@ -6,7 +6,7 @@ const jwtvalidate=()=>{
             let token=req.headers.authorization.split(' ')[1];
             jwt.verify(token,process.env.SECRET_KEY,(err,decode)=>{
                 if(err){
-                    res.send("wrong token")
+                    res.json("wrong token")
                 }
                 else{
                     next();
@@ -16,7 +16,7 @@ const jwtvalidate=()=>{
         else{
             res.status(400).json({
                 error:1,
-                msg:"Pls Provide token"
+                msg:"Please Provide token"
             });
         }
     }
