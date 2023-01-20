@@ -1,14 +1,11 @@
 const mongoose = require("mongoose");
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(
-      "mongodb+srv://neosoft:neosoft@cluster0.zjt3olv.mongodb.net/test",
-      {
-        useUnifiedTopology: true,
-        useNewUrlParser: true,
-        // useCreateIndex: true,
-      }
-    );
+    const conn = await mongoose.connect(process.env.MONGODBCON, {
+      useUnifiedTopology: true,
+      useNewUrlParser: true,
+      // useCreateIndex: true,
+    });
 
     console.log(`MongoDB Connected: ${conn.connection.host}`);
   } catch (error) {
