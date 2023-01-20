@@ -1,21 +1,30 @@
 const nodemailer = require("nodemailer");
-const { errormsg } = require("./error");
-const { successmsg } = require("./success");
-
-async function sendMailer(email) {
+const hbs = require("nodemailer-express-handlebars");
+async function sendMailer(email, resetToken, sub, temp, uId) {
   let mailTransporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-      user: "galineelam10@gmail.com",
-      pass: "swfhmwfdmqnzvkqx",
+      user: process.env.EMAIL,
+      pass: process.env.PASSWORD,
     },
   });
+  mailTransporter.use(
+    "compile",
+    hbs({
+      viewEngine: "nodemailer-express-handlebars",
+      viewPath: "src/views/Templates/",
+    })
+  );
 
   let mailDetails = {
-    from: "galineelam10@gmail.com",
+    from: process.env.EMAIL,
     to: email,
-    subject: "Reset Password Link",
-    html: " <p> <a href='http://localhost:3000/changepasswordscreen'>Click Here </a> </p>",
+    subject: sub,
+    template: temp,
+    context: {
+      token: resetToken,
+      id: uId,
+    },
   };
   return await mailTransporter.sendMail(mailDetails);
 }

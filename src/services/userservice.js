@@ -1,38 +1,47 @@
 const User = require("../model/User");
-const { authService } = require("./authservice");
-const { errormsg } = require("../utils/error");
-const { successmsg } = require("../utils/success");
+const { authService } = require("./authService");
+const { errorMsg } = require("../utils/error");
+const { successMsg } = require("../utils/success");
 
 const userService = {
-  finduser: async function (email) {
-    const userdata = User.findOne({ email });
-    if (userdata) {
-      return userdata;
+  findUser: async function (email) {
+    const userData = User.findOne({ email });
+    if (userData) {
+      return userData;
     }
     return false;
   },
 
-  usercreate: async function (data) {
-    const userdata = await User.create(data);
-    if (userdata) return userdata;
+  userCreate: async function (data) {
+    const userData = await User.create(data);
+    if (userData) return userData;
     return false;
   },
 
-  signup: async function (data) {
-    const userdata = await this.finduser(data.email);
-    if (userdata) {
+  userfindOneAndDelete: async function (email) {
+    const userData = User.findOneAndDelete(email);
+    if (userData) return userData;
+    return false;
+  },
+
+  signUp: async function (data) {
+    const userData = await authService.authFindOne(data.email);
+    if (userData) {
       const msg = "Try any other email, this email is already registered!";
-      return errormsg(msg, 409);
+      return errorMsg(msg, 409);
     }
     try {
-      const userdata1 = await this.usercreate(data);
-      const authData = await authService.authCreate(userdata1, data.password);
+      const userData1 = await this.userCreate(data);
+      const authData = await authService.authCreate(userData1, data.password);
       if (authData) {
         const msg = "User Registered";
-        return successmsg(msg);
+        return successMsg(msg);
+      } else {
+        await this.userDelete(data.email);
+        return errorMsg("Data is not saved in Db", 204);
       }
     } catch (err) {
-      return errormsg(err.message);
+      return errorMsg(err.message);
     }
   },
 };

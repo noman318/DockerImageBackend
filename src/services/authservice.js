@@ -1,34 +1,35 @@
 const Auth = require("../model/Auth");
 const { passWord } = require("../utils/passwords");
-const { errormsg } = require("../utils/error");
-const { successmsg } = require("../utils/success");
+const { errorMsg } = require("../utils/error");
+const { successMsg } = require("../utils/success");
 const { authToken } = require("../middleware/authMiddleware");
 const { sendMailer } = require("../utils/mail");
+const crypto = require("crypto");
 
 const authService = {
-  authCreate: async function (userdata, upassword) {
-    const pass = passWord.encpass(upassword);
+  authCreate: async function (userData, upassword) {
+    const pass = passWord.encruptPassword(upassword);
     const authUser = await Auth.create({
-      userid: userdata._id,
-      email: userdata.email,
+      userId: userData._id,
+      email: userData.email,
       password: pass,
     });
     return authUser;
   },
 
-  authfindone: async function (email) {
+  authFindOne: async function (email) {
     let user = Auth.findOne({ email });
     if (user) return user;
     return false;
   },
 
-  authpopulate: async function (email) {
-    const user = Auth.findOne({ email }).populate("userid");
+  authPopulate: async function (email) {
+    const user = Auth.findOne({ email }).populate("userId");
     if (user) return user;
     return false;
   },
 
-  authfindoneupdate: async function (email, token) {
+  authFindOneUpdate: async function (email, token) {
     const user = Auth.findOneAndUpdate(
       { email },
       { $set: { token } },
@@ -38,13 +39,13 @@ const authService = {
     return false;
   },
 
-  authfindbyid: async function (id) {
+  authFindById: async function (id) {
     const user = Auth.findById(id);
     if (user) return user;
     return false;
   },
 
-  authupdateone: async function (id, hash) {
+  authUpdateOne: async function (id, hash) {
     const user = Auth.updateOne(
       { _id: id },
       { $set: { password: hash } },
@@ -54,80 +55,86 @@ const authService = {
     return false;
   },
 
-  signin: async function (userdata) {
-    const user = await this.authfindone(userdata.email);
+  signIn: async function (userData) {
+    const user = await this.authFindOne(userData.email);
     if (user) {
-      const validPassword = await passWord.decruptpass(
-        userdata.password,
+      const validPassword = await passWord.decruptPassword(
+        userData.password,
         user.password
       );
       if (!validPassword) {
         const msg = "Invalid Credentials!";
-        return errormsg(msg, 401);
+        return errorMsg(msg, 401);
       } else {
         try {
-          const user = await this.authpopulate(userdata.email);
+          const user = await this.authPopulate(userData.email);
           const token = await authToken.jwtToken(user);
-          await this.authfindoneupdate(userdata.email, token);
+          await this.authFindOneUpdate(userData.email, token);
           const data = {
             email: user.email,
             isAuthenticated: true,
             token: token,
           };
-          const msg = "successful";
-          return successmsg(msg, data);
+          return successMsg("successful", data);
         } catch (err) {
-          return errormsg(err.message);
+          return errorMsg(err.message);
         }
       }
     } else {
       const msg = "This email has not been registered!";
-      return errormsg(msg, 204);
+      return errorMsg(msg, 204);
     }
   },
 
-  resetpassword: async function (userdata) {
-    const user = await this.authfindone(userdata.email);
+  resetPassword: async function (userData) {
+    const user = await this.authFindOne(userData.email);
     if (user) {
       try {
-        const m1 = await sendMailer(userdata.email);
+        let resetToken = crypto.randomBytes(32).toString("hex");
+        const m1 = await sendMailer(
+          userData.email,
+          resetToken,
+          "Reset Password Link",
+          "resetMail",
+          userData._id
+        );
 
         if (m1) {
           const msg = "mail sent";
-          return successmsg(msg);
+          return successMsg(msg);
         }
       } catch (err) {
-        return errormsg(err.message);
+        return errorMsg(err.message);
       }
     } else {
       const msg = "This email has not been registered!";
-      return errormsg(msg, 204);
+      return errorMsg(msg, 204);
     }
   },
 
-  changepassword: async function (userdata) {
+  changePassword: async function (userData) {
     try {
-      const user = await this.authfindbyid(userdata.id);
+      const user = await this.authFindById(userData.id);
       if (user) {
-        const validPassword = await passWord.decruptpass(
-          userdata.oldpass,
+        const validPassword = await passWord.decruptPassword(
+          userData.oldPassword,
           user.password
         );
         if (!validPassword) {
           const msg = "Invalid Credentials!";
-          return errormsg(msg, 203);
+          return errorMsg(msg, 203);
         } else {
-          const hashpass = passWord.encpass(userdata.newpass);
-          await this.authupdateone(userdata.id, hashpass);
+          const hashPass = passWord.encruptPassword(userData.newPassword);
+          await this.authUpdateOne(userData.id, hashPass);
           const msg = "changed successful";
-          return successmsg(msg);
+          return successMsg(msg);
         }
       } else {
         const msg = "id does not exist";
-        return errormsg(msg, 204);
+        return errorMsg(msg, 204);
       }
     } catch (err) {
-      return errormsg(err.message);
+      return errorMsg(err.message);
     }
   },
 };

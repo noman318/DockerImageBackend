@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const userSchema = new mongoose.Schema({
-  firstname: {
+  firstName: {
     type: String,
     required: true,
     maxlength: 100,
@@ -10,16 +10,16 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  lastname: {
+  lastName: {
     type: String,
     required: true,
     maxlength: 100,
   },
-  mobilenumber: {
+  mobileNumber: {
     type: Number,
     required: true,
   },
-  username: {
+  userName: {
     type: String,
     unique: true,
     required: true,

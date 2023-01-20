@@ -1,11 +1,11 @@
 const { body, validationResult } = require("express-validator");
 const userValidationRules = () => {
   return [
-    body("firstname").exists().withMessage("firstname is missing"),
+    body("firstName").exists().withMessage("firstname is missing"),
     body("email").exists().withMessage("email is missing"),
-    body("lastname").exists().withMessage("lastname is missing"),
-    body("mobilenumber").exists().withMessage("mobilenumber is missing"),
-    body("username").exists().withMessage("username is missing"),
+    body("lastName").exists().withMessage("lastname is missing"),
+    body("mobileNumber").exists().withMessage("mobilenumber is missing"),
+    body("userName").exists().withMessage("username is missing"),
     body("password").exists().withMessage("password is missing"),
     body("location").exists().withMessage("location is missing"),
   ];
@@ -21,8 +21,8 @@ const resetValidationRules = () => {
 };
 const changepassValidationRules = () => {
   return [
-    body("oldpass").exists().withMessage("oldpass is missing"),
-    body("newpass").exists().withMessage("newpass is missing"),
+    body("oldPassword").exists().withMessage("oldpassword is missing"),
+    body("newPassword").exists().withMessage("newpassword is missing"),
     body("id").exists().withMessage("id is missing"),
   ];
 };
@@ -41,11 +41,12 @@ const validate = (req, res, next) => {
     errors: extractedErrors,
   });
 };
-
-module.exports = {
+const formValidation = {
   userValidationRules,
   validate,
   loginValidationRules,
   resetValidationRules,
   changepassValidationRules,
 };
+
+module.exports = { formValidation };

@@ -1,13 +1,13 @@
 const bcrypt = require("bcrypt");
 
 const passWord = {
-  encpass: function (pass) {
+  encruptPassword: function (pass) {
     const hash = bcrypt.hashSync(pass, Number(process.env.SALT_ROUNDS));
     return hash;
   },
-  decruptpass: function (oldpass, newpass) {
-    const isvalid = bcrypt.compare(oldpass, newpass);
-    return isvalid;
+  decruptPassword: function (oldPass, newPass) {
+    const isValid = bcrypt.compare(oldPass, newPass);
+    return isValid;
   },
 };
 module.exports = { passWord };

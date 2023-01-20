@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const authToken = {
-  jwtvalidate: function () {
+  jwtValidate: function () {
     return (req, res, next) => {
       if (
         req.headers &&
@@ -27,8 +27,8 @@ const authToken = {
   jwtToken: function (user) {
     return jwt.sign(
       {
-        _id: user.userid._id,
-        name: `${user.userid.firstname} ${user.userid.lastname}`,
+        _id: user.userId._id,
+        name: `${user.userId.firstName} ${user.userId.lastName}`,
       },
       process.env.SECRET_KEY,
       { expiresIn: "30days" }

@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const authSchema = new mongoose.Schema({
-  userid: {
+  userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",
   },
