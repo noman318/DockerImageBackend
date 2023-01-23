@@ -9,8 +9,7 @@ const connectDB = require('./src/utils/db');
 const jwtvalidate = require("./src/middleware/authMiddleware");
 const session = require("./src/middleware/sessionMiddleware");
 const seatRoute = require("./src/routes/eventBookingRouter");
-const userRoute = require("./src/routes/loginRouter");
-
+const  userRoute = require('./src/routes/loginRouter')
 const PORT = process.env.PORT;
 
 mongoose.set("strictQuery", true);
