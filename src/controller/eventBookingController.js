@@ -1,22 +1,27 @@
-const {createPaymentJsonService,executePaymentJsonService} = require("../services/paypalJsonService");
-const {createPayment,executePayment} = require("../services/paypalPaymentService");
+const { invoiceGenerator } = require("../services/invoiceGeneratorService");
+const { paymentInitiatorJson } = require("../services/paypalJsonService");
+const { paymentExecuter } = require("../services/paypalPaymentService");
+
 
 const seatArray = [
   {
     name: "1",
-    price: "2",
+    description: "S-1",
+    price: 2,
     currency: "USD",
     quantity: 1,
   },
   {
     name: "2",
-    price: "2",
+    description: "S-2",
+    price: 2,
     currency: "USD",
     quantity: 1,
   },
   {
     name: "3",
-    price: "2",
+    description: "S-3",
+    price: 2,
     currency: "USD",
     quantity: 1,
   },
@@ -36,7 +41,7 @@ const eventBooking = async (req, res) => {
     req.session.totalPrice = totalSum;
     console.log("req.session.totalPrice :>> ", req.session.totalPrice);
 
-    let data = createPaymentJsonService(
+    let data = paymentInitiatorJson.createPaymentJsonService(
       seatArray,
       `http://localhost:7899/success?total=${req.session.totalPrice}`,
       "http://localhost:7899/cancel",
@@ -45,7 +50,7 @@ const eventBooking = async (req, res) => {
 
     console.log(data);
 
-    createPayment(data, (payment) => {
+    paymentExecuter.createPayment(data, (payment) => {
       console.log("payment:", payment);
       return res.json(payment);
     });
@@ -64,10 +69,11 @@ const successEventBooking = (req, res) => {
     const payerId = req.query.PayerID;
     const paymentId = req.query.paymentId;
 
-    let data = executePaymentJsonService(payerId, totalAmount);
+    let data = paymentInitiatorJson.executePaymentJsonService(payerId, totalAmount);
     console.log(data);
 
-    executePayment(paymentId, data, (paypalResponse) => {
+    paymentExecuter.executePayment(paymentId, data, (paypalResponse) => {
+        invoiceGenerator(paypalResponse.paymentObject)
       return res.json(paypalResponse);
     });
   } catch (error) {
@@ -84,8 +90,12 @@ const failedEventBooking = (req, res) => {
   }
 };
 
+const eventBookingExecutor={eventBooking,successEventBooking,failedEventBooking,}
+
 module.exports = {
-  eventBooking,
-  successEventBooking,
-  failedEventBooking,
+  eventBookingExecutor
+};
+
+module.exports = {
+  eventBookingExecutor,
 };
