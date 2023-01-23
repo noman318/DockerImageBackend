@@ -1,7 +1,10 @@
 const paypal=require('paypal-rest-sdk');
-const { mode, client_id, client_secret } = require("../config/paypalConfig");
 
-paypal.configure({mode,client_id,client_secret})
+paypal.configure({
+    mode: process.env.PAYPAL_MODE,
+    client_id: process.env.PAYPAL_CLIENT,
+    client_secret: process.env.PAYPAL_SECRET
+});
 
 const createPayment=(data, callback)=>{
     /*
@@ -38,10 +41,11 @@ const executePayment=(paymentId,data,callback)=>{
                 console.log(error.response);
                 throw error;
             } else {
-                console.log(JSON.stringify(payment));
+                // console.log(JSON.stringify(payment));
+                console.log(payment);
                 if(payment.state=='approved'){
-                  console.log('Seat Book Kijye');
-                  callback({message:`Thanks for paying ${data.transactions[0].amount.total} USD`,paymentObject:payment})
+                    console.log('Seat Book Kijye');
+                    callback({message:`Thanks for paying ${data.transactions[0].amount.total} USD`,paymentObject:payment})
                 }
             }
         });
@@ -51,7 +55,8 @@ const executePayment=(paymentId,data,callback)=>{
     }
 }
 
+const paymentExecuter={createPayment,executePayment}
+
 module.exports={
-    createPayment,
-    executePayment
+   paymentExecuter 
 }

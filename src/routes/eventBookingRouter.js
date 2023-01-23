@@ -1,10 +1,10 @@
 const express=require('express');
-const { successEventBooking,eventBooking,failedEventBooking } = require("../controller/eventBookingController");
+const { eventBookingExecutor } = require('../controller/eventBookingController');
 
 const router=express.Router();
 
-router.post('/pay',eventBooking);
-router.get('/success',successEventBooking);
-router.get('/cancel',failedEventBooking);
+router.post('/pay',eventBookingExecutor.eventBooking);
+router.get('/success',eventBookingExecutor.successEventBooking);
+router.get('/cancel',eventBookingExecutor.failedEventBooking);
 
 module.exports=router;

@@ -31,4 +31,5 @@ const execute_payment_json = {
     }]
   };
 
-module.exports={create_payment_json,execute_payment_json}
+const paymentJson={create_payment_json,execute_payment_json}
+module.exports={paymentJson}
