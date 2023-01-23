@@ -99,9 +99,12 @@ let data = {
 
 
 const easyInvoiceJsonDataModifier=(paymentObject)=>{
-    console.log(data);
+    // console.log(data);
     data.information.number=paymentObject.id.split('-')[1]
     data.products=paymentObject.transactions[0].item_list.items
+    // for(let i in data.products){
+    //     data.products[i]="tax-rate"
+    // }
 
     console.log(data);
 

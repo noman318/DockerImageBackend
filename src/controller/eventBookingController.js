@@ -95,3 +95,7 @@ const eventBookingExecutor={eventBooking,successEventBooking,failedEventBooking,
 module.exports = {
   eventBookingExecutor
 };
+
+module.exports = {
+  eventBookingExecutor,
+};
