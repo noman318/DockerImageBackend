@@ -34,10 +34,5 @@ const execute_payment_json = {
   ],
 };
 
-<<<<<<< HEAD
-const paymentJson = { create_payment_json, execute_payment_json };
-module.exports = { paymentJson };
-=======
 const paymentJson={create_payment_json,execute_payment_json}
 module.exports={paymentJson}
->>>>>>> 6bf53bec919750cda2244eda43c5bd71ac6c0a9f

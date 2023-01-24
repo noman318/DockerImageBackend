@@ -1,6 +1,4 @@
 const eventModel = require("../model/EventModel");
-const endOfDay = require("date-fns/endOfDay");
-const startOfDay = require("date-fns/startOfDay");
 let currentDate = new Date();
 let start = new Date(
   currentDate.getFullYear(),
@@ -24,9 +22,6 @@ const eventHandler = {
       return eventModel
         .create({
           ...data,
-          startDate: startOfDay(new Date()),
-          endDate: endOfDay(new Date()),
-          futureDate: data.futureDate,
         })
         .then((res) => res)
         .catch((err) => err);
@@ -76,33 +71,92 @@ const eventHandler = {
       return { err: 1, msg: ex.message };
     }
   },
-  ongoingEvent: async function () {
-    try {
-      let data = await eventModel.find({
-        createdAt: { $gte: start, $lt: end },
-      });
-      console.log(data);
-      return data;
-    } catch (error) {
-      return { err: 1, msg: error.message };
+  ongoingEvent: async function (data) {
+    let { language, artist, location,genre,name,format} = data;
+    const filterObj = {};
+    if (language) {
+      {filterObj.language = language;}
     }
-  },
-  futureEvent: async function () {
-    try {
-      let data = await eventModel.find({
-        createdAt: { $gte:end },
-      });
-      console.log(data);
-      return data;
-    } catch (error) {
-      return { err: 1, msg: error.message };
+    if (name) {
+      filterObj.name = { $regex: name, $options: "i" };
     }
-  },
-  pastEvent: async function () {
+    if (artist) {
+      {
+        filterObj.artist = artist;
+      }
+    } 
+    if (location) {
+      {
+        console.log(location)
+        filterObj.location = location;
+      }
+    }
+    console.log(filterObj)
     try {
       let data = await eventModel.find(
-        { createdAt: { $lt: start },
-      });
+        {createdAt: { $gte: start },
+        future: false, ...filterObj}
+      );
+      return data;
+    } catch (error) {
+      return { err: 1, msg: error.message };
+    }
+  },
+  futureEvent: async function (data) {
+    let { language, artist, location,genre,name,format} = data;
+    const filterObj = {};
+    if (language) {
+      {filterObj.language = language;}
+    }
+    if (name) {
+      filterObj.name = { $regex: name, $options: "i" };
+    }
+    if (artist) {
+      {
+        filterObj.artist = artist;
+      }
+    } 
+    if (location) {
+      {
+        console.log(location)
+        filterObj.location = location;
+      }
+    }
+    console.log(filterObj)
+    try {
+      let data = await eventModel.find({
+        createdAt: { $gte: end },
+        future: true,
+        ...filterObj});
+      console.log(data);
+      return data;
+    } catch (error) {
+      return { err: 1, msg: error.message };
+    }
+  },
+  pastEvent: async function (data) {
+    let { language, artist, location,genre,name,format} = data;
+    const filterObj = {};
+    if (language) {
+      {filterObj.language = language;}
+    }
+    if (name) {
+      filterObj.name = { $regex: name, $options: "i" };
+    }
+    if (artist) {
+      {
+        filterObj.artist = artist;
+      }
+    } 
+    if (location) {
+      {
+        console.log(location)
+        filterObj.location = location;
+      }
+    }
+    console.log(filterObj)
+    try {
+      let data = await eventModel.find({ createdAt: { $lt: start },...filterObj});
       console.log(data);
       return data;
     } catch (error) {

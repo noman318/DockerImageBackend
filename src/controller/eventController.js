@@ -47,7 +47,8 @@ async function getById(req, res) {
   }
 }
 async function ongoingEvent(req,res){
-  let data = await eventHandler.ongoingEvent();
+  // console.log(req.body)
+  let data = await eventHandler.ongoingEvent(req.body);
   if (!data) {
     res.status(404).json({ err: 1, message: "Id is Wrong" });
   } else {
@@ -56,16 +57,16 @@ async function ongoingEvent(req,res){
   }
 }
 async function futureEvent(req,res){
-  let data = await eventHandler.futureEvent();
+  let data = await eventHandler.futureEvent(req.body);
   if (!data) {
-    res.status(404).json({ err: 1, message: "Id is Wrong" });
+    res.status(404).json({ err: 1, message: "Something went wrong" });
   } else {
     res.status(200).json(data);
     console.log(data);
   }
 }
 async function pastEvent(req,res){
-  let data=await eventHandler.pastEvent();
+  let data=await eventHandler.pastEvent(req.body);
   if (!data) {
     res.status(404).json({ err: 1, message: "Id is Wrong" });
   } else {
