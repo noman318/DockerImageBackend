@@ -4,9 +4,6 @@ const { authService } = require("../services/authService");
 async function signIn(req, res) {
   const userData = await authService.signIn(req.body);
   if (userData) {
-    req.session.userEmail=userData.data.email;
-    // console.log(userData.data.email)
-    // console.log('req.session.userEmail', req.session.userEmail)
     res.json(userData);
   } else {
     res.json("error");
@@ -14,7 +11,6 @@ async function signIn(req, res) {
 }
 
 async function signUp(req, res) {
-  console.log(req.session.userEmail)
   const userData = await userService.signUp(req.body);
   if (userData) {
     res.json(userData);

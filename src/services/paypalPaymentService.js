@@ -1,6 +1,4 @@
 const paypal = require("paypal-rest-sdk");
-const { myBooking } = require("../controller/BookingController");
-const BookingSchema = require("../model/BookingModel");
 const { deleteFile } = require("../utils/fileDeletion");
 const { invoiceDataModifier } = require("../utils/invoiceJsonData");
 const { sendMailer } = require("../utils/mail");

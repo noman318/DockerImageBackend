@@ -18,7 +18,6 @@ const bookingInformationHandler={
                 bookingData.seatDetails.push(item)
               }
               bookingData.save()
-            // return {err:0,paymentId:payment.id}
         } catch (error) {
             console.log(error);
         }
@@ -39,12 +38,9 @@ const bookingInformationHandler={
     getBookingInfoByUserIdAndEventId: async function(userId,eventId,page){
         try {
             const perPage=1;
-            page=Number(page)
-            // console.log('SKIP->perPage*page', Number(perPage*page))
-            // console.log('limit', perPage)
-            // const data=await BookingSchema.find({$and: [{userId: userId}, {eventId: eventId}]}).populate(["userId","eventId"]).skip(Number(perPage * page)).limit(Number(perPage))
+            console.log('SKIP->perPage*page', Number(perPage*page))
+            console.log('limit', perPage)
             const data=await BookingSchema.find({$and: [{userId: userId}, {eventId: eventId}]}).populate(["userId","eventId"]).skip(Number(perPage * page)).limit(Number(perPage))
-
             if(!data) return { err: 1, msg: `Event with id ${eventId} not found` };
             if(data) return { err: 0, data }
             else return false;
