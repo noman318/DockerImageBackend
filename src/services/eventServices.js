@@ -72,36 +72,45 @@ const eventHandler = {
     }
   },
   ongoingEvent: async function (data) {
-    let { language, artist, location,genre,name,format,price} = data;
-    // console.log({language})
+    let {filterlocation,filterartist,filterprice ,filterLanguage,name} = data;
+    console.log(filterLanguage);
     const filterObj = {};
-    if (language) {
-      {filterObj.language = language;}
+    const filterObjlocation = {};
+    const filterObjartist = {};
+    const filterObjprice = {};
+    // const filterObj = {};
+    if (filterLanguage!=="") {
+      // console.log(filterLanguage)
+      filterObj.language = filterLanguage;
     }
-    if (name) {
+   if (name) {
       filterObj.name = { $regex: name, $options: "i" };
     }
-    if (artist) {
+    if (filterartist!=="") {
       {
-        filterObj.artist = artist;
+        filterObjartist.artist = filterartist;
       }
     } 
-    if (location) {
+    if (filterlocation!=="") {
       {
-        console.log(location)
-        filterObj.location = location;
+        filterObjlocation.location = filterlocation;
       }
     }
-    if(price){
+    if(filterprice!==""){
+      console.log(filterprice)
       {
-        filterObj.price = price;
+        filterObjprice.price = filterprice;
       }
     }
     console.log(filterObj)
+    console.log(filterObjprice);
+    // console.log(filterObjartist);
+    // console.log(filterObjlocation);
+    // createdAt: { $gte: start },
+    //     future: false, 
     try {
       let data = await eventModel.find(
-        {createdAt: { $gte: start },
-        future: false, ...filterObj}
+        {...filterObj,...filterObjprice,...filterObjartist,...filterObjlocation}
       );
       return data;
     } catch (error) {

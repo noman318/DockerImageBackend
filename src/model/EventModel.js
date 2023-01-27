@@ -29,15 +29,6 @@ const eventSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
-    startDate: {
-      type: Date,
-    },
-    endDate: {
-      type: Date,
-    },
-    futureDate:{
-      type:String,
-    },
     price: {
       type: Number,
       required: true,
