@@ -72,7 +72,8 @@ const eventHandler = {
     }
   },
   ongoingEvent: async function (data) {
-    let { language, artist, location,genre,name,format} = data;
+    let { language, artist, location,genre,name,format,price} = data;
+    // console.log({language})
     const filterObj = {};
     if (language) {
       {filterObj.language = language;}
@@ -89,6 +90,11 @@ const eventHandler = {
       {
         console.log(location)
         filterObj.location = location;
+      }
+    }
+    if(price){
+      {
+        filterObj.price = price;
       }
     }
     console.log(filterObj)
@@ -164,5 +170,6 @@ const eventHandler = {
     }
   },
 };
-
+  //  CreatedAt:{gts:start,$lt:end}
+  {}
 module.exports = { eventHandler };
