@@ -1,4 +1,12 @@
 const paypal = require("paypal-rest-sdk");
+const { myBooking } = require("../controller/BookingController");
+const BookingSchema = require("../model/BookingModel");
+const { deleteFile } = require("../utils/fileDeletion");
+const { invoiceDataModifier } = require("../utils/invoiceJsonData");
+const { sendMailer } = require("../utils/mail");
+const { bookingInformationHandler } = require("./bookingService");
+const { createInvoice } = require("./invoiceGeneratorService");
+
 
 paypal.configure({
   mode: process.env.PAYPAL_MODE,
@@ -29,7 +37,7 @@ const createPayment = (data, callback) => {
   }
 };
 
-const executePayment = (paymentId, data, callback) => {
+const executePayment = (paymentId, data, userId, eventId, callback) => {
   /*
     @param paymentId: the ID of the payment to execute
     @param data: a JSON object containing the details of the execution, such as the payer ID and transaction amount
@@ -41,13 +49,23 @@ const executePayment = (paymentId, data, callback) => {
         throw error;
       } else {
         // console.log(JSON.stringify(payment));
+        payment.uid=userId
+        payment.eventId=eventId
         console.log(payment);
+        bookingInformationHandler.transactionsInfoStoring(payment)
         if (payment.state == "approved") {
           console.log("Seat Book Kijye");
+          let invoiceData=invoiceDataModifier(payment);
+          let fileName=payment.cart+".pdf"
           callback({
             message: `Thanks for paying ${data.transactions[0].amount.total} USD`,
             paymentObject: payment,
           });
+        
+          createInvoice(invoiceData,fileName);
+          sendMailer(null,null,"Regarding Invoice","invoiceMail",null,payment);
+          deleteFile(fileName)
+          bookingInformationHandler.bookingInfoStoring(payment)
         }
       }
     });

@@ -47,6 +47,8 @@ async function getById(req, res) {
   }
 }
 
+
+
 const eventController = {
   postDataAdmin,
   getDataEvent,

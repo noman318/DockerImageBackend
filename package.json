@@ -12,7 +12,9 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.0",
+    "connect-mongo": "^4.6.0",
     "cors": "^2.8.5",
+    "currency-converter-lt": "^2.0.0-beta.0",
     "date-fns": "^2.29.3",
     "dotenv": "^16.0.3",
     "easyinvoice": "^2.3.3",
@@ -28,6 +30,8 @@
     "nodemailer": "^6.8.0",
     "nodemailer-express-handlebars": "^6.0.0",
     "nodemon": "^2.0.20",
-    "paypal-rest-sdk": "^1.8.1"
+    "paypal-rest-sdk": "^1.8.1",
+    "pdfkit": "^0.13.0",
+    "timers": "^0.1.1"
   }
 }

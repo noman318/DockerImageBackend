@@ -58,14 +58,6 @@ const eventHandler = {
       return { err: 1, msg: ex.message };
     }
   },
-  //   pastData: async function() {
-  // try {
-  //   let dataEvent = await eventModel.find();
-  //   return dataEvent;
-  // } catch (ex) {
-  //   console.log(error);
-  // }
-  //   }
 };
 
 module.exports = { eventHandler };
