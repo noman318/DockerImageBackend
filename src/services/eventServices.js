@@ -73,45 +73,35 @@ const eventHandler = {
   },
   ongoingEvent: async function (data) {
     let {filterlocation,filterartist,filterprice ,filterLanguage,name} = data;
-    console.log(filterLanguage);
     const filterObj = {};
-    const filterObjlocation = {};
-    const filterObjartist = {};
-    const filterObjprice = {};
     // const filterObj = {};
-    if (filterLanguage!=="") {
-      // console.log(filterLanguage)
+    if (filterLanguage.length>0) {
       filterObj.language = filterLanguage;
     }
-   if (name) {
-      filterObj.name = { $regex: name, $options: "i" };
-    }
-    if (filterartist!=="") {
+    if (filterartist.length>0) {
       {
-        filterObjartist.artist = filterartist;
+        filterObj.artist = filterartist;
       }
     } 
-    if (filterlocation!=="") {
+    if (filterlocation.length>0) {
       {
-        filterObjlocation.location = filterlocation;
+        filterObj.location = filterlocation;
       }
     }
-    if(filterprice!==""){
-      console.log(filterprice)
+    if(filterprice.length>0){
+      // console.log(filterprice)
       {
-        filterObjprice.price = filterprice;
+        filterObj.price = filterprice;
       }
     }
+  // {createdAt: { $gte: start },
+  // future: false,...
     console.log(filterObj)
-    console.log(filterObjprice);
-    // console.log(filterObjartist);
-    // console.log(filterObjlocation);
-   
     try {
-      let data = await eventModel.find(
-        {createdAt: { $gte: start },
-        future: false}
+      let data = await eventModel.find({
+        createdAt: { $gte: start },future: false,...filterObj}
       );
+      console.log(data)
       return data;
     } catch (error) {
       return { err: 1, msg: error.message };
