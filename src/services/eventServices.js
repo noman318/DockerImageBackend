@@ -106,11 +106,11 @@ const eventHandler = {
     console.log(filterObjprice);
     // console.log(filterObjartist);
     // console.log(filterObjlocation);
-    // createdAt: { $gte: start },
-    //     future: false, 
+   
     try {
       let data = await eventModel.find(
-        {...filterObj,...filterObjprice,...filterObjartist,...filterObjlocation}
+        {createdAt: { $gte: start },
+        future: false}
       );
       return data;
     } catch (error) {

@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const { eventController } = require("../controller/eventController");
-router.post("/", eventController.postDataAdmin);
+const { eventsValidation } = require("../middleware/eventValidation");
+router.post("/",eventsValidation.eventValidation(),eventsValidation.validate,eventController.postDataAdmin);
 router.get("/api/getall", eventController.getDataEvent);
 router.put("/api/update/:id", eventController.updateEvent);
 router.delete("/api/delete/:id", eventController.deleteEvent);
