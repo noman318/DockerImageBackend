@@ -98,11 +98,11 @@ const failedEventBooking = (req, res) => {
   }
 };
 
-const eventBookingExecutor={eventBooking,successEventBooking,failedEventBooking,}
-
-module.exports = {
-  eventBookingExecutor
-};
+const eventBookingExecutor = {
+  eventBooking,
+  successEventBooking,
+  failedEventBooking,
+}
 
 module.exports = {
   eventBookingExecutor,

@@ -21,19 +21,11 @@ const eventSchema = new mongoose.Schema(
       type: String,
       // required:true
     },
+    future:{
+     type:Boolean,
+     default:false,
+    },
     artist: {
-      type: String,
-      required: false,
-    },
-    startDate: {
-      type: Date,
-      //   required:true
-    },
-    endDate: {
-      type: Date,
-      //   required:true
-    },
-    map: {
       type: String,
       required: false,
     },
