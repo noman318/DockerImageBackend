@@ -46,6 +46,34 @@ async function getById(req, res) {
     res.status(200).json(data);
   }
 }
+async function ongoingEvent(req,res){
+  // console.log(req.body)
+  let data = await eventHandler.ongoingEvent(req.body);
+  if (!data) {
+    res.status(404).json({ err: 1, message: "Something went wrong" });
+  } else {
+    res.status(200).json(data);
+    console.log(data);
+  }
+}
+async function futureEvent(req,res){
+  let data = await eventHandler.futureEvent(req.body);
+  if (!data) {
+    res.status(404).json({ err: 1, message: "Something went wrong" });
+  } else {
+    res.status(200).json(data);
+    console.log(data);
+  }
+}
+async function pastEvent(req,res){
+  let data=await eventHandler.pastEvent(req.body);
+  if (!data) {
+    res.status(404).json({ err: 1, message: "Something went wrong" });
+  } else {
+    res.status(200).json(data);
+    console.log(data);
+  }
+}
 
 const eventController = {
   postDataAdmin,
@@ -53,5 +81,8 @@ const eventController = {
   updateEvent,
   deleteEvent,
   getById,
+  ongoingEvent,
+  futureEvent,
+  pastEvent
 };
 module.exports = { eventController };
