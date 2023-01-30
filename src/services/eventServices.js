@@ -72,9 +72,11 @@ const eventHandler = {
     }
   },
   ongoingEvent: async function (data) {
-    let {filterlocation,filterartist,filterprice ,filterLanguage,name} = data;
+    let {filterlocation,filterartist,filterprice ,filterLanguage,page} = data;
     const filterObj = {};
     // const filterObj = {};
+    const perPage=10;
+    console.log(filterLanguage)
     if (filterLanguage.length>0) {
       filterObj.language = filterLanguage;
     }
@@ -94,13 +96,11 @@ const eventHandler = {
         filterObj.price = filterprice;
       }
     }
-  // {createdAt: { $gte: start },
-  // future: false,...
     console.log(filterObj)
     try {
       let data = await eventModel.find({
         createdAt: { $gte: start },future: false,...filterObj}
-      );
+      ).skip(Number(perPage * page)).limit(Number(perPage));
       console.log(data)
       return data;
     } catch (error) {
@@ -108,23 +108,26 @@ const eventHandler = {
     }
   },
   futureEvent: async function (data) {
-    let { language, artist, location,genre,name,format} = data;
+    let {filterlocation,filterartist,filterprice ,filterLanguage,page} = data;
+    const perPage=10;
     const filterObj = {};
-    if (language) {
-      {filterObj.language = language;}
+    if (filterLanguage.length>0) {
+      filterObj.language = filterLanguage;
     }
-    if (name) {
-      filterObj.name = { $regex: name, $options: "i" };
-    }
-    if (artist) {
+    if (filterartist.length>0) {
       {
-        filterObj.artist = artist;
+        filterObj.artist = filterartist;
       }
     } 
-    if (location) {
+    if (filterlocation.length>0) {
       {
-        console.log(location)
-        filterObj.location = location;
+        filterObj.location = filterlocation;
+      }
+    }
+    if(filterprice.length>0){
+      // console.log(filterprice)
+      {
+        filterObj.price = filterprice;
       }
     }
     console.log(filterObj)
@@ -132,7 +135,7 @@ const eventHandler = {
       let data = await eventModel.find({
         createdAt: { $gte: end },
         future: true,
-        ...filterObj});
+        ...filterObj}).skip(Number(perPage * page)).limit(Number(perPage));
       console.log(data);
       return data;
     } catch (error) {
@@ -140,28 +143,30 @@ const eventHandler = {
     }
   },
   pastEvent: async function (data) {
-    let { language, artist, location,genre,name,format} = data;
+    let {filterlocation,filterartist,filterprice ,filterLanguage,page} = data;
+    const perPage=10;
     const filterObj = {};
-    if (language) {
-      {filterObj.language = language;}
+    if (filterLanguage.length>0) {
+      filterObj.language = filterLanguage;
     }
-    if (name) {
-      filterObj.name = { $regex: name, $options: "i" };
-    }
-    if (artist) {
+    if (filterartist.length>0) {
       {
-        filterObj.artist = artist;
+        filterObj.artist = filterartist;
       }
     } 
-    if (location) {
+    if (filterlocation.length>0) {
       {
-        console.log(location)
-        filterObj.location = location;
+        filterObj.location = filterlocation;
       }
     }
-    console.log(filterObj)
+    if(filterprice.length>0){
+      // console.log(filterprice)
+      {
+        filterObj.price = filterprice;
+      }
+    }
     try {
-      let data = await eventModel.find({ createdAt: { $lt: start },...filterObj});
+      let data = await eventModel.find({ createdAt: { $lt: start },...filterObj}).skip(Number(perPage * page)).limit(Number(perPage));
       console.log(data);
       return data;
     } catch (error) {

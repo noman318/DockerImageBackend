@@ -1,4 +1,4 @@
-const { body, validationResult } = require("express-validator");
+const { body, validationResult ,check,param} = require("express-validator");
 const eventValidation = () => {
   return [
     body("threaterId").exists().withMessage("threaterId is missing"),
@@ -11,7 +11,35 @@ const eventValidation = () => {
     body("price").exists().withMessage("price is missing")
   ];
 };
-
+const updateValidation = () => {
+  return [
+    param("id").exists().withMessage("id is missing"),
+  ];
+};
+const onGoingValidation = () => {
+  return [
+    body("filterLanguage").optional(),
+    body("filterartist").optional(),
+    body("filterlocation").optional(),
+    body("filterprice").optional(),
+  ];
+};
+const futureValidation = () => {
+  return [
+    body("language").optional(),
+    body("price").optional(),
+    body("location").optional(),
+    body("artist").optional(),
+  ];
+};
+const pastValidation = () => {
+  return [
+    body("language").optional(),
+    body("price").optional(),
+    body("location").optional(),
+    body("artist").optional(),
+  ];
+};
 const validate = (req, res, next) => {
   const errors = validationResult(req);
   if (errors.isEmpty()) {
@@ -27,7 +55,11 @@ const validate = (req, res, next) => {
   });
 };
 const eventsValidation = {
+  updateValidation,
   eventValidation,
+  onGoingValidation,
+  futureValidation,
+  pastValidation,
   validate,
 };
 
