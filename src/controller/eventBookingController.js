@@ -1,5 +1,6 @@
 const { paymentInitiatorJson } = require("../services/paypalJsonService");
 const { paymentExecuter } = require("../services/paypalPaymentService");
+const paypalItemListTransformer = require("../utils/paypalItemListConverter");
 
 
 /*The eventBooking function handles the initial creation of a payment. It starts by calculating the total sum of the seats prices using a hardcoded array seatArray of seats. It then assigns this total sum to a session variable totalPrice.
@@ -36,11 +37,11 @@ const eventBooking = async (req, res) => {
     //     },
     //   ];
 
-    console.log('req.useremail',req.session.userEmail)
-      console.log('seatArray',  req.session.seats)
+    let seatData = paypalItemListTransformer(paymentData)
+    console.log('seatData', seatData)
     let totalSum = 0;
     console.log("totalSum", totalSum);
-    for (let data of paymentData) {
+    for (let data of seatData) {
       totalSum += parseInt(data.price);
     }
 
@@ -48,8 +49,8 @@ const eventBooking = async (req, res) => {
     console.log("req.session.totalPrice :>> ", req.session.totalPrice);
 
     let data = paymentInitiatorJson.createPaymentJsonService(
-      paymentData,
-      `http://localhost:7899/success?total=${req.session.totalPrice}`,
+      seatData,
+      `http://localhost:7899/success?total=${req.session.totalPrice}&uid=${paymentData[0].uid}&eventId=${paymentData[0].eventId}`,
       "http://localhost:7899/cancel",
       req.session.totalPrice
     );
@@ -75,8 +76,11 @@ const successEventBooking = (req, res) => {
     const totalAmount = req.query.total;
     const payerId = req.query.PayerID;
     const paymentId = req.query.paymentId;
-    const userId='63d0c3d5522b08bc5413e2f4'
-    const eventId='63ce8f6786522c2609cf81a5'
+    const userId = req.query.uid;
+    const eventId = req.query.eventId;
+
+    // const userId='63d0c3d5522b08bc5413e2f4'
+    // const eventId='63ce8f6786522c2609cf81a5'
     let data = paymentInitiatorJson.executePaymentJsonService(payerId, totalAmount);
     console.log(data);
 
