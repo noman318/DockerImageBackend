@@ -1,25 +1,200 @@
-const easyinvoice = require('easyinvoice');
-const fs=require('fs');
-const easyInvoiceJsonDataModifier = require('../utils/easyInvoiceJsonData');
-
-const invoiceGenerator=(payment,callback)=>{
-try {
-    let data=easyInvoiceJsonDataModifier(payment);
-    // console.log('data', data)
-    console.log('payment :>> ', payment.transactions[0]);
-    easyinvoice.createInvoice(data, function (result) {
-        /*  
-        The 'result' variable will contain our invoice as a base64 encoded PDF
-        Now let's save our invoice to our local filesystem so we can have a look!
-        We will be using the 'fs' library we imported above for this.
-        */
-        fs.writeFileSync("invoice.pdf", result.pdf, 'base64');
-    });
-    
-
-} catch (error) {
-    console.log(error);
-}
+const fs = require("fs");
+const PDFDocument = require("pdfkit");
+const conversionRate=0.01368
+function createInvoice(invoice, path) {
+  try {
+    path='./invoiceFiles/'+path
+    let doc = new PDFDocument({ size: "A4", margin: 50 });
+  
+    generateHeader(doc);
+    generateCustomerInformation(doc, invoice);
+    generateInvoiceTable(doc, invoice);
+    generateFooter(doc);
+  
+    doc.end();
+    doc.pipe(fs.createWriteStream(path));
+  }
+  catch (error) {
+    console.log(error)
+  }
 }
 
-module.exports={invoiceGenerator}
+function generateHeader(doc) {
+  doc
+    .image("./src/assets/soware_01.jpg", 50, 58, { width: 50 })
+    .fillColor("#444444")
+    .fontSize(20)
+    .text("Soware", 110, 57)
+    .fontSize(10)
+    .text("SOWARE INNOVATIONS.", 200, 50, { align: "right" })
+    .text("Meenattoor Railway Station Road", 200, 65, { align: "right" })
+    .text("Kochi, Kerala, 682024", 200, 80, { align: "right" })
+    .moveDown();
+}
+
+function generateCustomerInformation(doc, invoice) {
+  doc
+    .fillColor("#444444")
+    .fontSize(20)
+    .text("Invoice", 50, 160);
+
+  generateHr(doc, 185);
+
+  const customerInformationTop = 200;
+
+  doc
+    .fontSize(10)
+    .text("Invoice Number:", 50, customerInformationTop)
+    .font("Helvetica-Bold")
+    .text(invoice.invoice_nr, 150, customerInformationTop)
+    .font("Helvetica")
+    .text("Invoice Date:", 50, customerInformationTop + 15)
+    .text(formatDate(new Date()), 150, customerInformationTop + 15)
+    .text("Amount Paid:", 50, customerInformationTop + 30)
+    .text(
+      formatCurrency(invoice.subtotal - invoice.paid),
+      150,
+      customerInformationTop + 30
+    )
+
+    .font("Helvetica-Bold")
+    .text(invoice.shipping.name, 350, customerInformationTop)
+    .font("Helvetica")
+    .text(invoice.shipping.address, 350, customerInformationTop + 15)
+    .text(
+      invoice.shipping.city +
+        ", " +
+        invoice.shipping.state +
+        ", " +
+        invoice.shipping.country,
+        350,
+      customerInformationTop + 30
+    )
+    .moveDown();
+
+  generateHr(doc, 252);
+}
+
+function generateInvoiceTable(doc, invoice) {
+  let i;
+  const invoiceTableTop = 330;
+
+  doc.font("Helvetica-Bold");
+  generateTableRow(
+    doc,
+    invoiceTableTop,
+    "Item",
+    "Description",
+    "Unit Cost",
+    "Quantity",
+    "Line Total"
+  );
+  generateHr(doc, invoiceTableTop + 20);
+  doc.font("Helvetica");
+
+  for (i = 0; i < invoice.items.length; i++) {
+    const item = invoice.items[i];
+    const position = invoiceTableTop + (i + 1) * 30;
+    generateTableRow(
+      doc,
+      position,
+      item.name,
+      item.description,
+      formatCurrency(item.price / item.quantity),
+      item.quantity,
+      formatCurrency(item.price)
+    );
+
+    generateHr(doc, position + 20);
+  }
+
+  const subtotalPosition = invoiceTableTop + (i + 1) * 30;
+  generateTableRow(
+    doc,
+    subtotalPosition,
+    "",
+    "",
+    "Subtotal",
+    "",
+    formatCurrency(invoice.subtotal)
+  );
+
+  const paidToDatePosition = subtotalPosition + 20;
+  generateTableRow(
+    doc,
+    paidToDatePosition,
+    "",
+    "",
+    "Tax",//paid to total
+    "",
+    formatCurrency(invoice.paid)
+  );
+
+  const duePosition = paidToDatePosition + 25;
+  doc.font("Helvetica-Bold");
+  generateTableRow(
+    doc,
+    duePosition,
+    "",
+    "",
+    "Total Paid",//balance due
+    "",
+    formatCurrency(invoice.subtotal)
+  );
+  doc.font("Helvetica");
+}
+
+function generateFooter(doc) {
+  doc
+    .fontSize(10)
+    .text(
+      "Please Keep this Invoice",
+      50,
+      780,
+      { align: "center", width: 500 }
+    );
+}
+
+function generateTableRow(
+  doc,
+  y,
+  item,
+  description,
+  unitCost,
+  quantity,
+  lineTotal
+) {
+  doc
+    .fontSize(10)
+    .text(item, 50, y)
+    .text(description, 150, y)
+    .text(unitCost, 280, y, { width: 90, align: "right" })
+    .text(quantity, 370, y, { width: 90, align: "right" })
+    .text(lineTotal, 0, y, { align: "right" });
+}
+
+function generateHr(doc, y) {
+  doc
+    .strokeColor("#aaaaaa")
+    .lineWidth(1)
+    .moveTo(50, y)
+    .lineTo(550, y)
+    .stroke();
+}
+
+function formatCurrency(cents) {
+//   return "$" + (cents / 100).toFixed(2);
+    return "Rs. "+ Number(cents / conversionRate).toFixed(2);
+}
+
+function formatDate(date) {
+  const day = date.getDate();
+  const month = date.getMonth() + 1;
+  const year = date.getFullYear();
+
+  return day + "/" + month + "/" + year;
+}
+
+module.exports = {
+  createInvoice
+};

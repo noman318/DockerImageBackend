@@ -1,4 +1,3 @@
-const eventModel = require("../model/EventModel");
 const { eventHandler } = require("../services/eventServices");
 async function postDataAdmin(req, res) {
   let data = await eventHandler.PostData(req.body);
@@ -74,6 +73,8 @@ async function pastEvent(req,res){
     console.log(data);
   }
 }
+
+
 
 const eventController = {
   postDataAdmin,
