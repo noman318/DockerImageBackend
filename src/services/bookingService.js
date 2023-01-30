@@ -37,11 +37,7 @@ const bookingInformationHandler={
 
     getBookingInfoByUserIdAndEventId: async function(userId,eventId,page){
         try {
-            const perPage=1;
-            console.log('SKIP->perPage*page', Number(perPage*page))
-            console.log('limit', perPage)
-            const data=await BookingSchema.find({$and: [{userId: userId}, {eventId: eventId}]}).populate(["userId","eventId"]).skip(Number(perPage * page)).limit(Number(perPage))
-            if(!data) return { err: 1, msg: `Event with id ${eventId} not found` };
+             
             if(data) return { err: 0, data }
             else return false;
         } catch (error) {

@@ -7,40 +7,40 @@ It also imports two services createPaymentJsonService and createPayment to creat
 
 const eventBooking = async (req, res) => {
   try {
+    const {paymentData}=req.body;
+    console.log('paymentData :>> ', paymentData);
+    // const seatArray = [
+    //     {
+    //       name: "1",
+    //       description: "S-1",
+    //       price: 2,
+    //       currency: "USD",
+    //       quantity: 1,
+    //       sku:"63d0c3d5522b08bc5413e2f4,63c6546d81818d0dab6b85bb"
+    //     },
+    //     {
+    //       name: "2",
+    //       description: "S-2",
+    //       price: 2,
+    //       currency: "USD",
+    //       quantity: 1,
+    //       sku:"63d0c3d5522b08bc5413e2f4,63c6546d81818d0dab6b85bb"
+    //     },
+    //     {
+    //       name: "3",
+    //       description: "S-3",
+    //       price: 2,
+    //       currency: "USD",
+    //       quantity: 1,
+    //       sku:"63d0c3d5522b08bc5413e2f4,63c6546d81818d0dab6b85bb"
+    //     },
+    //   ];
 
-    const seatArray = [
-        {
-          name: "1",
-          description: "S-1",
-          price: 2,
-          currency: "USD",
-          quantity: 1,
-          sku:"63d0c3d5522b08bc5413e2f4,63c6546d81818d0dab6b85bb"
-        },
-        {
-          name: "2",
-          description: "S-2",
-          price: 2,
-          currency: "USD",
-          quantity: 1,
-          sku:"63d0c3d5522b08bc5413e2f4,63c6546d81818d0dab6b85bb"
-        },
-        {
-          name: "3",
-          description: "S-3",
-          price: 2,
-          currency: "USD",
-          quantity: 1,
-          sku:"63d0c3d5522b08bc5413e2f4,63c6546d81818d0dab6b85bb"
-        },
-      ];
-
-      req.session.seats=seatArray
     console.log('req.useremail',req.session.userEmail)
       console.log('seatArray',  req.session.seats)
     let totalSum = 0;
     console.log("totalSum", totalSum);
-    for (let data of seatArray) {
+    for (let data of paymentData) {
       totalSum += parseInt(data.price);
     }
 
@@ -48,7 +48,7 @@ const eventBooking = async (req, res) => {
     console.log("req.session.totalPrice :>> ", req.session.totalPrice);
 
     let data = paymentInitiatorJson.createPaymentJsonService(
-      seatArray,
+      paymentData,
       `http://localhost:7899/success?total=${req.session.totalPrice}`,
       "http://localhost:7899/cancel",
       req.session.totalPrice
@@ -81,7 +81,7 @@ const successEventBooking = (req, res) => {
     console.log(data);
 
     paymentExecuter.executePayment(paymentId, data,userId,eventId, (paypalResponse) => {
-        // invoiceGenerator(paypalResponse.paymentObject)
+
       return res.json(paypalResponse);
     });
   } catch (error) {
