@@ -1,7 +1,8 @@
 const { authToken } = require("../middleware/authMiddleware");
 const {userService} = require("../services/userService")
 const UserModel = require("../model/User");
-const Auth = require("../model/Auth")
+const Auth = require("../model/Auth");
+const User = require("../model/User");
 const userProfileService = {
     getByid: async function (id) {
         try {
@@ -18,6 +19,7 @@ const userProfileService = {
       updateByid: async function(id,requestbody) {
         try{
             const dataUser = await Auth.findByIdAndUpdate(id,requestbody);
+            const eventUser= await User.findByIdAndUpdate(dataUser.userId,requestbody);
             if(!dataUser){
                 return {err: 1, msg: `User with id ${id} not found`};
             }
