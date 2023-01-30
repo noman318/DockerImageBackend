@@ -5,8 +5,10 @@ const Auth = require("../model/Auth");
 const User = require("../model/User");
 const userProfileService = {
     getByid: async function (id) {
+      console.log(id);
         try {
-          let data = await Auth.findById(id);
+          let data = await Auth.findById(id).populate("userId");
+            console.log(data)
           if (!data) {
             return { err: 1, msg: `User with id ${id} not found` };
           }
