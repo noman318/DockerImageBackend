@@ -1,5 +1,5 @@
 const express=require('express');
-const { myBooking } = require('../controller/BookingController');
+const { myBooking,getAllBookings } = require('../controller/bookingController');
 const { eventBookingExecutor } = require('../controller/eventBookingController');
 const { bookingValidationMiddleware } = require('../middleware/bookingMiddleware');
 const { paymentRequestValidationMiddleware } = require('../middleware/paymentValidationMiddleware');
@@ -18,5 +18,7 @@ router.post("/booking",
 bookingValidationMiddleware.myBookingReqBody(),
 bookingValidationMiddleware.validate,
 myBooking)
+
+router.post('/mybooking',getAllBookings)
 
 module.exports = router;
