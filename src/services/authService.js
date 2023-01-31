@@ -57,6 +57,7 @@ const authService = {
 
   signIn: async function (userData) {
     const user = await this.authFindOne(userData.email);
+    
     if (user) {
       const validPassword = await passWord.decruptPassword(
         userData.password,
@@ -70,6 +71,8 @@ const authService = {
           const user = await this.authPopulate(userData.email);
           const token = await authToken.jwtToken(user);
           await this.authFindOneUpdate(userData.email, token);
+          console.log(user);
+          
           const data = {
             email: user.email,
             isAuthenticated: true,

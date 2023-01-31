@@ -29,15 +29,6 @@ const eventSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
-    startDate: {
-      type: Date,
-    },
-    endDate: {
-      type: Date,
-    },
-    futureDate: {
-      type: String,
-    },
     price: {
       type: Number,
       required: true,
@@ -53,9 +44,11 @@ const eventSchema = new mongoose.Schema(
     seats: [
       {
         row: { type: String, required: true },
-        seat_number: { type: Number, required: true },
-        status: { type: Number, required: true },
-        // price: { type: Number, required: true },
+        seat_number: { type: Number, required: true, unique: true },
+        status: { type: Number, required: true, default: 0 },
+        section: { type: String, required: true },
+        price: { type: Number, required: true },
+        show_id: { type: String, required: true },
       },
     ],
   },
