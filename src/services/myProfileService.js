@@ -4,7 +4,7 @@ const UserModel = require("../model/User");
 const Auth = require("../model/Auth");
 const User = require("../model/User");
 const userProfileService = {
-    getByid: async function (id) {
+    getById: async function (id) {
       console.log(id);
         try {
           let data = await Auth.findById(id).populate("userId");
@@ -18,7 +18,7 @@ const userProfileService = {
         }
       },
 
-      updateByid: async function(id,requestbody) {
+      updateById: async function(id,requestbody) {
         try{
             const dataUser = await Auth.findByIdAndUpdate(id,requestbody);
             const eventUser= await User.findByIdAndUpdate(dataUser.userId,requestbody);
