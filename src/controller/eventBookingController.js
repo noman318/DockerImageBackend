@@ -1,5 +1,6 @@
 const { paymentInitiatorJson } = require("../services/paypalJsonService");
 const { paymentExecuter } = require("../services/paypalPaymentService");
+const paypalItemListTransformer = require("../utils/paypalItemListConverter");
 
 /*The eventBooking function handles the initial creation of a payment. It starts by calculating the total sum of the seats prices using a hardcoded array seatArray of seats. It then assigns this total sum to a session variable totalPrice.
 It also imports two services createPaymentJsonService and createPayment to create a payment JSON object and to create a payment respectively. The function then calls the createPaymentJsonService with the seats array, success URL, cancel URL, and total price as parameters. This function returns a JSON object that is used to create a payment using the createPayment function.*/
@@ -35,6 +36,7 @@ const eventBooking = async (req, res) => {
     //     },
     //   ];
 
+<<<<<<< HEAD
     console.log("req.useremail", req.session.userEmail);
     console.log("seatArray", req.session.seats);
     let totalSum = 0;
@@ -42,13 +44,23 @@ const eventBooking = async (req, res) => {
     for (let data of paymentData) {
       totalSum += parseInt(data.price);
     }
+=======
+    let seatData = paypalItemListTransformer(paymentData)
+    console.log('seatData', seatData)
+    let totalSum = Number(seatData[0].price)*seatData.length;
+    // console.log(totalSum);
+    // console.log("totalSum", totalSum);
+    // for (let data of seatData) {
+    //   totalSum += parseInt(data.price);
+    // }
+>>>>>>> db1ad20b57b4e85d4119eb0167540ef45fa652bd
 
     req.session.totalPrice = totalSum;
     console.log("req.session.totalPrice :>> ", req.session.totalPrice);
 
     let data = paymentInitiatorJson.createPaymentJsonService(
-      paymentData,
-      `http://localhost:7899/success?total=${req.session.totalPrice}`,
+      seatData,
+      `http://localhost:7899/success?total=${req.session.totalPrice}&uid=${paymentData[0].uid}&eventId=${paymentData[0].eventId}`,
       "http://localhost:7899/cancel",
       req.session.totalPrice
     );
@@ -74,12 +86,21 @@ const successEventBooking = (req, res) => {
     const totalAmount = req.query.total;
     const payerId = req.query.PayerID;
     const paymentId = req.query.paymentId;
+<<<<<<< HEAD
     const userId = "63d0c3d5522b08bc5413e2f4";
     const eventId = "63ce8f6786522c2609cf81a5";
     let data = paymentInitiatorJson.executePaymentJsonService(
       payerId,
       totalAmount
     );
+=======
+    const userId = req.query.uid;
+    const eventId = req.query.eventId;
+
+    // const userId='63d0c3d5522b08bc5413e2f4'
+    // const eventId='63ce8f6786522c2609cf81a5'
+    let data = paymentInitiatorJson.executePaymentJsonService(payerId, totalAmount);
+>>>>>>> db1ad20b57b4e85d4119eb0167540ef45fa652bd
     console.log(data);
 
     paymentExecuter.executePayment(
