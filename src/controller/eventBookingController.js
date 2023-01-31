@@ -39,11 +39,12 @@ const eventBooking = async (req, res) => {
 
     let seatData = paypalItemListTransformer(paymentData)
     console.log('seatData', seatData)
-    let totalSum = 0;
-    console.log("totalSum", totalSum);
-    for (let data of seatData) {
-      totalSum += parseInt(data.price);
-    }
+    let totalSum = Number(seatData[0].price)*seatData.length;
+    // console.log(totalSum);
+    // console.log("totalSum", totalSum);
+    // for (let data of seatData) {
+    //   totalSum += parseInt(data.price);
+    // }
 
     req.session.totalPrice = totalSum;
     console.log("req.session.totalPrice :>> ", req.session.totalPrice);
