@@ -11,8 +11,8 @@ paymentRequestValidationMiddleware.paymentReqBody(),
 paymentRequestValidationMiddleware.validate,
 eventBookingExecutor.eventBooking);
 
-router.get('/success',eventBookingExecutor.successEventBooking);
-router.get('/cancel',eventBookingExecutor.failedEventBooking);
+router.post('/success',eventBookingExecutor.successEventBooking);
+router.post('/cancel',eventBookingExecutor.failedEventBooking);
 
 router.post("/booking",
 bookingValidationMiddleware.myBookingReqBody(),
