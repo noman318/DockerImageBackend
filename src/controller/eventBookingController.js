@@ -2,7 +2,6 @@ const { invoiceGenerator } = require("../services/invoiceGeneratorService");
 const { paymentInitiatorJson } = require("../services/paypalJsonService");
 const { paymentExecuter } = require("../services/paypalPaymentService");
 
-
 const seatArray = [
   {
     name: "1",
@@ -69,11 +68,14 @@ const successEventBooking = (req, res) => {
     const payerId = req.query.PayerID;
     const paymentId = req.query.paymentId;
 
-    let data = paymentInitiatorJson.executePaymentJsonService(payerId, totalAmount);
+    let data = paymentInitiatorJson.executePaymentJsonService(
+      payerId,
+      totalAmount
+    );
     console.log(data);
 
     paymentExecuter.executePayment(paymentId, data, (paypalResponse) => {
-        invoiceGenerator(paypalResponse.paymentObject)
+      invoiceGenerator(paypalResponse.paymentObject);
       return res.json(paypalResponse);
     });
   } catch (error) {
@@ -94,7 +96,7 @@ const eventBookingExecutor = {
   eventBooking,
   successEventBooking,
   failedEventBooking,
-}
+};
 
 module.exports = {
   eventBookingExecutor,
