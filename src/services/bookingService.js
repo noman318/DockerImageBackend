@@ -43,6 +43,19 @@ const bookingInformationHandler={
         } catch (error) {
             console.log(error);
         }
+    },
+
+    getAllBookings: async function(page){
+        
+        const perPage=1;
+        try {
+            const data = await BookingSchema.find().skip(Number(perPage * page)).limit(Number(perPage))
+            if(!data) return { err: 1, msg: `Event with id ${eventId} not found` };
+            if(data) return { err: 0, data }
+            else return false;
+        } catch (error) {
+            console.log('error :>> ', error);
+        }
     }
 }
 
