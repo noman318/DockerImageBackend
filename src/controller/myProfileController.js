@@ -13,10 +13,10 @@ async function getProfileById(req, res) {
   }
 
   async function updateProfileById(req, res) {
-    let databody = req.body;
-    let data = await userProfileService.updateById(req.params.id, databody);
+    let dataBody = req.body;
+    let data = await userProfileService.updateById(req.params.id, dataBody);
     if (!data) {
-      res.status(404).json({ err: 1, message: "data is not update" });
+      res.status(404).json({ err: 1, message: "Cannot Update Data" });
     } else {
       res.status(200).json(data);
     }
