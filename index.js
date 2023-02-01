@@ -11,7 +11,7 @@ const session = require("./src/middleware/sessionMiddleware");
 const seatRoute = require("./src/routes/eventBookingRouter");
 const userRoute = require("./src/routes/loginRouter");
 const eventRoute = require("./src/routes/eventRouter");
-
+const profileRoute= require("./src/routes/myProfileRouter");
 const PORT = process.env.PORT;
 
 mongoose.set("strictQuery", true);
@@ -31,6 +31,7 @@ app.use(session);
 app.use("/", userRoute);
 app.use("/", seatRoute);
 app.use("/event", eventRoute);
+app.use("/profile",profileRoute);
 
 app.listen(PORT, (err) => {
   if (err) throw err;
