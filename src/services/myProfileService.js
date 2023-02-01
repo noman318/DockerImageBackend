@@ -22,7 +22,7 @@ const userProfileService = {
         try{
             const dataUser = await Auth.findByIdAndUpdate(id,requestbody);
             const eventUser= await User.findByIdAndUpdate(dataUser.userId,requestbody);
-            if(!dataUser){
+            if(!dataUser && !eventUser){
                 return {err: 1, msg: `User with id ${id} not found`};
             }
             return { err: 0, msg: "Profile Updated"};
