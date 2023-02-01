@@ -7,54 +7,18 @@ It also imports two services createPaymentJsonService and createPayment to creat
 
 const eventBooking = async (req, res) => {
   try {
-    console.log("req.body", req.body);
-    // const { paymentData } = req.body;
-    // console.log("paymentData :>> ", paymentData);
-    let paymentData = req.body;
-    // const seatArray = [
-    //     {
-    //       name: "1",
-    //       description: "S-1",
-    //       price: 2,
-    //       currency: "USD",
-    //       quantity: 1,
-    //       sku:"63d0c3d5522b08bc5413e2f4,63c6546d81818d0dab6b85bb"
-    //     },
-    //     {
-    //       name: "2",
-    //       description: "S-2",
-    //       price: 2,
-    //       currency: "USD",
-    //       quantity: 1,
-    //       sku:"63d0c3d5522b08bc5413e2f4,63c6546d81818d0dab6b85bb"
-    //     },
-    //     {
-    //       name: "3",
-    //       description: "S-3",
-    //       price: 2,
-    //       currency: "USD",
-    //       quantity: 1,
-    //       sku:"63d0c3d5522b08bc5413e2f4,63c6546d81818d0dab6b85bb"
-    //     },
-    //   ];
+    const paymentData = req.body;
+    console.log("paymentData :>> ", paymentData);
 
     let seatData = paypalItemListTransformer(paymentData);
     console.log("seatData", seatData);
     let totalSum = Number(seatData[0].price) * seatData.length;
-    // console.log(totalSum);
-    // console.log("totalSum", totalSum);
-    // for (let data of seatData) {
-    //   totalSum += parseInt(data.price);
-    // }
-
-    req.session.totalPrice = totalSum;
-    console.log("req.session.totalPrice :>> ", req.session.totalPrice);
 
     let data = paymentInitiatorJson.createPaymentJsonService(
       seatData,
-      `http://localhost:7899/success?total=${req.session.totalPrice}&uid=${paymentData[0].uid}&eventId=${paymentData[0].eventId}`,
+      `http://localhost:7899/success?total=${totalSum}&uid=${paymentData[0].userId}&eventId=${paymentData[0].eventId}`,
       "http://localhost:3000/checkout",
-      req.session.totalPrice
+      totalSum
     );
 
     console.log(data);
@@ -72,8 +36,6 @@ const eventBooking = async (req, res) => {
 It also imports two services executePaymentJsonService and executePayment to create a JSON object to execute the payment and to execute the payment respectively. */
 
 const successEventBooking = (req, res) => {
-  console.log("req.session.totalPrice", req.session.totalPrice);
-  console.log("req.session.seats", req.session.seats);
   try {
     const totalAmount = req.query.total;
     const payerId = req.query.PayerID;
@@ -95,7 +57,7 @@ const successEventBooking = (req, res) => {
       userId,
       eventId,
       (paypalResponse) => {
-        return res.json(paypalResponse);
+        return res.redirect("http://localhost:3000/");
       }
     );
   } catch (error) {
