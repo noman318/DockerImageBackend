@@ -11,7 +11,6 @@ const session = require("./src/middleware/sessionMiddleware");
 const seatRoute = require("./src/routes/eventBookingRouter");
 const userRoute = require("./src/routes/loginRouter");
 const eventRoute = require("./src/routes/eventRouter");
-const availableSeatRoute  = require("./src/routes/seatRouter");
 
 const PORT = process.env.PORT;
 
@@ -31,7 +30,6 @@ app.use(session);
 
 app.use("/", userRoute);
 app.use("/", seatRoute);
-app.use("/",availableSeatRoute);
 app.use("/event", eventRoute);
 
 app.listen(PORT, (err) => {

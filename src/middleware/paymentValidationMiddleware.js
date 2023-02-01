@@ -1,7 +1,7 @@
 const { body, validationResult, } = require("express-validator");
 const paymentReqBody = () => {
   return [
-    body("paymentData").isArray({min:1}).exists().withMessage("Should be a array of object"),
+    body("").isArray({min:1}).exists().withMessage("Should be a array of object"),
   ];
 };
 
