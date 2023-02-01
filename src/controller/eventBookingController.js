@@ -7,8 +7,10 @@ It also imports two services createPaymentJsonService and createPayment to creat
 
 const eventBooking = async (req, res) => {
   try {
-    const { paymentData } = req.body;
-    console.log("paymentData :>> ", paymentData);
+    console.log("req.body", req.body);
+    // const { paymentData } = req.body;
+    // console.log("paymentData :>> ", paymentData);
+    let paymentData = req.body;
     // const seatArray = [
     //     {
     //       name: "1",
@@ -36,24 +38,14 @@ const eventBooking = async (req, res) => {
     //     },
     //   ];
 
-<<<<<<< HEAD
-    console.log("req.useremail", req.session.userEmail);
-    console.log("seatArray", req.session.seats);
-    let totalSum = 0;
-    console.log("totalSum", totalSum);
-    for (let data of paymentData) {
-      totalSum += parseInt(data.price);
-    }
-=======
-    let seatData = paypalItemListTransformer(paymentData)
-    console.log('seatData', seatData)
-    let totalSum = Number(seatData[0].price)*seatData.length;
+    let seatData = paypalItemListTransformer(paymentData);
+    console.log("seatData", seatData);
+    let totalSum = Number(seatData[0].price) * seatData.length;
     // console.log(totalSum);
     // console.log("totalSum", totalSum);
     // for (let data of seatData) {
     //   totalSum += parseInt(data.price);
     // }
->>>>>>> db1ad20b57b4e85d4119eb0167540ef45fa652bd
 
     req.session.totalPrice = totalSum;
     console.log("req.session.totalPrice :>> ", req.session.totalPrice);
@@ -61,7 +53,7 @@ const eventBooking = async (req, res) => {
     let data = paymentInitiatorJson.createPaymentJsonService(
       seatData,
       `http://localhost:7899/success?total=${req.session.totalPrice}&uid=${paymentData[0].uid}&eventId=${paymentData[0].eventId}`,
-      "http://localhost:7899/cancel",
+      "http://localhost:3000/checkout",
       req.session.totalPrice
     );
 
@@ -86,21 +78,15 @@ const successEventBooking = (req, res) => {
     const totalAmount = req.query.total;
     const payerId = req.query.PayerID;
     const paymentId = req.query.paymentId;
-<<<<<<< HEAD
-    const userId = "63d0c3d5522b08bc5413e2f4";
-    const eventId = "63ce8f6786522c2609cf81a5";
-    let data = paymentInitiatorJson.executePaymentJsonService(
-      payerId,
-      totalAmount
-    );
-=======
     const userId = req.query.uid;
     const eventId = req.query.eventId;
 
     // const userId='63d0c3d5522b08bc5413e2f4'
     // const eventId='63ce8f6786522c2609cf81a5'
-    let data = paymentInitiatorJson.executePaymentJsonService(payerId, totalAmount);
->>>>>>> db1ad20b57b4e85d4119eb0167540ef45fa652bd
+    let data = paymentInitiatorJson.executePaymentJsonService(
+      payerId,
+      totalAmount
+    );
     console.log(data);
 
     paymentExecuter.executePayment(
