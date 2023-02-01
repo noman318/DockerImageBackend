@@ -3,7 +3,7 @@ const multer=require('multer');
 //start upload code 
 const storage=multer.diskStorage({
     destination:function(req,file,cb){
-      cb(null,path.resolve(__dirname,'../src/',"uploads"))
+      cb(null,path.resolve(__dirname,'./src/',"uploads"))
     },
     filename:function(req,file,cb){
         let fileExtension=path.extname(file.originalname);
