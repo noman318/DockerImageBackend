@@ -16,6 +16,7 @@ let end = new Date(
   59,
   59
 );
+var seats=[];
 const eventHandler = {
   PostData: async function (data) {
     try {
@@ -24,9 +25,9 @@ const eventHandler = {
           ...data,
         })
         .then((res) => res)
-        .catch((err) => err);
+        .catch((err) =>{return {err:0,message:err}});
     } catch (error) {
-      console.log(error);
+      return {err:1,message:error}
     }
   },
   getAlldata: async function () {
@@ -34,7 +35,7 @@ const eventHandler = {
       let dataEvent = await eventModel.find();
       return dataEvent;
     } catch (error) {
-      console.log(error);
+      return {err:1,message:error}
     }
   },
   deleteEvent: async function (id) {
@@ -72,70 +73,80 @@ const eventHandler = {
     }
   },
   ongoingEvent: async function (data) {
-    let {filterlocation,filterartist,filterprice ,filterLanguage,page} = data;
+    let { filterlocation, filterartist, filterprice, filterLanguage, page } =
+      data;
     const filterObj = {};
     // const filterObj = {};
-    const perPage=10;
-    console.log(filterLanguage)
-    if (filterLanguage.length>0) {
+    const perPage = 10;
+    console.log(filterLanguage);
+    if (filterLanguage.length > 0) {
       filterObj.language = filterLanguage;
     }
-    if (filterartist.length>0) {
+    if (filterartist.length > 0) {
       {
         filterObj.artist = filterartist;
       }
-    } 
-    if (filterlocation.length>0) {
+    }
+    if (filterlocation.length > 0) {
       {
         filterObj.location = filterlocation;
       }
     }
-    if(filterprice.length>0){
+    if (filterprice.length > 0) {
       // console.log(filterprice)
       {
         filterObj.price = filterprice;
       }
     }
-    console.log(filterObj)
+    // createdAt: { $gte: start },
+    // future: false,
+    console.log(filterObj);
     try {
-      let data = await eventModel.find({
-        createdAt: { $gte: start },future: false,...filterObj}
-      ).skip(Number(perPage * page)).limit(Number(perPage));
-      console.log(data)
+      let data = await eventModel
+        .find({
+          ...filterObj,
+        })
+        .skip(Number(perPage * page))
+        .limit(Number(perPage));
       return data;
     } catch (error) {
       return { err: 1, msg: error.message };
     }
   },
   futureEvent: async function (data) {
-    let {filterlocation,filterartist,filterprice ,filterLanguage,page} = data;
-    const perPage=10;
+    let { filterlocation, filterartist, filterprice, filterLanguage, page } =
+      data;
+    const perPage = 10;
     const filterObj = {};
-    if (filterLanguage.length>0) {
+    if (filterLanguage.length > 0) {
       filterObj.language = filterLanguage;
     }
-    if (filterartist.length>0) {
+    if (filterartist.length > 0) {
       {
         filterObj.artist = filterartist;
       }
-    } 
-    if (filterlocation.length>0) {
+    }
+    if (filterlocation.length > 0) {
       {
         filterObj.location = filterlocation;
       }
     }
-    if(filterprice.length>0){
+    if (filterprice.length > 0) {
       // console.log(filterprice)
       {
         filterObj.price = filterprice;
       }
     }
-    console.log(filterObj)
+    console.log(filterObj);
     try {
-      let data = await eventModel.find({
-        createdAt: { $gte: end },
-        future: true,
-        ...filterObj}).skip(Number(perPage * page)).limit(Number(perPage));
+      let data = await eventModel
+        .find({
+          createdAt: { $gte: end },
+          future: true,
+          ...filterObj,
+        })
+        .skip(Number(perPage * page))
+        .limit(Number(perPage));
       console.log(data);
       return data;
     } catch (error) {
@@ -143,30 +154,34 @@ const eventHandler = {
     }
   },
   pastEvent: async function (data) {
-    let {filterlocation,filterartist,filterprice ,filterLanguage,page} = data;
-    const perPage=10;
+    let { filterlocation, filterartist, filterprice, filterLanguage, page } =
+      data;
+    const perPage = 10;
     const filterObj = {};
-    if (filterLanguage.length>0) {
+    if (filterLanguage.length > 0) {
       filterObj.language = filterLanguage;
     }
-    if (filterartist.length>0) {
+    if (filterartist.length > 0) {
       {
         filterObj.artist = filterartist;
       }
-    } 
-    if (filterlocation.length>0) {
+    }
+    if (filterlocation.length > 0) {
       {
         filterObj.location = filterlocation;
       }
     }
-    if(filterprice.length>0){
+    if (filterprice.length > 0) {
       // console.log(filterprice)
       {
         filterObj.price = filterprice;
       }
     }
     try {
-      let data = await eventModel.find({ createdAt: { $lt: start },...filterObj}).skip(Number(perPage * page)).limit(Number(perPage));
+      let data = await eventModel
+        .find({ createdAt: { $lt: start }, ...filterObj })
+        .skip(Number(perPage * page))
+        .limit(Number(perPage));
       console.log(data);
       return data;
     } catch (error) {
@@ -174,6 +189,7 @@ const eventHandler = {
     }
   },
 };
-  //  CreatedAt:{gts:start,$lt:end}
-  {}
+//  CreatedAt:{gts:start,$lt:end}
+{
+}
 module.exports = { eventHandler };

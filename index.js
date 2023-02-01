@@ -11,9 +11,16 @@ const session = require("./src/middleware/sessionMiddleware");
 const seatRoute = require("./src/routes/eventBookingRouter");
 const userRoute = require("./src/routes/loginRouter");
 const eventRoute = require("./src/routes/eventRouter");
+const { sendNotificationToClient } = require("./src/utils/nofity");
+const getToken  = require("./src/utils/gettoken");
 
+// const messaging=require('./src/utils/firebaseInit');
+// const { tokenman } = require("./src/utils/gettoken");
 const PORT = process.env.PORT;
-
+ console.log(sendNotificationToClient);
+ console.log(getToken)
+//  console.log(messaging);
+//  console.log(tokenman)
 mongoose.set("strictQuery", true);
 
 connectDB();
