@@ -16,6 +16,7 @@ const getToken  = require("./src/utils/gettoken");
 
 // const messaging=require('./src/utils/firebaseInit');
 // const { tokenman } = require("./src/utils/gettoken");
+const profileRoute= require("./src/routes/myProfileRouter");
 const PORT = process.env.PORT;
  console.log(sendNotificationToClient);
  console.log(getToken)
@@ -38,6 +39,7 @@ app.use(session);
 app.use("/", userRoute);
 app.use("/", seatRoute);
 app.use("/event", eventRoute);
+app.use("/profile",profileRoute);
 
 app.listen(PORT, (err) => {
   if (err) throw err;

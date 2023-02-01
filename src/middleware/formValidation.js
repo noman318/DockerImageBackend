@@ -27,6 +27,16 @@ const changepassValidationRules = () => {
   ];
 };
 
+const myProfileValidationRules = () => {
+  return [
+    body("firstName").exists().withMessage("firstname is missing"),
+    body("email").exists().withMessage("email is missing"),
+    body("lastName").exists().withMessage("lastname is missing"),
+    body("mobileNumber").exists().withMessage("mobilenumber is missing"),
+    body("userName").exists().withMessage("username is missing")
+  ];
+};
+
 const validate = (req, res, next) => {
   const errors = validationResult(req);
   if (errors.isEmpty()) {
@@ -47,6 +57,7 @@ const formValidation = {
   loginValidationRules,
   resetValidationRules,
   changepassValidationRules,
+  myProfileValidationRules
 };
 
 module.exports = { formValidation };
