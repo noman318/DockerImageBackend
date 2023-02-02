@@ -17,7 +17,7 @@ const eventBooking = async (req, res) => {
     let data = paymentInitiatorJson.createPaymentJsonService(
       seatData,
       `http://localhost:7899/success?total=${totalSum}&uid=${paymentData[0].userId}&eventId=${paymentData[0].eventId}`,
-      "http://localhost:3000/checkout",
+      `http://localhost:3000/eventdetails/${seatData[0].eventId}`,
       totalSum
     );
 
