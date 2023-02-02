@@ -25,7 +25,7 @@ const eventBooking = async (req, res) => {
       totalSum
     );
 
-    console.log(data);
+    console.log("data-1",data);
 
     paymentExecuter.createPayment(data, (payment) => {
       console.log("payment:", payment);

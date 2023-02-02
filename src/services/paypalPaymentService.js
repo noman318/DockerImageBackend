@@ -46,13 +46,16 @@ const executePayment = (paymentId, data, userId, eventId, callback) => {
         console.log(error.response);
         throw error;
       } else {
+        console.log("mydata",(data))
         // console.log(JSON.stringify(payment));
         payment.uid=userId
         payment.eventId=eventId
         console.log(payment);
         bookingInformationHandler.transactionsInfoStoring(payment)
         if (payment.state == "approved") {
+          bookingInformationHandler.bookingSeatById(payment)
           console.log("Seat Book Kijye");
+
           let invoiceData=invoiceDataModifier(payment);
           let fileName=payment.cart+".pdf"
           callback({
