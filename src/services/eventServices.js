@@ -104,6 +104,7 @@ const eventHandler = {
     try {
       let data = await eventModel
         .find({
+
           ...filterObj,
         })
         .skip(Number(perPage * page))
@@ -141,7 +142,6 @@ const eventHandler = {
     try {
       let data = await eventModel
         .find({
-          createdAt: { $gte: end },
           future: true,
           ...filterObj,
         })
