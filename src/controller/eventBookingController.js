@@ -9,7 +9,7 @@ It also imports two services createPaymentJsonService and createPayment to creat
 const eventBooking = async (req, res) => {
   try {
     const paymentData=req.body;
-    console.log('paymentData :>> ', paymentData);
+    // console.log('paymentData :>> ', paymentData);
     
 
     let seatData = paypalItemListTransformer(paymentData)
@@ -25,7 +25,7 @@ const eventBooking = async (req, res) => {
       totalSum
     );
 
-    console.log("data-1",data);
+    // console.log("data-1",data);
 
     paymentExecuter.createPayment(data, (payment) => {
       console.log("payment:", payment);
@@ -51,7 +51,7 @@ const successEventBooking = (req, res) => {
     // const userId='63d0c3d5522b08bc5413e2f4'
     // const eventId='63ce8f6786522c2609cf81a5'
     let data = paymentInitiatorJson.executePaymentJsonService(payerId, totalAmount);
-    console.log(data);
+    // console.log(data);
 
     paymentExecuter.executePayment(paymentId, data,userId,eventId, (paypalResponse) => {
 

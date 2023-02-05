@@ -5,6 +5,7 @@ const { successMsg } = require("../utils/success");
 const { authToken } = require("../middleware/authMiddleware");
 const { sendMailer } = require("../utils/mail");
 const crypto = require("crypto");
+const { addPushNotify } = require("../utils/addPushNotification");
 
 const authService = {
   authCreate: async function (userData, upassword) {
@@ -74,10 +75,12 @@ const authService = {
           console.log(user);
           
           const data = {
+            _id:user._id,
             email: user.email,
             isAuthenticated: true,
             token: token,
           };
+          addPushNotify("hello","world","c9oVnid56XTE8_TGdwsiDu:APA91bFXO8ZWVqihzsK7ctaJEKrRgEidSHgN52hFEtSZ8p4TFXdmXkIC78Pss9kwK_cvUiArWRoAXpS")
           return successMsg("successful", data);
         } catch (err) {
           return errorMsg(err.message);
