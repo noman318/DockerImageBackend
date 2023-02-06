@@ -1,7 +1,6 @@
 const BookingSchema = require("../model/BookingModel");
 const TransactionModel = require("../model/TransactionModel");
-
-
+const eventModel=require('../model/EventModel')
 const bookingInformationHandler={
     bookingInfoStoring:async function(payment){
         try {
@@ -59,6 +58,20 @@ const bookingInformationHandler={
             else return false;
         } catch (error) {
             console.log('error :>> ', error);
+        }
+    },
+
+    bookingSeatById:async function(data){
+        try {
+            for(let id of data.transactions[0].item_list.items){
+                console.log('id-- :>> ', id.sku);
+                await eventModel.findById(data.eventId).update({'seats._id':id.sku},{'$set': {
+                    'seats.$.status':1,
+                }})
+            }
+            
+        } catch (error) {
+            console.log(error);
         }
     }
 }

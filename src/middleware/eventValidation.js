@@ -1,4 +1,4 @@
-const { body, validationResult ,check,param} = require("express-validator");
+const { body, validationResult, check, param } = require("express-validator");
 const eventValidation = () => {
   return [
     body("threaterId").exists().withMessage("threaterId is missing"),
@@ -6,15 +6,12 @@ const eventValidation = () => {
     body("language").exists().withMessage("language is missing"),
     body("location").exists().withMessage("location is missing"),
     body("description").exists().withMessage("description is missing"),
-    body("image").exists().withMessage("image is missing"),
     body("seatAvailable").exists().withMessage("seatAvailable is missing"),
-    body("price").exists().withMessage("price is missing")
+    body("price").exists().withMessage("price is missing"),
   ];
 };
 const updateValidation = () => {
-  return [
-    param("id").exists().withMessage("id is missing"),
-  ];
+  return [param("id").exists().withMessage("id is missing")];
 };
 const onGoingValidation = () => {
   return [

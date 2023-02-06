@@ -17,11 +17,11 @@ const eventBooking = async (req, res) => {
     let data = paymentInitiatorJson.createPaymentJsonService(
       seatData,
       `http://localhost:7899/success?total=${totalSum}&uid=${paymentData[0].userId}&eventId=${paymentData[0].eventId}`,
-      `http://localhost:3000/eventdetails/${seatData[0].eventId}`,
+      "http://localhost:7899/cancel",
       totalSum
     );
 
-    console.log(data);
+    console.log("data-1", data);
 
     paymentExecuter.createPayment(data, (payment) => {
       console.log("payment:", payment);
@@ -57,7 +57,9 @@ const successEventBooking = (req, res) => {
       userId,
       eventId,
       (paypalResponse) => {
-        return res.redirect("http://localhost:3000/");
+        return res.redirect(
+          `http://localhost:3000/eventdetails/${req.query.eventId}`
+        );
       }
     );
   } catch (error) {
@@ -68,7 +70,7 @@ const successEventBooking = (req, res) => {
 /*The failedEventBooking function handles the case where the payment process is unsuccessful.*/
 const failedEventBooking = (req, res) => {
   try {
-    return res.json({ message: "Unable to pay" });
+    return res.redirect("http://localhost:3000/checkout");
   } catch (error) {
     console.log(error);
   }

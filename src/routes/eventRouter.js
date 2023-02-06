@@ -2,8 +2,10 @@ const express = require("express");
 const router = express.Router();
 const { eventController } = require("../controller/eventController");
 const { eventsValidation } = require("../middleware/eventValidation");
+const upload = require("../middleware/multerMiddleware");
 router.post(
   "/",
+  upload.single("image"),
   eventsValidation.eventValidation(),
   eventsValidation.validate,
   eventController.postDataAdmin
