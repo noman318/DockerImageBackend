@@ -11,8 +11,6 @@ try {
     console.log('notificationData :>> ', notificationData);
     
     sendNotificationToClient(tokens, notificationData);
-
-    return true;
     
 } catch (error) {
     console.log(error)

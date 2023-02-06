@@ -80,7 +80,6 @@ const authService = {
             isAuthenticated: true,
             token: token,
           };
-          addPushNotify("hello","world","c9oVnid56XTE8_TGdwsiDu:APA91bFXO8ZWVqihzsK7ctaJEKrRgEidSHgN52hFEtSZ8p4TFXdmXkIC78Pss9kwK_cvUiArWRoAXpS")
           return successMsg("successful", data);
         } catch (err) {
           return errorMsg(err.message);

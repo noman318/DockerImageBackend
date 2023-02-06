@@ -52,16 +52,17 @@ const executePayment = (paymentId, data, userId, eventId, callback) => {
         // console.log(JSON.stringify(payment));
         payment.uid=userId
         payment.eventId=eventId
+       
         // console.log(payment);
         bookingInformationHandler.transactionsInfoStoring(payment)
         if (payment.state == "approved") {
-          bookingInformationHandler.bookingSeatById(payment)
+          // bookingInformationHandler.bookingSeatById(payment)
           console.log("Seat Book Kijye");
-          let fpnData=await firebasePushNotificationModel.find({userId:userId})
-          console.log(fpnData[0].firebaseDeviceToken)
-          if(fpnData.length>0){
+          let fpnData=await firebasePushNotificationModel.findOne({userId:userId})
+          console.log(fpnData.firebaseDeviceToken)
+          if(fpnData){
             console.log(fpnData)
-            await addPushNotify("Congratulations","You have Succesfully booked ticket",fpnData[0].firebaseDeviceToken)
+            await addPushNotify("Congratulations","You have Succesfully booked ticket",fpnData.firebaseDeviceToken)
           }
           let invoiceData=invoiceDataModifier(payment);
           let fileName=payment.cart+".pdf"

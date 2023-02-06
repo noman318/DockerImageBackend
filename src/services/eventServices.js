@@ -190,13 +190,13 @@ const eventHandler = {
   },
   updateFPNToken:async function(id,token){
     try {
-      let data=await firebasePushNotificationModel.find({userId:id})
+      let data=await firebasePushNotificationModel.findOne({userId:id})
       if(data){
         console.log("---",data.firebaseDeviceToken)
         await firebasePushNotificationModel.updateOne({userId:id},{$set:{firebaseDeviceToken:token}})
       }
 
-      if(data.length==0){
+      if(!data){
         fpn=new firebasePushNotificationModel({
           userId:id,
           firebaseDeviceToken:token

@@ -1,3 +1,4 @@
+const { bookingInformationHandler } = require("../services/bookingService");
 const { paymentInitiatorJson } = require("../services/paypalJsonService");
 const { paymentExecuter } = require("../services/paypalPaymentService");
 const paypalItemListTransformer = require("../utils/paypalItemListConverter");
@@ -21,7 +22,7 @@ const eventBooking = async (req, res) => {
     let data = paymentInitiatorJson.createPaymentJsonService(
       seatData,
       `http://localhost:7899/success?total=${totalSum}&uid=${paymentData[0].userId}&eventId=${paymentData[0].eventId}`,
-      "http://localhost:7899/cancel",
+      `http://localhost:7899/cancel?total=${totalSum}&uid=${paymentData[0].userId}&eventId=${paymentData[0].eventId}`,
       totalSum
     );
 
@@ -65,7 +66,24 @@ const successEventBooking = (req, res) => {
 /*The failedEventBooking function handles the case where the payment process is unsuccessful.*/
 const failedEventBooking = (req, res) => {
   try {
-    return res.json({ message: "Unable to pay" });
+    const totalAmount = req.query.total;
+    const userId = req.query.uid;
+    const eventId = req.query.eventId;
+    const obj={
+      state:"cancelled",
+      transactions:[
+        {
+          amount:{
+            total:totalAmount,
+            currency:'USD'
+          }
+        }
+      ],
+      uid:userId,
+      eventId:eventId
+    }
+    bookingInformationHandler.transactionsInfoStoring(obj)
+    return res.json({ message: `${totalAmount}` });
   } catch (error) {
     console.log(error);
   }

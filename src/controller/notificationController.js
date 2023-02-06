@@ -2,11 +2,11 @@ const sendNotificationToClient  = require("../utils/pushNotify");
 
 const addNotification=async(req,res)=>{
     const { name, message } = req.body;
-    const columns = 'name, message';
-    const values = `'${name}', '${message}'`;
+    // const columns = 'name, message';
+    // const values = `'${name}', '${message}'`;
     try {
     //   const data = await messagesModel.insertWithReturn(columns, values);
-      const tokens = ["c9oVnid56XTE8_TGdwsiDu:APA91bFXO8ZWVqihzsK7ctaJEKrRgEidSHgN52hFEtSZ8p4TFXdmXkIC78Pss9kwK_cvUiArWRoAXpS-6FXpR-8cPspMvo57XRXwb0emtdjzJy9ta204NbBkllZuJyFx68YKHCzubjMV"];
+      const tokens = ["e4rZoBSNFm_78coss5clkn:APA91bEMjPFo9ARnWK4Ni0jn6GCD5zA8lMu65NVif0D9WaK4YoWZDSGPoCDU8FzwD5waVLbSeQo4Pzyavr2X6Ju7wLFYcFUxmWIFxR1sOoK96Yq8fa02ZWeo8hFMJb1EIEnHgQGrHHVh"];
       const notificationData = {
         title: 'Hello From Nodejs',
         body: message,
