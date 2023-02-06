@@ -3,7 +3,6 @@ const { myBooking,getAllBookings } = require('../controller/bookingController');
 const { eventBookingExecutor } = require('../controller/eventBookingController');
 const { bookingValidationMiddleware } = require('../middleware/bookingMiddleware');
 const { paymentRequestValidationMiddleware } = require('../middleware/paymentValidationMiddleware');
-
 const router = express.Router();
 
 router.post('/pay',

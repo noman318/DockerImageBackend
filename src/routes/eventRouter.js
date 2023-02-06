@@ -3,6 +3,7 @@ const router = express.Router();
 const { eventController } = require("../controller/eventController");
 const addNotification = require("../controller/notificationController");
 const { eventsValidation } = require("../middleware/eventValidation");
+
 router.post("/",eventsValidation.eventValidation(),eventsValidation.validate,eventController.postDataAdmin);
 router.get("/api/getAll", eventController.getDataEvent);
 router.put("/api/update/:id",eventsValidation.updateValidation(),eventsValidation.validate,eventController.updateEvent);

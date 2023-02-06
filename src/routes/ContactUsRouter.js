@@ -5,8 +5,6 @@ const router = express.Router();
 router.post(
     "/api/contactus",
     contactController.postContactUs
-    // postContactUs,
-    // getContactUs
 );
 router.get(
     "/api/getAll/contactus",

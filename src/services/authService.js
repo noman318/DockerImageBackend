@@ -93,10 +93,13 @@ const authService = {
   },
 
   resetPassword: async function (userData) {
+    
     const user = await this.authFindOne(userData.email);
+   
     if (user) {
       try {
         let resetToken = crypto.randomBytes(32).toString("hex");
+        
         const m1 = await sendMailer(
           userData.email,
           resetToken,
@@ -104,7 +107,7 @@ const authService = {
           "resetMail",
           userData._id
         );
-
+        // console.log(true)
         if (m1) {
           const msg = "mail sent";
           return successMsg(msg);
