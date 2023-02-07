@@ -6,5 +6,7 @@ const contactUs = new mongoose.Schema({
     text: {
         type: String,
     },
+},{
+    timestamps:true
 })
 module.exports = mongoose.model("contactus", contactUs);
