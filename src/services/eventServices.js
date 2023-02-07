@@ -76,7 +76,7 @@ const eventHandler = {
     const filterObj = {};
     // const filterObj = {};
     const perPage=10;
-    console.log(filterLanguage)
+    // console.log(filterLanguage)
     if (filterLanguage.length>0) {
       filterObj.language = filterLanguage;
     }
@@ -96,12 +96,12 @@ const eventHandler = {
         filterObj.price = filterprice;
       }
     }
-    console.log(filterObj)
+    // console.log(filterObj)
     try {
       let data = await eventModel.find({
         createdAt: { $gte: start },future: false,...filterObj}
       ).skip(Number(perPage * page)).limit(Number(perPage));
-      console.log(data)
+      // console.log(data)
       return data;
     } catch (error) {
       return { err: 1, msg: error.message };
@@ -130,13 +130,13 @@ const eventHandler = {
         filterObj.price = filterprice;
       }
     }
-    console.log(filterObj)
+    // console.log(filterObj)
     try {
       let data = await eventModel.find({
         createdAt: { $gte: end },
         future: true,
         ...filterObj}).skip(Number(perPage * page)).limit(Number(perPage));
-      console.log(data);
+      // console.log(data);
       return data;
     } catch (error) {
       return { err: 1, msg: error.message };
@@ -167,7 +167,7 @@ const eventHandler = {
     }
     try {
       let data = await eventModel.find({ createdAt: { $lt: start },...filterObj}).skip(Number(perPage * page)).limit(Number(perPage));
-      console.log(data);
+      // console.log(data);
       return data;
     } catch (error) {
       return { err: 1, msg: error.message };
