@@ -57,7 +57,6 @@ const authService = {
 
   signIn: async function (userData) {
     const user = await this.authFindOne(userData.email);
-    
     if (user) {
       const validPassword = await passWord.decruptPassword(
         userData.password,

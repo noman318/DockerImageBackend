@@ -30,9 +30,14 @@ const eventHandler = {
       return {err:1,message:error}
     }
   },
-  getAlldata: async function () {
+  getAlldata: async function (data) {
+    const filterObjname={};
+    const {name=""} =data;
+    if(name!==""){
+      {filterObjname.name=name}
+    }
     try {
-      let dataEvent = await eventModel.find();
+      let dataEvent = await eventModel.find({...filterObjname});
       return dataEvent;
     } catch (error) {
       return {err:1,message:error}
@@ -73,7 +78,7 @@ const eventHandler = {
     }
   },
   ongoingEvent: async function (data) {
-    let { filterlocation, filterartist, filterprice, filterLanguage, page } =
+    let { filterlocation, filterartist, filterprice, filterLanguage, page ,name=""} =
       data;
     const filterObj = {};
     // const filterObj = {};
@@ -98,24 +103,35 @@ const eventHandler = {
         filterObj.price = filterprice;
       }
     }
+    if(name!==""){
+      {filterObj.name=name}
+    }
     // createdAt: { $gte: start },
     // future: false,
     console.log(filterObj);
     try {
+      var total = await await eventModel
+      .find({
+        future:false,
+        ...filterObj,
+      }).count();
+      var pages = Math.ceil(total / perPage);
+      var pageNumber = (page == null) ? 1 : page;
+      var startFrom = (pageNumber - 1) * perPage;
       let data = await eventModel
         .find({
-
+          future:false,
           ...filterObj,
         })
-        .skip(Number(perPage * page))
+        .skip(Number(startFrom))
         .limit(Number(perPage));
-      return data;
+      return {data,pages:pages};
     } catch (error) {
       return { err: 1, msg: error.message };
     }
   },
   futureEvent: async function (data) {
-    let { filterlocation, filterartist, filterprice, filterLanguage, page } =
+    let { filterlocation, filterartist, filterprice, filterLanguage, page ,name="" } =
       data;
     const perPage = 10;
     const filterObj = {};
@@ -138,23 +154,34 @@ const eventHandler = {
         filterObj.price = filterprice;
       }
     }
+    if(name!==""){
+      {filterObj.name=name}
+    }
     console.log(filterObj);
     try {
+      var total = await await eventModel
+      .find({
+        future:false,
+        ...filterObj,
+      }).count();
+      var pages = Math.ceil(total / perPage);
+      var pageNumber = (page == null) ? 1 : page;
+      var startFrom = (pageNumber - 1) * perPage;
       let data = await eventModel
         .find({
           future: true,
           ...filterObj,
         })
-        .skip(Number(perPage * page))
+        .skip(Number(startFrom))
         .limit(Number(perPage));
       console.log(data);
-      return data;
+      return {data,pages:pages};
     } catch (error) {
       return { err: 1, msg: error.message };
     }
   },
   pastEvent: async function (data) {
-    let { filterlocation, filterartist, filterprice, filterLanguage, page } =
+    let { filterlocation, filterartist, filterprice, filterLanguage, page ,name=""} =
       data;
     const perPage = 10;
     const filterObj = {};
@@ -177,13 +204,24 @@ const eventHandler = {
         filterObj.price = filterprice;
       }
     }
+    if(name!==""){
+      {filterObj.name=name}
+    }
     try {
+      var total = await await eventModel
+      .find({
+        future:false,
+        ...filterObj,
+      }).count();
+      var pages = Math.ceil(total / perPage);
+      var pageNumber = (page == null) ? 1 : page;
+      var startFrom = (pageNumber - 1) * perPage;
       let data = await eventModel
         .find({ createdAt: { $lt: start }, ...filterObj })
-        .skip(Number(perPage * page))
+        .skip(Number(startFrom))
         .limit(Number(perPage));
       console.log(data);
-      return data;
+      return {data,pages:pages};
     } catch (error) {
       return { err: 1, msg: error.message };
     }

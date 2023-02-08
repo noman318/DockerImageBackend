@@ -34,6 +34,7 @@ app.use("/", seatRoute);
 app.use("/event", eventRoute);
 app.use("/profile",profileRoute);
 
+// app.use("*",)
 app.listen(PORT, (err) => {
   if (err) throw err;
   else console.log(`Server is run on ${PORT}`);

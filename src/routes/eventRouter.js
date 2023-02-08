@@ -4,7 +4,7 @@ const { eventController } = require("../controller/eventController");
 const { eventsValidation } = require("../middleware/eventValidation");
 
 router.post("/",eventsValidation.eventValidation(),eventsValidation.validate,eventController.postDataAdmin);
-router.get("/api/getAll", eventController.getDataEvent);
+router.post("/api/getAll",eventsValidation.getAll(),eventsValidation.validate, eventController.getDataEvent);
 router.put("/api/update/:id",eventsValidation.updateValidation(),eventsValidation.validate,eventController.updateEvent);
 router.delete("/api/delete/:id",eventsValidation.updateValidation(),eventsValidation.validate, eventController.deleteEvent);
 router.get("/api/getByid/:id",eventsValidation.updateValidation(),eventsValidation.validate ,eventController.getById);
