@@ -20,7 +20,7 @@ const authService = {
 
   authFindOne: async function (email) {
     let user = Auth.findOne({ email });
-    if (user) return user;
+    if (user) return user; 
     return false;
   },
 
