@@ -81,7 +81,7 @@ const eventHandler = {
     let { filterlocation, filterartist, filterprice, filterLanguage, page ,name=""} =
       data;
     const filterObj = {};
-    // const filterObj = {};
+    // console.log("name"+name)
     const perPage = 10;
     console.log(filterLanguage);
     if (filterLanguage.length > 0) {
@@ -103,18 +103,19 @@ const eventHandler = {
         filterObj.price = filterprice;
       }
     }
-    if(name!==""){
+    if(name.length>0){
       {filterObj.name=name}
-    }
+    } 
     // createdAt: { $gte: start },
     // future: false,
     console.log(filterObj);
+    var total = await eventModel
+    .find({
+      future:false,
+      ...filterObj,
+      name:name
+    }).count();
     try {
-      var total = await await eventModel
-      .find({
-        future:false,
-        ...filterObj,
-      }).count();
       var pages = Math.ceil(total / perPage);
       var pageNumber = (page == null) ? 1 : page;
       var startFrom = (pageNumber - 1) * perPage;
@@ -157,13 +158,13 @@ const eventHandler = {
     if(name!==""){
       {filterObj.name=name}
     }
+    var total = await eventModel
+    .find({
+      future:false,
+      ...filterObj,
+    }).count();
     console.log(filterObj);
     try {
-      var total = await await eventModel
-      .find({
-        future:false,
-        ...filterObj,
-      }).count();
       var pages = Math.ceil(total / perPage);
       var pageNumber = (page == null) ? 1 : page;
       var startFrom = (pageNumber - 1) * perPage;
@@ -207,12 +208,12 @@ const eventHandler = {
     if(name!==""){
       {filterObj.name=name}
     }
+    var total = await eventModel
+    .find({
+      future:false,
+      ...filterObj,
+    }).count();
     try {
-      var total = await await eventModel
-      .find({
-        future:false,
-        ...filterObj,
-      }).count();
       var pages = Math.ceil(total / perPage);
       var pageNumber = (page == null) ? 1 : page;
       var startFrom = (pageNumber - 1) * perPage;
