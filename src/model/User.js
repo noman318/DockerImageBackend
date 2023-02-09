@@ -16,8 +16,9 @@ const userSchema = new mongoose.Schema({
     maxlength: 100,
   },
   mobileNumber: {
-    type: Number,
-    required: true,
+    type: String,
+    default:""
+    // required: true,
   },
   userName: {
     type: String,

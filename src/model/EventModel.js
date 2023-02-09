@@ -39,16 +39,12 @@ const eventSchema = new mongoose.Schema(
     },
     image: {
       type: String,
-      // required:true
     },
     seats: [
       {
-        row: { type: String, required: true },
-        seat_number: { type: Number, required: true, unique: true },
-        status: { type: Number, required: true,default:0 },
-        section: { type: String, required: true },
-        price: { type: Number, required: true },
-        show_id: { type: String, required: true },
+        seat_number: { type: Number},
+        status: { type: Number,default:0 },
+        price: { type: Number},
       },
     ],
   },
