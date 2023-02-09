@@ -76,6 +76,7 @@ const authService = {
           const data = {
             email: user.email,
             isAuthenticated: true,
+            isAdmin:user.role==="admin",
             token: token,
           };
           return successMsg("successful", data);
