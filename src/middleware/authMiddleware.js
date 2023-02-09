@@ -28,6 +28,8 @@ const authToken = {
     return jwt.sign(
       {
         _id: user.userId._id,
+        authId:user._id,
+        role:user.userId.role,
         name: `${user.userId.firstName} ${user.userId.lastName}`,
       },
       process.env.SECRET_KEY,
