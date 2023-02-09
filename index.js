@@ -11,10 +11,11 @@ const session = require("./src/middleware/sessionMiddleware");
 const seatRoute = require("./src/routes/eventBookingRouter");
 const userRoute = require("./src/routes/loginRouter");
 const eventRoute = require("./src/routes/eventRouter");
+// const { tokenman } = require("./src/utils/gettoken");
 const profileRoute= require("./src/routes/myProfileRouter");
 const ContactUs = require("./src/routes/ContactUsRouter");
 const PORT = process.env.PORT;
-
+//  console.log(tokenman)
 mongoose.set("strictQuery", true);
 
 connectDB();
@@ -35,6 +36,7 @@ app.use("/event", eventRoute);
 app.use("/profile",profileRoute);
 app.use("/contactus",ContactUs);
 
+// app.use("*",)
 app.listen(PORT, (err) => {
   if (err) throw err;
   else console.log(`Server is run on ${PORT}`);

@@ -1,4 +1,4 @@
-const { body, validationResult ,check,param} = require("express-validator");
+const { body, validationResult ,param} = require("express-validator");
 const eventValidation = () => {
   return [
     body("threaterId").exists().withMessage("threaterId is missing"),
@@ -40,6 +40,11 @@ const pastValidation = () => {
     body("artist").optional(),
   ];
 };
+const getAll=()=>{
+  return [
+    body("name").optional()
+  ]
+}
 const validate = (req, res, next) => {
   const errors = validationResult(req);
   if (errors.isEmpty()) {
@@ -60,6 +65,7 @@ const eventsValidation = {
   onGoingValidation,
   futureValidation,
   pastValidation,
+  getAll,
   validate,
 };
 

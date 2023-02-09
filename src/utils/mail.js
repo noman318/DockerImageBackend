@@ -26,7 +26,11 @@ async function sendMailer(email, resetToken, sub, temp, uId,data) {
       token: resetToken,
       id: uId,
     }:{},
+<<<<<<< HEAD
     attachments: data ? [
+=======
+    attachments: data ?[
+>>>>>>> c0e96458c73dbde0431a2a65506e8efa8211220a
       {
           filename: `${data.cart}.pdf`, 
           path: path.join(`./invoiceFiles/${data.cart}.pdf`), 

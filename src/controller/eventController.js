@@ -8,7 +8,7 @@ async function postDataAdmin(req, res) {
   }
 }
 async function getDataEvent(req, res) {
-  let data = await eventHandler.getAlldata();
+  let data = await eventHandler.getAlldata(req.body);
   if (!data) {
     res
       .status(404)
