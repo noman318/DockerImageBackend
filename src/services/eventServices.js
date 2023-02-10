@@ -229,6 +229,4 @@ const eventHandler = {
   },
 };
 //  CreatedAt:{gts:start,$lt:end}
-{
-}
 module.exports = { eventHandler };
