@@ -4,7 +4,7 @@ async function postDataAdmin(req, res) {
   const url =
     req.protocol + "://" + req.get("host") + "/static/" + req.file.filename;
   const data1 = { ...requestBody, image: url };
-  console.log(data1);
+
   let data = await eventHandler.PostData(data1);
   if (!data) {
     res.status(404).json({ err: 1, message: "Please Provide Data" });
@@ -24,9 +24,11 @@ async function getDataEvent(req, res) {
 }
 
 async function updateEvent(req, res) {
-  let databody = req.body;
-  console.log(databody);
-  let data = await eventHandler.updateEvent(req.params.id, databody);
+  const requestBody = req.body;
+  const url =
+    req.protocol + "://" + req.get("host") + "/static/" + req.file.filename;
+  const data1 = { ...requestBody, image: url };
+  let data = await eventHandler.updateEvent(req.params.id, data1);
   if (!data) {
     res.status(404).json({ err: 1, message: "data is not update" });
   } else {
@@ -82,9 +84,8 @@ async function pastEvent(req, res) {
 
 async function getFPNToken(req, res) {
   try {
-    const {id,token}=req.body;
-    eventHandler.updateFPNToken(id,token)
-    
+    const { id, token } = req.body;
+    eventHandler.updateFPNToken(id, token);
   } catch (error) {
     console.log(error);
   }
