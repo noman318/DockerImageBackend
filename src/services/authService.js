@@ -5,6 +5,7 @@ const { successMsg } = require("../utils/success");
 const { authToken } = require("../middleware/authMiddleware");
 const { sendMailer } = require("../utils/mail");
 const crypto = require("crypto");
+const { addPushNotify } = require("../utils/addPushNotification");
 
 const authService = {
   authCreate: async function (userData, upassword) {
@@ -19,7 +20,7 @@ const authService = {
 
   authFindOne: async function (email) {
     let user = Auth.findOne({ email });
-    if (user) return user;
+    if (user) return user; 
     return false;
   },
 
@@ -73,6 +74,7 @@ const authService = {
           console.log(user);
           
           const data = {
+            _id:user._id,
             email: user.email,
             isAuthenticated: true,
             token: token,

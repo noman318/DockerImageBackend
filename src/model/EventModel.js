@@ -17,6 +17,9 @@ const eventSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    futureDate: {
+      type: String,
+    },
     description: {
       type: String,
       // required:true
@@ -39,13 +42,12 @@ const eventSchema = new mongoose.Schema(
     },
     image: {
       type: String,
-      // required:true
     },
     seats: [
       {
-        seat_number: { type: Number, required: true},
-        status: { type: Number, required: true,default:0 },
-        price: { type: Number, required: true },
+        seat_number: { type: Number},
+        status: { type: Number,default:0 },
+        price: { type: Number},
       },
     ],
   },

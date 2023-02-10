@@ -227,6 +227,27 @@ const eventHandler = {
       return { err: 1, msg: error.message };
     }
   },
+  updateFPNToken:async function(id,token){
+    try {
+      let data=await firebasePushNotificationModel.findOne({userId:id})
+      if(data){
+        console.log("---",data.firebaseDeviceToken)
+        await firebasePushNotificationModel.updateOne({userId:id},{$set:{firebaseDeviceToken:token}})
+      }
+
+      if(!data){
+        fpn=new firebasePushNotificationModel({
+          userId:id,
+          firebaseDeviceToken:token
+        })
+        fpn.save()
+      }
+      
+    } catch (error) {
+      console.log(error)
+    }
+  }
 };
 //  CreatedAt:{gts:start,$lt:end}
+
 module.exports = { eventHandler };
