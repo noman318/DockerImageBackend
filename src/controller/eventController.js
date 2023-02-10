@@ -1,6 +1,11 @@
 const { eventHandler } = require("../services/eventServices");
 async function postDataAdmin(req, res) {
-  let data = await eventHandler.PostData(req.body);
+  const requestBody = req.body;
+  const url =
+    req.protocol + "://" + req.get("host") + "/static/" + req.file.filename;
+  const data1 = { ...requestBody, image: url };
+  console.log(data1);
+  let data = await eventHandler.PostData(data1);
   if (!data) {
     res.status(404).json({ err: 1, message: "Please Provide Data" });
   } else {
@@ -20,6 +25,7 @@ async function getDataEvent(req, res) {
 
 async function updateEvent(req, res) {
   let databody = req.body;
+  console.log(databody);
   let data = await eventHandler.updateEvent(req.params.id, databody);
   if (!data) {
     res.status(404).json({ err: 1, message: "data is not update" });
@@ -45,7 +51,7 @@ async function getById(req, res) {
     res.status(200).json(data);
   }
 }
-async function ongoingEvent(req,res){
+async function ongoingEvent(req, res) {
   // console.log(req.body)
   let data = await eventHandler.ongoingEvent(req.body);
   if (!data) {
@@ -55,7 +61,7 @@ async function ongoingEvent(req,res){
     // console.log(data);
   }
 }
-async function futureEvent(req,res){
+async function futureEvent(req, res) {
   let data = await eventHandler.futureEvent(req.body);
   if (!data) {
     res.status(404).json({ err: 1, message: "Something went wrong" });
@@ -64,8 +70,8 @@ async function futureEvent(req,res){
     // console.log(data);
   }
 }
-async function pastEvent(req,res){
-  let data=await eventHandler.pastEvent(req.body);
+async function pastEvent(req, res) {
+  let data = await eventHandler.pastEvent(req.body);
   if (!data) {
     res.status(404).json({ err: 1, message: "Something went wrong" });
   } else {
@@ -74,17 +80,15 @@ async function pastEvent(req,res){
   }
 }
 
-async function getFPNToken(req,res){
+async function getFPNToken(req, res) {
   try {
     const {id,token}=req.body;
     eventHandler.updateFPNToken(id,token)
     
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 }
-
-
 
 const eventController = {
   postDataAdmin,
@@ -95,6 +99,6 @@ const eventController = {
   ongoingEvent,
   futureEvent,
   pastEvent,
-  getFPNToken
+  getFPNToken,
 };
 module.exports = { eventController };

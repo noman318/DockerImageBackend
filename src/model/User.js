@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { ADMIN, USER } = require("../../constants");
 const userSchema = new mongoose.Schema({
   firstName: {
     type: String,
@@ -17,7 +18,7 @@ const userSchema = new mongoose.Schema({
   },
   mobileNumber: {
     type: String,
-    default:""
+    default: "",
   },
   userName: {
     type: String,
@@ -28,9 +29,14 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
-  isActive:{
-    type:Number,
-    default:1
+  isActive: {
+    type: Number,
+    default: 1,
+  },
+  role: {
+    type: String,
+    enum: [ADMIN, USER],
+    default: USER,
   },
 });
 module.exports = mongoose.model("user", userSchema);

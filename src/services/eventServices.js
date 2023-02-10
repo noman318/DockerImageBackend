@@ -21,27 +21,43 @@ var seats=[];
 const eventHandler = {
   PostData: async function (data) {
     try {
-      return eventModel
-        .create({
-          ...data,
-        })
-        .then((res) => res)
-        .catch((err) =>{return {err:0,message:err}});
+      newEventModel = new eventModel(data);
+      for (let index = 0; index < newEventModel.seatAvailable; index++) {
+        newEventModel.seats.push({
+          seat_number: index + 1,
+          status: 0,
+          price: newEventModel.price,
+        });
+      }
+      newEventModel.save();
+
+      return { err: 0, message: "Event added succesfully" };
     } catch (error) {
-      return {err:1,message:error}
+      return { err: 1, message: error };
     }
   },
   getAlldata: async function (data) {
-    const filterObjname={};
-    const {name=""} =data;
-    if(name!==""){
-      {filterObjname.name=name}
+    let filterObjname = {};
+    const perPage = 10;
+    const { name = "" } = data;
+    if (name !== "") {
+      filterObjname.name = name;
     }
     try {
-      let dataEvent = await eventModel.find({...filterObjname});
-      return dataEvent;
+      let total = await eventModel.find({ ...filterObjname }).count();
+      var pages = Math.ceil(total / perPage);
+      var pageNumber = data.page == 0 ? 1 : data.page;
+      var startFrom = (pageNumber - 1) * perPage;
+      let dataEvent = await eventModel
+        .find({ ...filterObjname })
+        .skip(Number(startFrom))
+        .limit(Number(perPage));
+      return {
+        pages: total,
+        data: dataEvent,
+      };
     } catch (error) {
-      return {err:1,message:error}
+      return { err: 1, message: error };
     }
   },
   deleteEvent: async function (id) {
@@ -228,28 +244,28 @@ const eventHandler = {
       return { err: 1, msg: error.message };
     }
   },
-  updateFPNToken:async function(id,token){
+  updateFPNToken: async function (id, token) {
     try {
-      let data=await firebasePushNotificationModel.findOne({userId:id})
-      if(data){
-        console.log("---",data.firebaseDeviceToken)
-        console.log("new-Token",token)
-        await firebasePushNotificationModel.updateOne({userId:id},{$set:{firebaseDeviceToken:token}})
+      let data = await firebasePushNotificationModel.findOne({ userId: id });
+      if (data) {
+        console.log("---", data.firebaseDeviceToken);
+        await firebasePushNotificationModel.updateOne(
+          { userId: id },
+          { $set: { firebaseDeviceToken: token } }
+        );
       }
 
-      if(!data){
-        fpn=new firebasePushNotificationModel({
-          userId:id,
-          firebaseDeviceToken:token
-        })
-        fpn.save()
+      if (!data) {
+        fpn = new firebasePushNotificationModel({
+          userId: id,
+          firebaseDeviceToken: token,
+        });
+        fpn.save();
       }
-      
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  },
 };
-//  CreatedAt:{gts:start,$lt:end}
 
 module.exports = { eventHandler };
