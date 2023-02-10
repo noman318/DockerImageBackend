@@ -1,4 +1,4 @@
-const { body, validationResult, check, param } = require("express-validator");
+const { body, validationResult, param } = require("express-validator");
 const eventValidation = () => {
   return [
     body("threaterId").exists().withMessage("threaterId is missing"),

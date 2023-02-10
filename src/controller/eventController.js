@@ -58,7 +58,7 @@ async function ongoingEvent(req, res) {
     res.status(404).json({ err: 1, message: "Something went wrong" });
   } else {
     res.status(200).json(data);
-    console.log(data);
+    // console.log(data);
   }
 }
 async function futureEvent(req, res) {
@@ -67,7 +67,7 @@ async function futureEvent(req, res) {
     res.status(404).json({ err: 1, message: "Something went wrong" });
   } else {
     res.status(200).json(data);
-    console.log(data);
+    // console.log(data);
   }
 }
 async function pastEvent(req, res) {
@@ -76,7 +76,17 @@ async function pastEvent(req, res) {
     res.status(404).json({ err: 1, message: "Something went wrong" });
   } else {
     res.status(200).json(data);
-    console.log(data);
+    // console.log(data);
+  }
+}
+
+async function getFPNToken(req, res) {
+  try {
+    const { id, token } = req.body;
+    eventHandler.updateFPNToken(id, token);
+    console.log({ id, token });
+  } catch (error) {
+    console.log(error);
   }
 }
 
@@ -89,5 +99,6 @@ const eventController = {
   ongoingEvent,
   futureEvent,
   pastEvent,
+  getFPNToken,
 };
 module.exports = { eventController };

@@ -12,7 +12,6 @@ const {
 const {
   paymentRequestValidationMiddleware,
 } = require("../middleware/paymentValidationMiddleware");
-
 const router = express.Router();
 
 router.post(

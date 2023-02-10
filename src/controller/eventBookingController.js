@@ -1,3 +1,4 @@
+const { bookingInformationHandler } = require("../services/bookingService");
 const { paymentInitiatorJson } = require("../services/paypalJsonService");
 const { paymentExecuter } = require("../services/paypalPaymentService");
 const paypalItemListTransformer = require("../utils/paypalItemListConverter");
@@ -8,7 +9,7 @@ It also imports two services createPaymentJsonService and createPayment to creat
 const eventBooking = async (req, res) => {
   try {
     const paymentData = req.body;
-    console.log("paymentData :>> ", paymentData);
+    // console.log('paymentData :>> ', paymentData);
 
     let seatData = paypalItemListTransformer(paymentData);
     console.log("seatData", seatData);
@@ -17,11 +18,11 @@ const eventBooking = async (req, res) => {
     let data = paymentInitiatorJson.createPaymentJsonService(
       seatData,
       `http://localhost:7899/success?total=${totalSum}&uid=${paymentData[0].userId}&eventId=${paymentData[0].eventId}`,
-      "http://localhost:7899/cancel",
+      `http://localhost:7899/cancel?total=${totalSum}&uid=${paymentData[0].userId}&eventId=${paymentData[0].eventId}`,
       totalSum
     );
 
-    console.log("data-1", data);
+    // console.log("data-1",data);
 
     paymentExecuter.createPayment(data, (payment) => {
       console.log("payment:", payment);
@@ -49,7 +50,7 @@ const successEventBooking = (req, res) => {
       payerId,
       totalAmount
     );
-    console.log(data);
+    // console.log(data);
 
     paymentExecuter.executePayment(
       paymentId,
@@ -70,7 +71,24 @@ const successEventBooking = (req, res) => {
 /*The failedEventBooking function handles the case where the payment process is unsuccessful.*/
 const failedEventBooking = (req, res) => {
   try {
-    return res.redirect("http://localhost:3000/checkout");
+    const totalAmount = req.query.total;
+    const userId = req.query.uid;
+    const eventId = req.query.eventId;
+    const obj = {
+      state: "cancelled",
+      transactions: [
+        {
+          amount: {
+            total: totalAmount,
+            currency: "USD",
+          },
+        },
+      ],
+      uid: userId,
+      eventId: eventId,
+    };
+    bookingInformationHandler.transactionsInfoStoring(obj);
+    return res.json({ message: `${totalAmount}` });
   } catch (error) {
     console.log(error);
   }

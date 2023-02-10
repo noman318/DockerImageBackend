@@ -1,4 +1,6 @@
 const paypal = require("paypal-rest-sdk");
+const firebasePushNotificationModel = require("../model/firebasePushNotificationModel");
+const { addPushNotify } = require("../utils/addPushNotification");
 const { deleteFile } = require("../utils/fileDeletion");
 const { invoiceDataModifier } = require("../utils/invoiceJsonData");
 const { sendMailer } = require("../utils/mail");
@@ -41,26 +43,32 @@ const executePayment = (paymentId, data, userId, eventId, callback) => {
     @param data: a JSON object containing the details of the execution, such as the payer ID and transaction amount
     @param callback: a function that is called with the result of the payment execution*/
   try {
-    paypal.payment.execute(paymentId, data, function (error, payment) {
+    paypal.payment.execute(paymentId, data, async function (error, payment) {
       if (error) {
         console.log(error.response);
-        throw error;
+        // throw error;
       } else {
-        console.log("mydata",(data))
+        // console.log("mydata",(data))
         // console.log(JSON.stringify(payment));
         payment.uid=userId
         payment.eventId=eventId
-        console.log(payment);
+       
+        // console.log(payment);
         bookingInformationHandler.transactionsInfoStoring(payment)
         if (payment.state == "approved") {
-          bookingInformationHandler.bookingSeatById(payment)
+          // bookingInformationHandler.bookingSeatById(payment)
           console.log("Seat Book Kijye");
-
+          let fpnData=await firebasePushNotificationModel.findOne({userId:userId})
+          console.log(fpnData.firebaseDeviceToken)
+          if(fpnData){
+            console.log(fpnData)
+            await addPushNotify("Congratulations","You have Succesfully booked ticket",fpnData.firebaseDeviceToken)
+          }
           let invoiceData=invoiceDataModifier(payment);
           let fileName=payment.cart+".pdf"
           callback({
             message: `Thanks for paying ${data.transactions[0].amount.total} USD`,
-            paymentObject: payment,
+            PaymentRequestObject: payment,
           });
         
           createInvoice(invoiceData,fileName);

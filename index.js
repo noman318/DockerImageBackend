@@ -12,8 +12,11 @@ const seatRoute = require("./src/routes/eventBookingRouter");
 const userRoute = require("./src/routes/loginRouter");
 const eventRoute = require("./src/routes/eventRouter");
 const profileRoute = require("./src/routes/myProfileRouter");
-const PORT = process.env.PORT;
+const ContactUs = require("./src/routes/ContactUsRouter");
+const googleAuthRoute = require("./src/routes/googleAuthRouter");
 
+const PORT = process.env.PORT;
+//  console.log(tokenman)
 mongoose.set("strictQuery", true);
 
 connectDB();
@@ -29,9 +32,11 @@ app.use(cors());
 app.use(session);
 
 app.use("/", userRoute);
+app.use("/", googleAuthRoute);
 app.use("/", seatRoute);
 app.use("/event", eventRoute);
 app.use("/profile", profileRoute);
+app.use("/contactus", ContactUs);
 
 app.listen(PORT, (err) => {
   if (err) throw err;
