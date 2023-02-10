@@ -58,7 +58,6 @@ const authService = {
 
   signIn: async function (userData) {
     const user = await this.authFindOne(userData.email);
-    
     if (user) {
       const validPassword = await passWord.decruptPassword(
         userData.password,
@@ -78,6 +77,7 @@ const authService = {
             _id:user._id,
             email: user.email,
             isAuthenticated: true,
+            isAdmin:user.role==="admin",
             token: token,
           };
           return successMsg("successful", data);
@@ -94,19 +94,16 @@ const authService = {
   resetPassword: async function (userData) {
     
     const user = await this.authFindOne(userData.email);
-   
     if (user) {
       try {
         let resetToken = crypto.randomBytes(32).toString("hex");
-        
         const m1 = await sendMailer(
           userData.email,
           resetToken,
           "Reset Password Link",
           "resetMail",
-          userData._id
+           user._id
         );
-        // console.log(true)
         if (m1) {
           const msg = "mail sent";
           return successMsg(msg);
@@ -123,12 +120,14 @@ const authService = {
   changePassword: async function (userData) {
     try {
       const user = await this.authFindById(userData.id);
+      console.log(userData.token)
+      console.log(userData.id);
       if (user) {
         const validPassword = await passWord.decruptPassword(
           userData.oldPassword,
           user.password
         );
-        if (!validPassword) {
+        if (!validPassword&&!token) {
           const msg = "Invalid Credentials!";
           return errorMsg(msg, 203);
         } else {
