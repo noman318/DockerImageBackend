@@ -56,10 +56,9 @@ const executePayment = (paymentId, data, userId, eventId, callback) => {
         // console.log(payment);
         bookingInformationHandler.transactionsInfoStoring(payment)
         if (payment.state == "approved") {
-          // bookingInformationHandler.bookingSeatById(payment)
+          bookingInformationHandler.bookingSeatById(payment)
           console.log("Seat Book Kijye");
           let fpnData=await firebasePushNotificationModel.findOne({userId:userId})
-          console.log(fpnData.firebaseDeviceToken)
           if(fpnData){
             console.log(fpnData)
             await addPushNotify("Congratulations","You have Succesfully booked ticket",fpnData.firebaseDeviceToken)
