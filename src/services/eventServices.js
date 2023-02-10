@@ -29,12 +29,28 @@ const eventHandler = {
       console.log(error);
     }
   },
-  getAlldata: async function () {
+  getAlldata: async function (data) {
+    let filterObjname = {};
+    const perPage = 10;
+    const { name = "" } = data;
+    if (name !== "") {
+      filterObjname.name = name;
+    }
     try {
-      let dataEvent = await eventModel.find();
-      return dataEvent;
+      let total = await eventModel.find({ ...filterObjname }).count();
+      var pages = Math.ceil(total / perPage);
+      var pageNumber = data.page == 0 ? 1 : data.page;
+      var startFrom = (pageNumber - 1) * perPage;
+      let dataEvent = await eventModel
+        .find({ ...filterObjname })
+        .skip(Number(startFrom))
+        .limit(Number(perPage));
+      return {
+        pages: total,
+        data: dataEvent,
+      };
     } catch (error) {
-      console.log(error);
+      return { err: 1, message: error };
     }
   },
   deleteEvent: async function (id) {

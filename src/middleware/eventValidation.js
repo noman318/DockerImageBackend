@@ -10,6 +10,9 @@ const eventValidation = () => {
     body("price").exists().withMessage("price is missing"),
   ];
 };
+const getAll = () => {
+  return [body("name").optional()];
+};
 const updateValidation = () => {
   return [param("id").exists().withMessage("id is missing")];
 };
@@ -54,6 +57,7 @@ const validate = (req, res, next) => {
 const eventsValidation = {
   updateValidation,
   eventValidation,
+  getAll,
   onGoingValidation,
   futureValidation,
   pastValidation,

@@ -5,12 +5,18 @@ const { eventsValidation } = require("../middleware/eventValidation");
 const upload = require("../middleware/multerMiddleware");
 router.post(
   "/",
-  upload.single("image"),
+  upload.single("file"),
   eventsValidation.eventValidation(),
   eventsValidation.validate,
   eventController.postDataAdmin
 );
-router.get("/api/getAll", eventController.getDataEvent);
+
+router.post(
+  "/api/getAll",
+  eventsValidation.getAll(),
+  eventsValidation.validate,
+  eventController.getDataEvent
+);
 router.put(
   "/api/update/:id",
   eventsValidation.updateValidation(),

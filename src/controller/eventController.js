@@ -13,7 +13,7 @@ async function postDataAdmin(req, res) {
   }
 }
 async function getDataEvent(req, res) {
-  let data = await eventHandler.getAlldata();
+  let data = await eventHandler.getAlldata(req.body);
   if (!data) {
     res
       .status(404)
@@ -25,6 +25,7 @@ async function getDataEvent(req, res) {
 
 async function updateEvent(req, res) {
   let databody = req.body;
+  console.log(databody);
   let data = await eventHandler.updateEvent(req.params.id, databody);
   if (!data) {
     res.status(404).json({ err: 1, message: "data is not update" });
