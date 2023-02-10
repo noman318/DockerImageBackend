@@ -29,6 +29,7 @@ async function resetPassword(req, res) {
 }
 
 async function changePassword(req, res) {
+  console.log(req.body)
   const userData = await authService.changePassword(req.body);
   if (userData) {
     res.json(userData);

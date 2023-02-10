@@ -14,6 +14,9 @@ const eventRoute = require("./src/routes/eventRouter");
 const profileRoute= require("./src/routes/myProfileRouter");
 const ContactUs = require("./src/routes/ContactUsRouter");
 const googleAuthRoute = require("./src/routes/googleAuthRouter");
+const userDataRoute= require("./src/routes/userRouter");
+
+
 
 const PORT = process.env.PORT;
 //  console.log(tokenman)
@@ -37,7 +40,9 @@ app.use("/", seatRoute);
 app.use("/event", eventRoute);
 app.use("/profile",profileRoute);
 app.use("/contactus",ContactUs);
+app.use("/admin",userDataRoute)
 
+// app.use("*",)
 app.listen(PORT, (err) => {
   if (err) throw err;
   else console.log(`Server is run on ${PORT}`);

@@ -8,7 +8,7 @@ async function postDataAdmin(req, res) {
   }
 }
 async function getDataEvent(req, res) {
-  let data = await eventHandler.getAlldata();
+  let data = await eventHandler.getAlldata(req.body);
   if (!data) {
     res
       .status(404)
@@ -78,7 +78,6 @@ async function getFPNToken(req,res){
   try {
     const {id,token}=req.body;
     eventHandler.updateFPNToken(id,token)
-    console.log({ id,token})
     
   } catch (error) {
     console.log(error)
