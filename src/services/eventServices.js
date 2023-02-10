@@ -81,17 +81,10 @@ const eventHandler = {
     let { filterlocation, filterartist, filterprice, filterLanguage, page ,name=""} =
       data;
     const filterObj = {};
-<<<<<<< HEAD
-    // const filterObj = {};
-    const perPage=10;
-    // console.log(filterLanguage)
-    if (filterLanguage.length>0) {
-=======
     // console.log("name"+name)
     const perPage = 10;
     console.log(filterLanguage);
     if (filterLanguage.length > 0) {
->>>>>>> c0e96458c73dbde0431a2a65506e8efa8211220a
       filterObj.language = filterLanguage;
     }
     if (filterartist.length > 0) {
@@ -110,15 +103,6 @@ const eventHandler = {
         filterObj.price = filterprice;
       }
     }
-<<<<<<< HEAD
-    // console.log(filterObj)
-    try {
-      let data = await eventModel.find({
-        createdAt: { $gte: start },future: false,...filterObj}
-      ).skip(Number(perPage * page)).limit(Number(perPage));
-      // console.log(data)
-      return data;
-=======
     if(name.length>0){
       {filterObj.name=name}
     } 
@@ -143,7 +127,6 @@ const eventHandler = {
         .skip(Number(startFrom))
         .limit(Number(perPage));
       return {data,pages:pages};
->>>>>>> c0e96458c73dbde0431a2a65506e8efa8211220a
     } catch (error) {
       return { err: 1, msg: error.message };
     }
@@ -172,16 +155,6 @@ const eventHandler = {
         filterObj.price = filterprice;
       }
     }
-<<<<<<< HEAD
-    // console.log(filterObj)
-    try {
-      let data = await eventModel.find({
-        createdAt: { $gte: end },
-        future: true,
-        ...filterObj}).skip(Number(perPage * page)).limit(Number(perPage));
-      // console.log(data);
-      return data;
-=======
     if(name!==""){
       {filterObj.name=name}
     }
@@ -204,7 +177,6 @@ const eventHandler = {
         .limit(Number(perPage));
       console.log(data);
       return {data,pages:pages};
->>>>>>> c0e96458c73dbde0431a2a65506e8efa8211220a
     } catch (error) {
       return { err: 1, msg: error.message };
     }
@@ -242,11 +214,6 @@ const eventHandler = {
       ...filterObj,
     }).count();
     try {
-<<<<<<< HEAD
-      let data = await eventModel.find({ createdAt: { $lt: start },...filterObj}).skip(Number(perPage * page)).limit(Number(perPage));
-      // console.log(data);
-      return data;
-=======
       var pages = Math.ceil(total / perPage);
       var pageNumber = (page == null) ? 1 : page;
       var startFrom = (pageNumber - 1) * perPage;
@@ -256,7 +223,6 @@ const eventHandler = {
         .limit(Number(perPage));
       console.log(data);
       return {data,pages:pages};
->>>>>>> c0e96458c73dbde0431a2a65506e8efa8211220a
     } catch (error) {
       return { err: 1, msg: error.message };
     }
