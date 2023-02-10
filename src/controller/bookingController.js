@@ -10,8 +10,9 @@ async function myBooking(req,res){
 }
 
 async function getAllBookings(req,res){
-    
-    data=await bookingInformationHandler.getAllBookings(Number(req.body.page))
+    const {userId} = req.body
+    console.log('userId :>> ', userId);
+    data=await bookingInformationHandler.getAllBookings((Number(req.body.page)),userId)
     return res.json(data);
 }
 

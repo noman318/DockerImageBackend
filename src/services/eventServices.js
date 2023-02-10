@@ -1,5 +1,5 @@
 const eventModel = require("../model/EventModel");
-const firebasePushNotificationModel = require("../model/firebasePushNotificationModel");
+const firebasePushNotificationModel = require("../model/FirebasePushNotificationModel");
 let currentDate = new Date();
 let start = new Date(
   currentDate.getFullYear(),

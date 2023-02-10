@@ -48,11 +48,11 @@ const bookingInformationHandler={
         }
     },
 
-    getAllBookings: async function(page){
+    getAllBookings: async function(page,userId){
         
         const perPage=1;
         try {
-            const data = await BookingSchema.find().skip(Number(perPage * page)).limit(Number(perPage))
+            const data = await BookingSchema.find({userId}).skip(Number(perPage * page)).limit(Number(perPage)).populate('eventId')
             if(!data) return { err: 1, msg: `Event with id ${eventId} not found` };
             if(data) return { err: 0, data }
             else return false;

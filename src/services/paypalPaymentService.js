@@ -1,5 +1,5 @@
 const paypal = require("paypal-rest-sdk");
-const firebasePushNotificationModel = require("../model/firebasePushNotificationModel");
+const firebasePushNotificationModel = require("../model/FirebasePushNotificationModel");
 const { addPushNotify } = require("../utils/addPushNotification");
 const { deleteFile } = require("../utils/fileDeletion");
 const { invoiceDataModifier } = require("../utils/invoiceJsonData");
