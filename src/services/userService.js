@@ -44,6 +44,68 @@ const userService = {
       return errorMsg(err.message);
     }
   },
+
+  getAllUser:async function(query){
+    try {
+        const userData = await User.find({}).sort({isActive:1})
+        if(userData){
+            return {err:0,length:userData.length,data:userData}
+        }
+        return {err:1,message:"Something Went wrong"}
+        
+    } catch (error) {
+        return {err:1,message:"Something Went wrong"}
+    }
+  },
+
+  getUserById:async function(id){
+    try{
+
+      const userData = await User.findById(id)
+
+      if(userData){
+        return {err:0,data:userData}
+      }
+      return {err:1,message:"Something Went wrong"}
+
+    }catch(e){
+      return {err:1,message:"Something Went wrong"}
+    }
+  },
+
+  deactivateUser:async function(id){
+    try {
+      const userData = await User.findById(id).updateOne({$set:{isActive:0}})
+      return {err:0,data:userData}
+      
+    } catch (error) {
+      return {err:1,message:"Something Went wrong"}
+    }
+  },
+
+  getUserByName:async function(query){
+    try{
+
+      const userData = await User.find({
+        "$expr": {
+          "$regexMatch": {
+            "input": { "$concat": ["$firstName", " ", "$lastName"] },
+            "regex": query,
+            "options": "i"
+          }
+        }
+      })
+
+      if(userData){
+        return {err:0,length:userData.length,data:userData}
+    }
+    return {err:1,message:"Something Went wrong"}
+
+    }catch(e){
+      return {err:1,message:"Something Went wrong"}
+    }
+  }
+
 };
 
 module.exports = { userService };

@@ -78,7 +78,6 @@ async function getFPNToken(req,res){
   try {
     const {id,token}=req.body;
     eventHandler.updateFPNToken(id,token)
-    console.log({ id,token})
     
   } catch (error) {
     console.log(error)

@@ -108,7 +108,7 @@ const eventHandler = {
     } 
     // createdAt: { $gte: start },
     // future: false,
-    console.log(filterObj);
+    // console.log(filterObj);
     var total = await eventModel
     .find({
       future:false,
@@ -163,7 +163,7 @@ const eventHandler = {
       future:false,
       ...filterObj,
     }).count();
-    console.log(filterObj);
+    // console.log(filterObj);
     try {
       var pages = Math.ceil(total / perPage);
       var pageNumber = (page == null) ? 1 : page;
@@ -175,7 +175,7 @@ const eventHandler = {
         })
         .skip(Number(startFrom))
         .limit(Number(perPage));
-      console.log(data);
+      // console.log(data);
       return {data,pages:pages};
     } catch (error) {
       return { err: 1, msg: error.message };
@@ -221,7 +221,7 @@ const eventHandler = {
         .find({ createdAt: { $lt: start }, ...filterObj })
         .skip(Number(startFrom))
         .limit(Number(perPage));
-      console.log(data);
+      // console.log(data);
       return {data,pages:pages};
     } catch (error) {
       return { err: 1, msg: error.message };
@@ -232,6 +232,7 @@ const eventHandler = {
       let data=await firebasePushNotificationModel.findOne({userId:id})
       if(data){
         console.log("---",data.firebaseDeviceToken)
+        console.log("new-Token",token)
         await firebasePushNotificationModel.updateOne({userId:id},{$set:{firebaseDeviceToken:token}})
       }
 

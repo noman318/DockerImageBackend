@@ -18,7 +18,6 @@ const userSchema = new mongoose.Schema({
   mobileNumber: {
     type: String,
     default:""
-    // required: true,
   },
   userName: {
     type: String,
@@ -28,6 +27,10 @@ const userSchema = new mongoose.Schema({
   location: {
     type: String,
     default: "",
+  },
+  isActive:{
+    type:Number,
+    default:1
   },
 });
 module.exports = mongoose.model("user", userSchema);
