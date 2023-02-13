@@ -11,7 +11,7 @@ const session = require("./src/middleware/sessionMiddleware");
 const seatRoute = require("./src/routes/eventBookingRouter");
 const userRoute = require("./src/routes/loginRouter");
 const eventRoute = require("./src/routes/eventRouter");
-const profileRoute= require("./src/routes/myProfileRouter");
+const profileRoute = require("./src/routes/myProfileRouter");
 const ContactUs = require("./src/routes/ContactUsRouter");
 const googleAuthRoute = require("./src/routes/googleAuthRouter");
 const userDataRoute= require("./src/routes/userRouter");
@@ -24,7 +24,7 @@ mongoose.set("strictQuery", true);
 
 connectDB();
 
-app.use("/static", express.static(path.join(__dirname, "uploads")));
+app.use("/static", express.static(path.join(__dirname, "src/uploads")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.engine("handlebars", expHbs.engine());
@@ -35,7 +35,7 @@ app.use(cors());
 app.use(session);
 
 app.use("/", userRoute);
-app.use("/",googleAuthRoute)
+app.use("/", googleAuthRoute);
 app.use("/", seatRoute);
 app.use("/event", eventRoute);
 app.use("/profile",profileRoute);

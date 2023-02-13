@@ -15,4 +15,4 @@ const paypalItemListTransformer=(data)=>{
     return myData;
 }
 
-module.exports=paypalItemListTransformer
+module.exports = paypalItemListTransformer;

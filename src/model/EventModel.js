@@ -17,13 +17,19 @@ const eventSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    futureDate: {
+      type: String,
+    },
     description: {
       type: String,
       // required:true
     },
-    future:{
-     type:Boolean,
-     default:false,
+    future: {
+      type: Boolean,
+      default: false,
+    },
+    futureDate: {
+      type: String,
     },
     artist: {
       type: String,
@@ -42,9 +48,9 @@ const eventSchema = new mongoose.Schema(
     },
     seats: [
       {
-        seat_number: { type: Number},
-        status: { type: Number,default:0 },
-        price: { type: Number},
+        seat_number: { type: Number },
+        status: { type: Number, default: 0 },
+        price: { type: Number },
       },
     ],
   },
