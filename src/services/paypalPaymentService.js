@@ -51,21 +51,31 @@ const executePayment = (paymentId, data, userId, eventId, callback) => {
       } else {
         payment.uid=userId
         payment.eventId=eventId
+
+        const authData = await Auth.findOne({userId:userId})
+         
+          const fpnData=await firebasePushNotificationModel.findOne({userId:authData.userId})
+          console.log('fpnData :>> ', fpnData);
+          if(fpnData){
+            console.log("fpnDAta",fpnData)
+            await addPushNotify("Congratulations","You have Succesfully booked ticket",fpnData.firebaseDeviceToken)
+            notifier("Congratulations","You have Succesfully booked ticket",fpnData.firebaseDeviceToken)
+          }
        
         bookingInformationHandler.transactionsInfoStoring(payment)
         if (payment.state == "approved") {
-          bookingInformationHandler.bookingSeatById(payment)
+          // bookingInformationHandler.bookingSeatById(payment)
           console.log("Seat Book Kijye");
           console.log("---",payment.uid)
-          const authData = await Auth.findOne({userId:userId})
+          // const authData = await Auth.findOne({userId:userId})
          
-          const fpnData=await firebasePushNotificationModel.findOne({userId:authData._id})
-          
-          if(fpnData){
-            console.log(fpnData)
-            // await addPushNotify("Congratulations","You have Succesfully booked ticket",fpnData.firebaseDeviceToken)
-            notifier("Congratulations","You have Succesfully booked ticket",fpnData.firebaseDeviceToken)
-          }
+          // const fpnData=await firebasePushNotificationModel.findOne({userId:authData.userId})
+          // console.log('fpnData :>> ', fpnData);
+          // if(fpnData){
+          //   console.log("fpnDAta",fpnData)
+          //   await addPushNotify("Congratulations","You have Succesfully booked ticket",fpnData.firebaseDeviceToken)
+          //   notifier("Congratulations","You have Succesfully booked ticket",fpnData.firebaseDeviceToken)
+          // }
           let invoiceData=invoiceDataModifier(payment);
           let fileName=payment.cart+".pdf"
           callback({

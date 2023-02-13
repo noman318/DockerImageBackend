@@ -56,7 +56,7 @@ const successEventBooking = (req, res) => {
 
     paymentExecuter.executePayment(paymentId, data,userId,eventId, (paypalResponse) => {
 
-      return res.redirect('http://localhost:3000/')
+      return res.redirect('http://localhost:3000/mybooking')
     });
   } catch (error) {
     console.log(error);
@@ -83,7 +83,7 @@ const failedEventBooking = (req, res) => {
       eventId:eventId
     }
     bookingInformationHandler.transactionsInfoStoring(obj)
-    return res.json({ message: `${totalAmount}` });
+    return res.redirect('http://localhost:3000/eventdetails/63da3fd5926a5ef0fddd6bfa?notification=perform');
   } catch (error) {
     console.log(error);
   }
