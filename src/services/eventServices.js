@@ -1,5 +1,6 @@
 const eventModel = require("../model/EventModel");
 const firebasePushNotificationModel = require("../model/FirebasePushNotificationModel");
+var fs = require("fs");
 let currentDate = new Date();
 let start = new Date(
   currentDate.getFullYear(),
@@ -17,7 +18,7 @@ let end = new Date(
   59,
   59
 );
-var seats=[];
+var seats = [];
 const eventHandler = {
   PostData: async function (data) {
     try {
@@ -83,6 +84,24 @@ const eventHandler = {
       return { err: 1, msg: ex.message };
     }
   },
+  updateImageEvent: async function (id) {
+    try {
+      const dataEvent1 = await eventModel.findByIdAndUpdate(id, { file: "" });
+      if (!dataEvent1) {
+        return { err: 1, msg: `Event with id ${id} not found` };
+      }
+      let data = await eventModel.findById(id);
+      console.log(data);
+      console.log(data.image.substring(29));
+      fs.unlink(`src/uploads/${data.image.substring(29)}`, function (err) {
+        if (err) throw err;
+        console.log("File deleted!");
+      });
+      return { err: 0, msg: "Event updated" };
+    } catch (ex) {
+      return { err: 1, msg: ex.message };
+    }
+  },
   getByid: async function (id) {
     try {
       let dataEvent = await eventModel.findById(id);
@@ -95,8 +114,14 @@ const eventHandler = {
     }
   },
   ongoingEvent: async function (data) {
-    let { filterlocation, filterartist, filterprice, filterLanguage, page ,name=""} =
-      data;
+    let {
+      filterlocation,
+      filterartist,
+      filterprice,
+      filterLanguage,
+      page,
+      name = "",
+    } = data;
     const filterObj = {};
     // console.log("name"+name)
     const perPage = 10;
@@ -120,37 +145,46 @@ const eventHandler = {
         filterObj.price = filterprice;
       }
     }
-    if(name.length>0){
-      {filterObj.name=name}
-    } 
+    if (name.length > 0) {
+      {
+        filterObj.name = name;
+      }
+    }
     // createdAt: { $gte: start },
     // future: false,
     // console.log(filterObj);
     var total = await eventModel
-    .find({
-      future:false,
-      ...filterObj,
-      name:name
-    }).count();
+      .find({
+        future: false,
+        ...filterObj,
+        name: name,
+      })
+      .count();
     try {
       var pages = Math.ceil(total / perPage);
-      var pageNumber = (page == null) ? 1 : page;
+      var pageNumber = page == null ? 1 : page;
       var startFrom = (pageNumber - 1) * perPage;
       let data = await eventModel
         .find({
-          future:false,
+          future: false,
           ...filterObj,
         })
         .skip(Number(startFrom))
         .limit(Number(perPage));
-      return {data,pages:pages};
+      return { data, pages: pages };
     } catch (error) {
       return { err: 1, msg: error.message };
     }
   },
   futureEvent: async function (data) {
-    let { filterlocation, filterartist, filterprice, filterLanguage, page ,name="" } =
-      data;
+    let {
+      filterlocation,
+      filterartist,
+      filterprice,
+      filterLanguage,
+      page,
+      name = "",
+    } = data;
     const perPage = 10;
     const filterObj = {};
     if (filterLanguage.length > 0) {
@@ -172,18 +206,21 @@ const eventHandler = {
         filterObj.price = filterprice;
       }
     }
-    if(name!==""){
-      {filterObj.name=name}
+    if (name !== "") {
+      {
+        filterObj.name = name;
+      }
     }
     var total = await eventModel
-    .find({
-      future:false,
-      ...filterObj,
-    }).count();
+      .find({
+        future: false,
+        ...filterObj,
+      })
+      .count();
     // console.log(filterObj);
     try {
       var pages = Math.ceil(total / perPage);
-      var pageNumber = (page == null) ? 1 : page;
+      var pageNumber = page == null ? 1 : page;
       var startFrom = (pageNumber - 1) * perPage;
       let data = await eventModel
         .find({
@@ -193,14 +230,20 @@ const eventHandler = {
         .skip(Number(startFrom))
         .limit(Number(perPage));
       // console.log(data);
-      return {data,pages:pages};
+      return { data, pages: pages };
     } catch (error) {
       return { err: 1, msg: error.message };
     }
   },
   pastEvent: async function (data) {
-    let { filterlocation, filterartist, filterprice, filterLanguage, page ,name=""} =
-      data;
+    let {
+      filterlocation,
+      filterartist,
+      filterprice,
+      filterLanguage,
+      page,
+      name = "",
+    } = data;
     const perPage = 10;
     const filterObj = {};
     if (filterLanguage.length > 0) {
@@ -222,24 +265,27 @@ const eventHandler = {
         filterObj.price = filterprice;
       }
     }
-    if(name!==""){
-      {filterObj.name=name}
+    if (name !== "") {
+      {
+        filterObj.name = name;
+      }
     }
     var total = await eventModel
-    .find({
-      future:false,
-      ...filterObj,
-    }).count();
+      .find({
+        future: false,
+        ...filterObj,
+      })
+      .count();
     try {
       var pages = Math.ceil(total / perPage);
-      var pageNumber = (page == null) ? 1 : page;
+      var pageNumber = page == null ? 1 : page;
       var startFrom = (pageNumber - 1) * perPage;
       let data = await eventModel
         .find({ createdAt: { $lt: start }, ...filterObj })
         .skip(Number(startFrom))
         .limit(Number(perPage));
       // console.log(data);
-      return {data,pages:pages};
+      return { data, pages: pages };
     } catch (error) {
       return { err: 1, msg: error.message };
     }
