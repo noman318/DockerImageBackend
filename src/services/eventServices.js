@@ -1,4 +1,5 @@
 const eventModel = require("../model/EventModel");
+const firebasePushNotificationModel = require("../model/firebasePushNotificationModel");
 let currentDate = new Date();
 let start = new Date(
   currentDate.getFullYear(),
@@ -16,16 +17,20 @@ let end = new Date(
   59,
   59
 );
-var seats=[];
 const eventHandler = {
   PostData: async function (data) {
     try {
-      return eventModel
-        .create({
-          ...data,
+      newEventModel=new eventModel(data)
+      for(let index=0;index<newEventModel.seatAvailable;index++){
+        newEventModel.seats.push({
+          seat_number: index+1,
+          status: 0,
+          price:newEventModel.price
         })
-        .then((res) => res)
-        .catch((err) =>{return {err:0,message:err}});
+      }
+      newEventModel.save()
+     
+      return {err:0,message:"Event added succesfully"}
     } catch (error) {
       return {err:1,message:error}
     }
@@ -83,7 +88,6 @@ const eventHandler = {
     const filterObj = {};
     // console.log("name"+name)
     const perPage = 10;
-    console.log(filterLanguage);
     if (filterLanguage.length > 0) {
       filterObj.language = filterLanguage;
     }
@@ -108,7 +112,7 @@ const eventHandler = {
     } 
     // createdAt: { $gte: start },
     // future: false,
-    console.log(filterObj);
+    // console.log(filterObj);
     var total = await eventModel
     .find({
       future:false,
@@ -163,7 +167,7 @@ const eventHandler = {
       future:false,
       ...filterObj,
     }).count();
-    console.log(filterObj);
+    // console.log(filterObj);
     try {
       var pages = Math.ceil(total / perPage);
       var pageNumber = (page == null) ? 1 : page;
@@ -175,7 +179,7 @@ const eventHandler = {
         })
         .skip(Number(startFrom))
         .limit(Number(perPage));
-      console.log(data);
+      // console.log(data);
       return {data,pages:pages};
     } catch (error) {
       return { err: 1, msg: error.message };
@@ -221,12 +225,33 @@ const eventHandler = {
         .find({ createdAt: { $lt: start }, ...filterObj })
         .skip(Number(startFrom))
         .limit(Number(perPage));
-      console.log(data);
+      // console.log(data);
       return {data,pages:pages};
     } catch (error) {
       return { err: 1, msg: error.message };
     }
   },
+  updateFPNToken:async function(id,token){
+    try {
+      let data=await firebasePushNotificationModel.findOne({userId:id})
+      if(data){
+        console.log("---",data.firebaseDeviceToken)
+        console.log("new-Token",token)
+        await firebasePushNotificationModel.updateOne({userId:id},{$set:{firebaseDeviceToken:token}})
+      }
+
+      if(!data){
+        fpn=new firebasePushNotificationModel({
+          userId:id,
+          firebaseDeviceToken:token
+        })
+        fpn.save()
+      }
+      
+    } catch (error) {
+      console.log(error)
+    }
+  }
 };
 //  CreatedAt:{gts:start,$lt:end}
 {
