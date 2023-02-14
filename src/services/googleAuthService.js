@@ -29,7 +29,7 @@ const googleAuth={
                 const res = await newUserData.save();
                 console.log('res :>> ', res);
                 if(res){
-                    const authRes = authService.authCreate(res,profile.jti)
+                    const authRes = await authService.authCreate(res,profile.jti)
                     return {err:0,_id:res._id,email:res.email,token:
                                         jwt.sign({
                                             _id:res._id,

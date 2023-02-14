@@ -52,17 +52,10 @@ const successEventBooking = (req, res) => {
     );
     // console.log(data);
 
-    paymentExecuter.executePayment(
-      paymentId,
-      data,
-      userId,
-      eventId,
-      (paypalResponse) => {
-        return res.redirect(
-          `http://localhost:3000/eventdetails/${req.query.eventId}`
-        );
-      }
-    );
+    paymentExecuter.executePayment(paymentId, data,userId,eventId, (paypalResponse) => {
+
+      return res.redirect('http://localhost:3000/mybooking')
+    });
   } catch (error) {
     console.log(error);
   }
@@ -84,11 +77,11 @@ const failedEventBooking = (req, res) => {
           },
         },
       ],
-      uid: userId,
-      eventId: eventId,
-    };
-    bookingInformationHandler.transactionsInfoStoring(obj);
-    return res.json({ message: `${totalAmount}` });
+      uid:userId,
+      eventId:eventId
+    }
+    bookingInformationHandler.transactionsInfoStoring(obj)
+    return res.redirect(`http://localhost:3000/eventdetails/${eventId}?notification=perform`);
   } catch (error) {
     console.log(error);
   }
