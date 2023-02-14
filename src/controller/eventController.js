@@ -2,6 +2,7 @@ const upload = require("../middleware/multerMiddleware");
 const { eventHandler } = require("../services/eventServices");
 async function postDataAdmin(req, res) {
   const requestBody = req.body;
+  console.log(requestBody);
   const url =
     req.protocol + "://" + req.get("host") + "/static/" + req.file.filename;
   const data1 = { ...requestBody, image: url };
@@ -26,15 +27,13 @@ async function getDataEvent(req, res) {
 
 async function updateEvent(req, res) {
   var requestBody = req.body;
-  console.log(requestBody);
-  if (req.body.file) {
-    upload.single("file");
+  if (req.file) {
     const url =
       req.protocol + "://" + req.get("host") + "/static/" + req.file.filename;
     var requestBody = { ...requestBody, image: url };
+    var data = await eventHandler.updateImageEvent(req.params.id);
   }
-
-  let data = await eventHandler.updateEvent(req.params.id, requestBody);
+  var data = await eventHandler.updateEvent(req.params.id, requestBody);
   if (!data) {
     res.status(404).json({ err: 1, message: "data is not update" });
   } else {

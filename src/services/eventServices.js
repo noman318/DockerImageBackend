@@ -84,7 +84,18 @@ const eventHandler = {
       return { err: 1, msg: ex.message };
     }
   },
-
+  updateImageEvent: async function (id) {
+    try {
+      let data = await eventModel.findById(id);
+      fs.unlink(`src/uploads/${data.image.substring(29)}`, function (err) {
+        if (err) {
+          return { err: 1, msg: err.message };
+        }
+      });
+    } catch (err) {
+      return { err: 1, msg: err.message };
+    }
+  },
   getByid: async function (id) {
     try {
       let dataEvent = await eventModel.findById(id);
