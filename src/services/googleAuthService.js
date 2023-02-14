@@ -1,7 +1,7 @@
 const User = require("../model/User");
 const { verifyGoogleTokenCred } = require("../utils/verifyGoogleToken")
 const jwt = require("jsonwebtoken");
-const { authService } = require("./authservice");
+const { authService } = require("./authService");
 const Auth = require("../model/Auth");
 
 const googleAuth={
