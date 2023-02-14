@@ -91,15 +91,9 @@ const eventHandler = {
         return { err: 1, msg: `Event with id ${id} not found` };
       }
       let data = await eventModel.findById(id);
-      console.log(data);
-      console.log(data.image.substring(29));
-      fs.unlink(`src/uploads/${data.image.substring(29)}`, function (err) {
-        if (err) throw err;
-        console.log("File deleted!");
-      });
-      return { err: 0, msg: "Event updated" };
-    } catch (ex) {
-      return { err: 1, msg: ex.message };
+      fs.unlink(`src/uploads/${data.image.substring(29)}`);
+    } catch (err) {
+      return { err: 1, msg: err.message };
     }
   },
   getByid: async function (id) {
