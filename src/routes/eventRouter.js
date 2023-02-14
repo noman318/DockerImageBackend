@@ -20,6 +20,7 @@ router.put(
   eventsValidation.validate,
   eventController.updateEvent
 );
+
 router.delete(
   "/api/delete/:id",
   eventsValidation.updateValidation(),

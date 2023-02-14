@@ -14,9 +14,8 @@ const eventRoute = require("./src/routes/eventRouter");
 const profileRoute = require("./src/routes/myProfileRouter");
 const ContactUs = require("./src/routes/ContactUsRouter");
 const googleAuthRoute = require("./src/routes/googleAuthRouter");
-const userDataRoute= require("./src/routes/userRouter");
-
-
+const userDataRoute = require("./src/routes/userRouter");
+const bodyParser = require("body-parser");
 
 const PORT = process.env.PORT;
 //  console.log(tokenman)
@@ -25,7 +24,9 @@ mongoose.set("strictQuery", true);
 connectDB();
 
 app.use("/static", express.static(path.join(__dirname, "src/uploads")));
+
 app.use(express.json());
+
 app.use(express.urlencoded({ extended: false }));
 app.engine("handlebars", expHbs.engine());
 app.set("view engine", "handlebars");
@@ -38,9 +39,9 @@ app.use("/", userRoute);
 app.use("/", googleAuthRoute);
 app.use("/", seatRoute);
 app.use("/event", eventRoute);
-app.use("/profile",profileRoute);
-app.use("/contactus",ContactUs);
-app.use("/admin",userDataRoute)
+app.use("/profile", profileRoute);
+app.use("/contactus", ContactUs);
+app.use("/admin", userDataRoute);
 
 // app.use("*",)
 app.listen(PORT, (err) => {
