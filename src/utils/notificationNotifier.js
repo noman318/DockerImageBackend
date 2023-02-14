@@ -3,11 +3,6 @@ const axios = require('axios')
 const notifier = async(title,message,token)=>{
     try{
         if(token){
-            // const data ={
-            //     title:title,
-            //     message:message,
-            //     token:token
-            // }
             console.log("--token--",token)
             await axios.post('http://localhost:7899/event/notification',{
                 title:title,
