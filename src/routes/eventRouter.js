@@ -15,11 +15,11 @@ router.post(
 router.post("/api/getAll", eventController.getDataEvent);
 router.put(
   "/api/update/:id",
-  upload.single("file"),
   eventsValidation.updateValidation(),
   eventsValidation.validate,
   eventController.updateEvent
 );
+
 router.delete(
   "/api/delete/:id",
   eventsValidation.updateValidation(),
