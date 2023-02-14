@@ -49,12 +49,17 @@ const bookingInformationHandler={
     },
 
     getAllBookings: async function(page,userId){
-        
-        const perPage=1;
+        console.log('userId from service :>> ', userId);
+        const perPage=5
         try {
-            const data = await BookingSchema.find({userId}).skip(Number(perPage * page)).limit(Number(perPage)).populate('eventId')
+            let total = await BookingSchema.find({ userId }).count();
+            console.log('total :>> ', total);
+            var totalPages = Math.ceil(total / perPage);
+            var pageNumber = page == 0 ? 1 : page;
+            var startFrom = (pageNumber - 1) * perPage;
+            const data = await BookingSchema.find({userId}).skip(Number(startFrom)).limit(Number(perPage)).populate('eventId')
             if(!data) return { err: 1, msg: `Event with id ${eventId} not found` };
-            if(data) return { err: 0, data }
+            if(data) return { err: 0, data, totalPages }
             else return false;
         } catch (error) {
             console.log('error :>> ', error);
