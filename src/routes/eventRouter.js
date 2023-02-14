@@ -15,7 +15,6 @@ router.post(
 router.post("/api/getAll", eventController.getDataEvent);
 router.put(
   "/api/update/:id",
-
   eventsValidation.updateValidation(),
   eventsValidation.validate,
   eventController.updateEvent
