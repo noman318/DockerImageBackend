@@ -24,14 +24,10 @@ mongoose.set("strictQuery", true);
 connectDB();
 
 app.use("/static", express.static(path.join(__dirname, "src/uploads")));
-app.use(
-  bodyParser.urlencoded({
-    extended: false,
-  })
-);
-// app.use(express.json());
-app.use(bodyParser.json());
-// app.use(express.urlencoded({ extended: false }));
+
+app.use(express.json());
+
+app.use(express.urlencoded({ extended: false }));
 app.engine("handlebars", expHbs.engine());
 app.set("view engine", "handlebars");
 app.set("views", "./views");
