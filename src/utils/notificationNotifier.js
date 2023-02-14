@@ -14,7 +14,7 @@ const notifier = async(title,message,token)=>{
                 message:message,
                 token:token
             })
-            .then(res=>{console.log(res)})
+            .then(res=>{console.log("")})
             .catch(err=>{console.log(err)})
         }
     }catch(e){
