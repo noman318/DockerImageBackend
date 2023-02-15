@@ -33,10 +33,17 @@ const myProfileValidationRules = () => {
     body("email").exists().withMessage("email is missing"),
     body("lastName").exists().withMessage("lastname is missing"),
     body("mobileNumber").exists().withMessage("mobilenumber is missing"),
-    body("userName").exists().withMessage("username is missing")
+    body("userName").exists().withMessage("username is missing"),
   ];
 };
+/**
+ * 
+ * @param {*} req Express request object
 
+ * @param {*} res Express response object
+ * @param {*} next Express next function
+ * @returns  {Function} - Either calls the next middleware or returns response with errors
+ */
 const validate = (req, res, next) => {
   const errors = validationResult(req);
   if (errors.isEmpty()) {
@@ -57,7 +64,7 @@ const formValidation = {
   loginValidationRules,
   resetValidationRules,
   changepassValidationRules,
-  myProfileValidationRules
+  myProfileValidationRules,
 };
 
 module.exports = { formValidation };

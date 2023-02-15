@@ -1,12 +1,17 @@
 const mongoose = require("mongoose");
-const FPNMODEL = new mongoose.Schema({
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "user",
+// Define schema
+
+const FPNMODEL = new mongoose.Schema(
+  {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user",
+    },
+    firebaseDeviceToken: {
+      type: String,
+      default: "",
+    },
   },
-  firebaseDeviceToken:{
-    type: String,
-    default:""
-  }
-},{timestamps:true});
+  { timestamps: true }
+);
 module.exports = mongoose.model("fpntoken", FPNMODEL);

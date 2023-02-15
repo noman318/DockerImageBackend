@@ -1,6 +1,10 @@
 const Auth = require("../model/Auth");
 const bcrypt = require("bcrypt");
-
+/**
+ *
+ * @changePassword for the user object , gets user id and search the user by the id using Auth.findById , then it bcrypt the old password and compared with the database if valid the sets the new password for the user
+ * @req oldpass, newpass, id
+ */
 async function changePassword(req, res) {
   let { oldpass, newpass, id } = req.body;
   // finding user by id
