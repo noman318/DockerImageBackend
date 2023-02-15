@@ -2,7 +2,12 @@ const User = require("../model/User");
 const { authService } = require("./authService");
 const { errorMsg } = require("../utils/error");
 const { successMsg } = require("../utils/success");
-
+/**
+ * in signup the details of the user are been saved
+ * getAllUser it gives all the details of the user
+ * the admin can deactivate the user
+ * getUserBName the user can be searched by its name
+ */
 const userService = {
   findUser: async function (email) {
     const userData = User.findOne({ email });
@@ -11,19 +16,21 @@ const userService = {
     }
     return false;
   },
-
+  /**
+   * Create a new user.
+   * @param {*} data - The data for the new user to be created.
+   * @returns - The newly created user data or false if creation fails.
+   */
   userCreate: async function (data) {
     const userData = await User.create(data);
     if (userData) return userData;
     return false;
   },
-
   userfindOneAndDelete: async function (email) {
     const userData = User.findOneAndDelete(email);
     if (userData) return userData;
     return false;
   },
-
   signUp: async function (data) {
     const userData = await authService.authFindOne(data.email);
     if (userData) {
@@ -45,67 +52,62 @@ const userService = {
     }
   },
 
-  getAllUser:async function(query){
+  getAllUser: async function (query) {
     try {
-        const userData = await User.find({}).sort({isActive:1})
-        if(userData){
-            return {err:0,length:userData.length,data:userData}
-        }
-        return {err:1,message:"Something Went wrong"}
-        
-    } catch (error) {
-        return {err:1,message:"Something Went wrong"}
-    }
-  },
-
-  getUserById:async function(id){
-    try{
-
-      const userData = await User.findById(id)
-
-      if(userData){
-        return {err:0,data:userData}
+      const userData = await User.find({}).sort({ isActive: 1 });
+      if (userData) {
+        return { err: 0, length: userData.length, data: userData };
       }
-      return {err:1,message:"Something Went wrong"}
-
-    }catch(e){
-      return {err:1,message:"Something Went wrong"}
-    }
-  },
-
-  deactivateUser:async function(id){
-    try {
-      const userData = await User.findById(id).updateOne({$set:{isActive:0}})
-      return {err:0,data:userData}
-      
+      return { err: 1, message: "Something Went wrong" };
     } catch (error) {
-      return {err:1,message:"Something Went wrong"}
+      return { err: 1, message: "Something Went wrong" };
     }
   },
 
-  getUserByName:async function(query){
-    try{
+  getUserById: async function (id) {
+    try {
+      const userData = await User.findById(id);
 
+      if (userData) {
+        return { err: 0, data: userData };
+      }
+      return { err: 1, message: "Something Went wrong" };
+    } catch (e) {
+      return { err: 1, message: "Something Went wrong" };
+    }
+  },
+
+  deactivateUser: async function (id) {
+    try {
+      const userData = await User.findById(id).updateOne({
+        $set: { isActive: 0 },
+      });
+      return { err: 0, data: userData };
+    } catch (error) {
+      return { err: 1, message: "Something Went wrong" };
+    }
+  },
+
+  getUserByName: async function (query) {
+    try {
       const userData = await User.find({
-        "$expr": {
-          "$regexMatch": {
-            "input": { "$concat": ["$firstName", " ", "$lastName"] },
-            "regex": query,
-            "options": "i"
-          }
-        }
-      })
+        $expr: {
+          $regexMatch: {
+            input: { $concat: ["$firstName", " ", "$lastName"] },
+            regex: query,
+            options: "i",
+          },
+        },
+      });
 
-      if(userData){
-        return {err:0,length:userData.length,data:userData}
+      if (userData) {
+        return { err: 0, length: userData.length, data: userData };
+      }
+      return { err: 1, message: "Something Went wrong" };
+    } catch (e) {
+      return { err: 1, message: "Something Went wrong" };
     }
-    return {err:1,message:"Something Went wrong"}
-
-    }catch(e){
-      return {err:1,message:"Something Went wrong"}
-    }
-  }
-
+  },
 };
 
 module.exports = { userService };

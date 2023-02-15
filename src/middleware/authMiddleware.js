@@ -1,4 +1,7 @@
 const jwt = require("jsonwebtoken");
+/**
+ * @authToken validation for the JWT token
+ */
 const authToken = {
   jwtValidate: function () {
     return (req, res, next) => {

@@ -6,7 +6,9 @@ const { authToken } = require("../middleware/authMiddleware");
 const { sendMailer } = require("../utils/mail");
 const crypto = require("crypto");
 const { addPushNotify } = require("../utils/addPushNotification");
-
+/**
+ * Function to create a new authentication user
+ */
 const authService = {
   authCreate: async function (userData, upassword) {
     const pass = passWord.encruptPassword(upassword);
@@ -17,19 +19,23 @@ const authService = {
     });
     return authUser;
   },
-
+  /**
+   *
+   * @param {*} email {string} email - The email address of the user to find.
+   * @returns {Promise<object|false>} - A promise that resolves to the user object if found, false otherwise.
+   */
   authFindOne: async function (email) {
     let user = Auth.findOne({ email });
-    if (user) return user; 
+    if (user) return user;
     return false;
   },
-
+  // Function to populate an authentication user by email
   authPopulate: async function (email) {
     const user = Auth.findOne({ email }).populate("userId");
     if (user) return user;
     return false;
   },
-
+  // Function to find an authentication user by email and update the token
   authFindOneUpdate: async function (email, token) {
     const user = Auth.findOneAndUpdate(
       { email },
@@ -39,12 +45,13 @@ const authService = {
     if (user) return user;
     return false;
   },
-
+  // Function to find an authentication user by ID
   authFindById: async function (id) {
     const user = Auth.findById(id);
     if (user) return user;
     return false;
   },
+  // Function to update the password of an authentication user
 
   authUpdateOne: async function (id, hash) {
     const user = Auth.updateOne(
@@ -55,6 +62,7 @@ const authService = {
     if (user) return user;
     return false;
   },
+  // Function to sign in a user and generate a token
 
   signIn: async function (userData) {
     const user = await this.authFindOne(userData.email);
@@ -72,12 +80,12 @@ const authService = {
           const token = await authToken.jwtToken(user);
           await this.authFindOneUpdate(userData.email, token);
           console.log(user);
-          
+
           const data = {
-            _id:user._id,
+            _id: user._id,
             email: user.email,
             isAuthenticated: true,
-            isAdmin:user.role==="admin",
+            isAdmin: user.role === "admin",
             token: token,
           };
           return successMsg("successful", data);
@@ -92,7 +100,6 @@ const authService = {
   },
 
   resetPassword: async function (userData) {
-    
     const user = await this.authFindOne(userData.email);
     if (user) {
       try {
@@ -102,7 +109,7 @@ const authService = {
           resetToken,
           "Reset Password Link",
           "resetMail",
-           user._id
+          user._id
         );
         if (m1) {
           const msg = "mail sent";
@@ -120,14 +127,14 @@ const authService = {
   changePassword: async function (userData) {
     try {
       const user = await this.authFindById(userData.id);
-      console.log(userData.token)
+      console.log(userData.token);
       console.log(userData.id);
       if (user) {
         const validPassword = await passWord.decruptPassword(
           userData.oldPassword,
           user.password
         );
-        if (!validPassword&&!token) {
+        if (!validPassword && !token) {
           const msg = "Invalid Credentials!";
           return errorMsg(msg, 203);
         } else {

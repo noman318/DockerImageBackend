@@ -1,34 +1,40 @@
 const mongoose = require("mongoose");
-const BookingSchema = new mongoose.Schema(
-  {
-    userId:{
-        // type:String,
+/**
+ * Define the booking schema
+ */
+const BookingSchema = new mongoose.Schema({
+    // The user who made the booking
+    userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "user"
+        ref: "user",
     },
-    eventId:{
-        // type:String,
+    // The event that was booked
+    eventId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "event",
     },
-    seatDetails:[
-        
-    ],
-    paymentId:{
-        type:String,
+    // Details of the seats that were booked
+    seatDetails: [],
+    // The payment ID associated with the booking
+    paymentId: {
+        type: String,
     },
-    amount:{
-        type:String,
+    // The amount that was paid
+    amount: {
+        type: String,
     },
-    transactionState:{
-        type:String
+    // The state of the transaction
+    transactionState: {
+        type: String,
     },
-    payerName:{
-        type:String
+    // The name of the person who made the payment
+    payerName: {
+        type: String,
     },
-    payerEmail:{
-        type:String
-    }
-  });
+    // The email address of the person who made the payment
+    payerEmail: {
+        type: String,
+    },
+});
 
-  module.exports=mongoose.model('booking',BookingSchema)
+module.exports = mongoose.model("booking", BookingSchema);

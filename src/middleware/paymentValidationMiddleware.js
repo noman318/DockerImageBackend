@@ -1,4 +1,8 @@
 const { body, validationResult } = require("express-validator");
+/**
+ *
+ * @returns an array of objects with validation rules for request body
+ */
 const paymentReqBody = () => {
   return [
     body("")
@@ -7,7 +11,13 @@ const paymentReqBody = () => {
       .withMessage("Should be a array of object"),
   ];
 };
-
+/**
+ *
+ * @param {*} req The request object
+ * @param {*} res The response object
+ * @param {*} next The next function
+ * @returns {object} - The error response if validation fails
+ */
 const validate = (req, res, next) => {
   const errors = validationResult(req);
   if (errors.isEmpty()) {

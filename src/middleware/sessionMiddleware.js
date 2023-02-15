@@ -1,10 +1,14 @@
-const sessions=require('express-session');
-const MongoStore = require('connect-mongo');
-
+const sessions = require("express-session");
+const MongoStore = require("connect-mongo");
+/**
+ * Define the length of a single day in milliseconds
+ */
 const oneDay = 1000 * 60 * 60 * 24;
-require('dotenv').config();
-
-const session=sessions({
+require("dotenv").config();
+/**
+ * Create a session middleware with the specified options
+ */
+const session = sessions({
     secret: process.env.SECRET_KEY,
     saveUninitialized: true,
     cookie: { maxAge: oneDay },
@@ -12,7 +16,8 @@ const session=sessions({
     store: MongoStore.create({
         mongoUrl: process.env.MONGODBCON,
         ttl: 1 * 24 * 60 * 60,
-        autoRemove: 'native'})
+        autoRemove: "native",
+    }),
 });
 
-module.exports=session;
+module.exports = session;
