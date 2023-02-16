@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
-// Define schema
-
+/**
+ * @description Define schema
+ */
 const FPNMODEL = new mongoose.Schema(
   {
     userId: {

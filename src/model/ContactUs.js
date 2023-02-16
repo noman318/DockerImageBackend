@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 /**
- * Define contact us schema
+ * @description Define contact us schema
  */
 const contactUs = new mongoose.Schema(
     {

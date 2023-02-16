@@ -4,6 +4,7 @@ const { userProfileService } = require("../services/myProfileService");
 /**
  *
  * @getProfileById function handles an HTTP GET request to retrieve a user's profile by their ID. It calls the getById function from the userProfileService module, passing in the ID from the request parameters.
+ * @param req the user id 
  */
 async function getProfileById(req, res) {
   //   res.send(req.params.id)
@@ -17,6 +18,8 @@ async function getProfileById(req, res) {
 /**
  *
  * @updateProfileById function handles an HTTP GET request to retrieve a user's profile by their ID. It calls the getById function from the userProfileService module, passing in the ID from the request parameters.
+ * @param req the user id from the user details object 
+ * @res if error then provides with an error message or with a 200 staus code 
  */
 async function updateProfileById(req, res) {
   let dataBody = req.body;

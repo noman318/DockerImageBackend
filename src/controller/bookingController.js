@@ -3,7 +3,7 @@ const { bookingInformationHandler } = require("../services/bookingService");
 /**
  * 
  *@myBooking  function receives a request object and extracts the eventId value and page value from its body
-
+ *@req userId, eventId
  * @returns  getBookingInfoByUserIdAndEventId function from the bookingInformationHandler object with these values and waits for it to complete. The resulting data is then sent back as a JSON response.
  */
 async function myBooking(req, res) {
@@ -21,6 +21,7 @@ async function myBooking(req, res) {
  *
  * @getAllBookings function receives a request object and extracts the userId value and page value from its body
  * @returns getAllBookings function from the bookingInformationHandler object with these values and waits for it to complete. The resulting data is then sent back as a JSON response.
+ * @req userId
  */
 async function getAllBookings(req, res) {
     const { userId } = req.body;

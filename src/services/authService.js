@@ -7,7 +7,7 @@ const { sendMailer } = require("../utils/mail");
 const crypto = require("crypto");
 const { addPushNotify } = require("../utils/addPushNotification");
 /**
- * Function to create a new authentication user
+ *@description Function to create a new authentication user
  */
 const authService = {
   authCreate: async function (userData, upassword) {
@@ -29,13 +29,20 @@ const authService = {
     if (user) return user;
     return false;
   },
-  // Function to populate an authentication user by email
+  /**
+   * @description  Function to populate an authentication user by email
+   * @param email The email address of the user to find.
+   */
   authPopulate: async function (email) {
     const user = Auth.findOne({ email }).populate("userId");
     if (user) return user;
     return false;
   },
-  // Function to find an authentication user by email and update the token
+  /**
+   * @description Function to find an authentication user by email and update the token
+   * @param  email fint the user by email 
+   * @param  token idf the user found then update the tocken 
+   */
   authFindOneUpdate: async function (email, token) {
     const user = Auth.findOneAndUpdate(
       { email },
@@ -45,12 +52,20 @@ const authService = {
     if (user) return user;
     return false;
   },
-  // Function to find an authentication user by ID
+  /**
+   * @description  Function to find an authentication user by ID
+   * @param {*} id  authentication user by ID
+   */
   authFindById: async function (id) {
     const user = Auth.findById(id);
     if (user) return user;
     return false;
   },
+  /**
+   * @description Function to update the password of an authentication user
+   * @param id get the user id 
+   * @param hash password 
+   */
   // Function to update the password of an authentication user
 
   authUpdateOne: async function (id, hash) {
@@ -62,7 +77,10 @@ const authService = {
     if (user) return user;
     return false;
   },
-  // Function to sign in a user and generate a token
+  /**
+   * @description Function to sign in a user and generate a token
+   * @param userData get user details to feth the user email
+   */
 
   signIn: async function (userData) {
     const user = await this.authFindOne(userData.email);

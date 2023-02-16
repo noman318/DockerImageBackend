@@ -15,6 +15,7 @@ const getAllUserData = async (req, res) => {
 /**
  *
  * @deactivateUser deactivate user based on their id provided in the request
+ * @param req id of the user and details of the user 
  */
 const deactivateUser = async (req, res) => {
     try {
@@ -28,6 +29,7 @@ const deactivateUser = async (req, res) => {
 /**
  *
  * @getUserByName retrieves a user based on their name provided in the request body by calling userService function getUserByName.
+ * @param req user detail body 
  */
 const getUserByName = async (req, res) => {
     try {

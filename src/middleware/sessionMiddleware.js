@@ -1,12 +1,12 @@
 const sessions = require("express-session");
 const MongoStore = require("connect-mongo");
 /**
- * Define the length of a single day in milliseconds
+ * @description Define the length of a single day in milliseconds
  */
 const oneDay = 1000 * 60 * 60 * 24;
 require("dotenv").config();
 /**
- * Create a session middleware with the specified options
+ * @description Create a session middleware with the specified options
  */
 const session = sessions({
     secret: process.env.SECRET_KEY,
