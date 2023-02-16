@@ -1,7 +1,10 @@
 const multer = require("multer");
 const path = require("path");
 
-//start upload code
+/**
+ * @description Set up the storage engine for multer to store uploaded files
+ */
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, path.resolve(__dirname, "../uploads"));
@@ -11,14 +14,16 @@ const storage = multer.diskStorage({
     cb(
       null,
       file.fieldname +
-        "-" +
-        Date.now() +
-        Math.round(Math.random() * 1e9) +
-        fileExtension
+      "-" +
+      Date.now() +
+      Math.round(Math.random() * 1e9) +
+      fileExtension
     );
   },
 });
-
+/**
+ * @description Set up multer middleware to handle file uploads and filter files
+ */
 const upload = multer({
   storage: storage,
   fileFilter: (req, file, cb) => {
@@ -33,6 +38,5 @@ const upload = multer({
     }
   },
 });
-//end upload
 
 module.exports = upload;

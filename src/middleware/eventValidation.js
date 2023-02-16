@@ -1,4 +1,8 @@
 const { body, validationResult, param } = require("express-validator");
+/**
+ * @description Returns an array of validation rules for event creation
+ *@returns Array of validation rules
+ */
 const eventValidation = () => {
   return [
     body("threaterId").exists().withMessage("threaterId is missing"),
@@ -37,11 +41,16 @@ const pastValidation = () => {
     body("artist").optional(),
   ];
 };
-const getAll=()=>{
-  return [
-    body("name").optional()
-  ]
-}
+const getAll = () => {
+  return [body("name").optional()];
+};
+/**
+ *
+ * @param  req The request object.
+ * @param  res The response object.
+ * @param  next  The next middleware function.
+ * @returns  If there are no validation errors, call the next middleware function, otherwise return an error response.
+ */
 const validate = (req, res, next) => {
   const errors = validationResult(req);
   if (errors.isEmpty()) {

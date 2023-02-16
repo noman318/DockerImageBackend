@@ -1,5 +1,10 @@
 const eventModel = require("../model/EventModel");
 const firebasePushNotificationModel = require("../model/FirebasePushNotificationModel");
+/**
+ * @description crud operation for all the events
+ * @description filter for ongoing event , past event , upcomming event
+ * @description using firbase token for updating token
+ */
 var fs = require("fs");
 let currentDate = new Date();
 let start = new Date(
@@ -117,7 +122,7 @@ const eventHandler = {
       name = "",
     } = data;
     const filterObj = {};
-    // console.log("name"+name)
+
     const perPage = 10;
     console.log(filterLanguage);
     if (filterLanguage.length > 0) {
@@ -134,7 +139,6 @@ const eventHandler = {
       }
     }
     if (filterprice.length > 0) {
-      // console.log(filterprice)
       {
         filterObj.price = filterprice;
       }
@@ -144,9 +148,7 @@ const eventHandler = {
         filterObj.name = name;
       }
     }
-    // createdAt: { $gte: start },
-    // future: false,
-    // console.log(filterObj);
+
     var total = await eventModel
       .find({
         future: false,
@@ -195,7 +197,6 @@ const eventHandler = {
       }
     }
     if (filterprice.length > 0) {
-      // console.log(filterprice)
       {
         filterObj.price = filterprice;
       }
@@ -211,7 +212,7 @@ const eventHandler = {
         ...filterObj,
       })
       .count();
-    // console.log(filterObj);
+
     try {
       var pages = Math.ceil(total / perPage);
       var pageNumber = page == null ? 1 : page;
@@ -223,7 +224,7 @@ const eventHandler = {
         })
         .skip(Number(startFrom))
         .limit(Number(perPage));
-      // console.log(data);
+
       return { data, pages: pages };
     } catch (error) {
       return { err: 1, msg: error.message };
@@ -254,7 +255,6 @@ const eventHandler = {
       }
     }
     if (filterprice.length > 0) {
-      // console.log(filterprice)
       {
         filterObj.price = filterprice;
       }
@@ -278,7 +278,7 @@ const eventHandler = {
         .find({ createdAt: { $lt: start }, ...filterObj })
         .skip(Number(startFrom))
         .limit(Number(perPage));
-      // console.log(data);
+
       return { data, pages: pages };
     } catch (error) {
       return { err: 1, msg: error.message };

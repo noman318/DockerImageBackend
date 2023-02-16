@@ -1,16 +1,19 @@
 const fs = require("fs");
 const PDFDocument = require("pdfkit");
-const conversionRate=0.01368
+const conversionRate = 0.01368
+/**
+ * @description for generating invoice for the book seats by the user 
+ */
 function createInvoice(invoice, path) {
   try {
-    path='./invoiceFiles/'+path
+    path = './invoiceFiles/' + path
     let doc = new PDFDocument({ size: "A4", margin: 50 });
-  
+
     generateHeader(doc);
     generateCustomerInformation(doc, invoice);
     generateInvoiceTable(doc, invoice);
     generateFooter(doc);
-  
+
     doc.end();
     doc.pipe(fs.createWriteStream(path));
   }
@@ -63,11 +66,11 @@ function generateCustomerInformation(doc, invoice) {
     .text(invoice.shipping.address, 350, customerInformationTop + 15)
     .text(
       invoice.shipping.city +
-        ", " +
-        invoice.shipping.state +
-        ", " +
-        invoice.shipping.country,
-        350,
+      ", " +
+      invoice.shipping.state +
+      ", " +
+      invoice.shipping.country,
+      350,
       customerInformationTop + 30
     )
     .moveDown();
@@ -183,8 +186,8 @@ function generateHr(doc, y) {
 }
 
 function formatCurrency(cents) {
-//   return "$" + (cents / 100).toFixed(2);
-    return "Rs. "+ Number(cents / conversionRate).toFixed(2);
+
+  return "Rs. " + Number(cents / conversionRate).toFixed(2);
 }
 
 function formatDate(date) {

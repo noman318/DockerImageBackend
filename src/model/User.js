@@ -1,5 +1,8 @@
 const mongoose = require("mongoose");
 const { ADMIN, USER } = require("../../constants");
+/**
+ *@description Define the user schema
+ */
 const userSchema = new mongoose.Schema({
   firstName: {
     type: String,

@@ -52,8 +52,9 @@ const executePayment = (paymentId, data, userId, eventId, callback) => {
         payment.uid=userId
         payment.eventId=eventId
 
-        const authData = await Auth.findOne({userId:userId})
-         
+        if(userId){
+          try {
+            const authData = await Auth.findOne({userId:userId})
           const fpnData=await firebasePushNotificationModel.findOne({userId:authData.userId})
           console.log('fpnData :>> ', fpnData);
           if(fpnData){
@@ -61,21 +62,20 @@ const executePayment = (paymentId, data, userId, eventId, callback) => {
             await addPushNotify("Congratulations","You have Succesfully booked ticket",fpnData.firebaseDeviceToken)
             notifier("Congratulations","You have Succesfully booked ticket",fpnData.firebaseDeviceToken)
           }
+            
+          } catch (error) {
+            console.log(error)
+          }
+        }
+         
+          
        
         bookingInformationHandler.transactionsInfoStoring(payment)
         if (payment.state == "approved") {
           // bookingInformationHandler.bookingSeatById(payment)
           console.log("Seat Book Kijye");
           console.log("---",payment.uid)
-          // const authData = await Auth.findOne({userId:userId})
-         
-          // const fpnData=await firebasePushNotificationModel.findOne({userId:authData.userId})
-          // console.log('fpnData :>> ', fpnData);
-          // if(fpnData){
-          //   console.log("fpnDAta",fpnData)
-          //   await addPushNotify("Congratulations","You have Succesfully booked ticket",fpnData.firebaseDeviceToken)
-          //   notifier("Congratulations","You have Succesfully booked ticket",fpnData.firebaseDeviceToken)
-          // }
+        
           let invoiceData=invoiceDataModifier(payment);
           let fileName=payment.cart+".pdf"
           callback({

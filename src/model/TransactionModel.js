@@ -1,20 +1,22 @@
 const mongoose = require("mongoose");
-const TransactionSchema = new mongoose.Schema(
-  {
-    paymentId:{
-        type:String,
+/**
+ * @description Define the schema for the "transaction" collection
+ */
+const TransactionSchema = new mongoose.Schema({
+    paymentId: {
+        type: String,
     },
-    userId:{
+    userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "user"
+        ref: "user",
     },
-    eventId:{
+    eventId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "event",
     },
-    paymentInfo:{
-        type:Object
-    }
-  });
+    paymentInfo: {
+        type: Object,
+    },
+});
 
-  module.exports=mongoose.model('transaction',TransactionSchema)
+module.exports = mongoose.model("transaction", TransactionSchema);

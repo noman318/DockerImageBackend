@@ -1,4 +1,8 @@
 const { body, validationResult } = require("express-validator");
+/**
+ * @description user validation rules 
+ * @returns with the error mesage if the field is missing 
+ */
 const userValidationRules = () => {
   return [
     body("firstName").exists().withMessage("firstname is missing"),
@@ -10,15 +14,26 @@ const userValidationRules = () => {
     body("location").exists().withMessage("location is missing"),
   ];
 };
+/**
+ * @description login validation rule for email and password 
+ * @returns if the email dose not  exists it provides with an error message
+ */
 const loginValidationRules = () => {
   return [
     body("email").exists().withMessage("email is missing"),
     body("password").exists().withMessage("password is missing"),
   ];
 };
+/**
+ * @description rule for reset password 
+ */
 const resetValidationRules = () => {
   return [body("email").exists().withMessage("email is missing")];
 };
+/**
+ * @description validation for change password 
+ * @returns if the fields are missing for old password , new password or id it provides and error message  
+ */
 const changepassValidationRules = () => {
   return [
     body("oldPassword").exists().withMessage("oldpassword is missing"),
@@ -26,17 +41,27 @@ const changepassValidationRules = () => {
     body("id").exists().withMessage("id is missing"),
   ];
 };
-
+/**
+ * @description validation ruls for my profile 
+ * @returns if any fild is empty it shows error 
+ */
 const myProfileValidationRules = () => {
   return [
     body("firstName").exists().withMessage("firstname is missing"),
     body("email").exists().withMessage("email is missing"),
     body("lastName").exists().withMessage("lastname is missing"),
     body("mobileNumber").exists().withMessage("mobilenumber is missing"),
-    body("userName").exists().withMessage("username is missing")
+    body("userName").exists().withMessage("username is missing"),
   ];
 };
+/**
+ * 
+ * @param  req Express request object
 
+ * @param  res Express response object
+ * @param  next Express next function
+ * @returns Either calls the next middleware or returns response with errors
+ */
 const validate = (req, res, next) => {
   const errors = validationResult(req);
   if (errors.isEmpty()) {
@@ -57,7 +82,7 @@ const formValidation = {
   loginValidationRules,
   resetValidationRules,
   changepassValidationRules,
-  myProfileValidationRules
+  myProfileValidationRules,
 };
 
 module.exports = { formValidation };

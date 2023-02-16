@@ -1,4 +1,7 @@
 const mongoose = require("mongoose");
+/**
+ *  @description Define the schema for events
+ */
 const eventSchema = new mongoose.Schema(
   {
     threaterId: {
@@ -17,12 +20,12 @@ const eventSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    // "futureDate" field is defined twice in the schema. Removing the duplicate.
     futureDate: {
       type: String,
     },
     description: {
       type: String,
-      // required:true
     },
     future: {
       type: Boolean,

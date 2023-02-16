@@ -2,7 +2,12 @@ const User = require("../model/User");
 const { authService } = require("./authService");
 const { errorMsg } = require("../utils/error");
 const { successMsg } = require("../utils/success");
-
+/**
+ *@description in signup the details of the user are been saved
+ * getAllUser it gives all the details of the user
+ * the admin can deactivate the user
+ * getUserBName the user can be searched by its name
+ */
 const userService = {
   findUser: async function (email) {
     const userData = User.findOne({ email });
@@ -11,19 +16,31 @@ const userService = {
     }
     return false;
   },
-
+  /**
+   * @description Create a new user.
+   * @param  data - The data for the new user to be created.
+   * @returns - The newly created user data or false if creation fails.
+   */
   userCreate: async function (data) {
     const userData = await User.create(data);
     if (userData) return userData;
     return false;
   },
-
+  /**
+   * @description find a user by email and delete 
+   * @param email get email from the user details 
+   * @returns 
+   */
   userfindOneAndDelete: async function (email) {
     const userData = User.findOneAndDelete(email);
     if (userData) return userData;
     return false;
   },
-
+  /**
+   * @description register a new user 
+   * @param data object of the users and compare the entered email with existing emails 
+   * @returns if email exist then throw error message 
+   */
   signUp: async function (data) {
     const userData = await authService.authFindOne(data.email);
     if (userData) {
@@ -44,7 +61,13 @@ const userService = {
       return errorMsg(err.message);
     }
   },
+<<<<<<< HEAD
 
+=======
+  /**
+   * @description fetch all the user details 
+   */
+>>>>>>> bf9daf39fcea97b395771350b89f476a5a7d2d28
   getAllUser: async function (query) {
     try {
       const userData = await User.find({}).sort({ isActive: 1 });
@@ -54,6 +77,7 @@ const userService = {
       return { err: 1, message: "Something Went wrong" };
     } catch (error) {
       return { err: 1, message: "Something Went wrong" };
+<<<<<<< HEAD
     }
   },
 
@@ -101,16 +125,57 @@ const userService = {
   getUserByName: async function (data) {
     const perPage = 10;
 
+=======
+    }
+  },
+  /**
+   * @description get user detail by user id 
+   * @param id find user by id 
+   */
+  getUserById: async function (id) {
+    try {
+      const userData = await User.findById(id);
+
+      if (userData) {
+        return { err: 0, data: userData };
+      }
+      return { err: 1, message: "Something Went wrong" };
+    } catch (e) {
+      return { err: 1, message: "Something Went wrong" };
+    }
+  },
+  /**
+   * @description the admin can activate 
+   * @param id get user by id 
+   */
+  deactivateUser: async function (id) {
+    try {
+      const userData = await User.findById(id).updateOne({
+        $set: { isActive: 0 },
+      });
+      return { err: 0, data: userData };
+    } catch (error) {
+      return { err: 1, message: "Something Went wrong" };
+    }
+  },
+
+  getUserByName: async function (query) {
+>>>>>>> bf9daf39fcea97b395771350b89f476a5a7d2d28
     try {
       const userData = await User.find({
         $expr: {
           $regexMatch: {
             input: { $concat: ["$firstName", " ", "$lastName"] },
+<<<<<<< HEAD
             regex: data.name,
+=======
+            regex: query,
+>>>>>>> bf9daf39fcea97b395771350b89f476a5a7d2d28
             options: "i",
           },
         },
       });
+<<<<<<< HEAD
 
       var pageNumber = data.page == 0 ? 1 : data.page;
       var startFrom = (pageNumber - 1) * perPage;
@@ -128,6 +193,11 @@ const userService = {
 
       if (userData) {
         return { err: 0, pages: userData.length, data: dataEvent };
+=======
+
+      if (userData) {
+        return { err: 0, length: userData.length, data: userData };
+>>>>>>> bf9daf39fcea97b395771350b89f476a5a7d2d28
       }
       return { err: 1, message: "Something Went wrong" };
     } catch (e) {

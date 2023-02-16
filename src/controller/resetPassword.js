@@ -1,6 +1,11 @@
 const Auth = require("../model/Auth");
 const nodemailer = require("nodemailer");
 const { mymail } = require("../utils/mail");
+/**
+ *
+ * @resetPassword is to reset the password for the user by passing the link for reset password to its respective mail the nodemailer
+ *@param req the user to provide its email
+ */
 async function resetPassword(req, res) {
   const { email } = req.body;
   let user = await Auth.findOne({ email });

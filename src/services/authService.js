@@ -6,7 +6,9 @@ const { authToken } = require("../middleware/authMiddleware");
 const { sendMailer } = require("../utils/mail");
 const crypto = require("crypto");
 const { addPushNotify } = require("../utils/addPushNotification");
-
+/**
+ *@description Function to create a new authentication user
+ */
 const authService = {
   authCreate: async function (userData, upassword) {
     const pass = passWord.encruptPassword(upassword);
@@ -17,19 +19,30 @@ const authService = {
     });
     return authUser;
   },
-
+  /**
+   *
+   * @param  email {string} email - The email address of the user to find.
+   * @returns - A promise that resolves to the user object if found, false otherwise.
+   */
   authFindOne: async function (email) {
     let user = Auth.findOne({ email });
     if (user) return user;
     return false;
   },
-
+  /**
+   * @description  Function to populate an authentication user by email
+   * @param email The email address of the user to find.
+   */
   authPopulate: async function (email) {
     const user = Auth.findOne({ email }).populate("userId");
     if (user) return user;
     return false;
   },
-
+  /**
+   * @description Function to find an authentication user by email and update the token
+   * @param  email fint the user by email
+   * @param  token idf the user found then update the tocken
+   */
   authFindOneUpdate: async function (email, token) {
     const user = Auth.findOneAndUpdate(
       { email },
@@ -39,12 +52,20 @@ const authService = {
     if (user) return user;
     return false;
   },
-
+  /**
+   * @description  Function to find an authentication user by ID
+   * @param {*} id  authentication user by ID
+   */
   authFindById: async function (id) {
     const user = Auth.findById(id);
     if (user) return user;
     return false;
   },
+  /**
+   * @description Function to update the password of an authentication user
+   * @param id get the user id
+   * @param hash password
+   */
 
   authUpdateOne: async function (id, hash) {
     const user = Auth.updateOne(
@@ -55,6 +76,10 @@ const authService = {
     if (user) return user;
     return false;
   },
+  /**
+   * @description Function to sign in a user and generate a token
+   * @param userData get user details to feth the user email
+   */
 
   signIn: async function (userData) {
     const user = await this.authFindOne(userData.email);
@@ -97,6 +122,10 @@ const authService = {
       return errorMsg(msg, 204);
     }
   },
+  /**
+   * @description is used for reset the password if the user has forget the password
+   * @param userData grts the user details and fetch the email from the detail
+   */
 
   resetPassword: async function (userData) {
     const user = await this.authFindOne(userData.email);
@@ -122,7 +151,10 @@ const authService = {
       return errorMsg(msg, 204);
     }
   },
-
+  /**
+   *
+   * @description this function is used for change the exesting password of the user
+   */
   changePassword: async function (userData) {
     try {
       const user = await this.authFindById(userData.id);
