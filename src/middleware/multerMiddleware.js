@@ -2,7 +2,7 @@ const multer = require("multer");
 const path = require("path");
 
 /**
- * Set up the storage engine for multer to store uploaded files
+ * @description Set up the storage engine for multer to store uploaded files
  */
 
 const storage = multer.diskStorage({
@@ -22,7 +22,7 @@ const storage = multer.diskStorage({
   },
 });
 /**
- * Set up multer middleware to handle file uploads and filter files
+ * @description Set up multer middleware to handle file uploads and filter files
  */
 const upload = multer({
   storage: storage,

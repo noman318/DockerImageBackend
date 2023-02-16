@@ -2,7 +2,7 @@ const BookingSchema = require("../model/BookingModel");
 const TransactionModel = require("../model/TransactionModel");
 const eventModel = require("../model/EventModel");
 /**
- * // Function to store booking information in the database
+ *@description Function to store booking information in the database
  */
 const bookingInformationHandler = {
     bookingInfoStoring: async function (payment) {
@@ -24,7 +24,10 @@ const bookingInformationHandler = {
             console.log(error);
         }
     },
-    // Function to store transaction information in the database
+    /**
+     * @description Function to store transaction information in the database
+     * @param  payment userId , eventId , paymentInfo
+     */
     transactionsInfoStoring: async function (payment) {
         try {
             new TransactionModel({
@@ -36,7 +39,9 @@ const bookingInformationHandler = {
             console.log(error);
         }
     },
-    // Function to retrieve booking information for a user and event
+    /**
+     * @description Function to retrieve booking information for a user and event
+     */
 
     getBookingInfoByUserIdAndEventId: async function (userId, eventId, page) {
         try {
@@ -56,7 +61,9 @@ const bookingInformationHandler = {
             console.log(error);
         }
     },
-    // Function to retrieve all bookings for a user
+    /**
+     *@description Function to retrieve all bookings for a user
+     */
 
     getAllBookings: async function (page, userId) {
         console.log("userId from service :>> ", userId);

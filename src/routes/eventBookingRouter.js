@@ -1,5 +1,7 @@
 const express = require("express");
-// Import the controller functions and middleware functions
+/**
+ * @description  Import the controller functions and middleware functions
+ */
 const {
   myBooking,
   getAllBookings,

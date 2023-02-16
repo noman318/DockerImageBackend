@@ -1,11 +1,11 @@
 const { paymentJson } = require("../utils/paymentJsonData");
 /**
- * Generates a payment JSON object with given seat array, return URL, cancel URL, and total price
- * @param {array} seatArray - array of seats for the transaction
- * @param {string} return_url - URL to redirect the user to after successful transaction
- * @param {string} cancel_url - URL to redirect the user to after cancelled transaction
- * @param {number} totalPrice - total amount to charge for the transaction
- * @returns {object} - payment JSON object
+ * @description Generates a payment JSON object with given seat array, return URL, cancel URL, and total price
+ * @param  seatArray - array of seats for the transaction
+ * @param  return_url - URL to redirect the user to after successful transaction
+ * @param cancel_url - URL to redirect the user to after cancelled transaction
+ * @param  totalPrice - total amount to charge for the transaction
+ * @returns  - payment JSON object
  */
 const createPaymentJsonService = (
     seatArray,

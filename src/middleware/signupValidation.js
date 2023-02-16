@@ -1,9 +1,12 @@
 const { body, validationResult } = require("express-validator");
+/**
+ * @description user validation rules
+ * @returns The response object with error information if errors exist.
+ */
 const userValidationRules = () => {
   return [
-    // username must be an email
     body("firstname").exists().withMessage("must be at least 5 chars long"),
-    // password must be at least 5 chars long
+
     body("email").exists().withMessage("must be at least 5 chars long"),
     body("lastname").exists().withMessage("must be at least 5 chars long"),
     body("mobilenumber").exists().withMessage("must be at least 5 chars long"),

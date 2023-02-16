@@ -3,7 +3,7 @@ const hbs = require("nodemailer-express-handlebars");
 const path = require("path");
 require("dotenv").config();
 /**
- *Creating a nodemailer transporter for Gmail
+ *@description Creating a nodemailer transporter for Gmail
  */
 let transporter = nodemailer.createTransport({
     service: "gmail",

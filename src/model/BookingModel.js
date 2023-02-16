@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 /**
- * Define the booking schema
+ * @description Define the booking schema
  */
 const BookingSchema = new mongoose.Schema({
     // The user who made the booking

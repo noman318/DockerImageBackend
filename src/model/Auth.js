@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 /**
- * Define the schema for the authentication collection
+ * @description Define the schema for the authentication collection
  */
 const authSchema = new mongoose.Schema({
   userId: {

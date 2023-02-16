@@ -20,9 +20,9 @@ const myBookingReqBody = () => {
 };
 /**
  *
- * @param {*} req represents the request object, which contains information about the incoming HTTP request
- * @param {*} res represents the response object, which is used to send a response back to the client.
- * @param {*} next is a function that is called to pass control to the next middleware function in the application's request-response cycle
+ * @param  req represents the request object, which contains information about the incoming HTTP request
+ * @param  res represents the response object, which is used to send a response back to the client.
+ * @param  next is a function that is called to pass control to the next middleware function in the application's request-response cycle
  * @returns
  */
 const validate = (req, res, next) => {

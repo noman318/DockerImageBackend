@@ -3,7 +3,7 @@ const { errorMsg } = require("../utils/error");
 const { successMsg } = require("../utils/success");
 const { sendMailer } = require("../utils/mail");
 /**
- * Function to store contact form data in the database
+ * @description Function to store contact form data in the database
  */
 const contactHandle = {
     PostData: async function (data) {
@@ -27,7 +27,7 @@ const contactHandle = {
         return null;
     },
     /**
-     * Function to retrieve all contact form data from the database
+     * @description Function to retrieve all contact form data from the database
      */
     getAlldata: async function () {
         try {

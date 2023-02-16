@@ -1,8 +1,8 @@
 const { contactHandle } = require("../services/contactusService");
 /**
- *
- * @postContactUs receives a request object and logs its body to the console. It then awaits the result of calling the PostData method from the contactHandle object with the request body
- * @req contactHandle.PostData
+ * @description Saves contact details of the user
+ * @param req Email ID and Message 
+ * @param res if error then plz provide the data or with the status code 200
  */
 async function postContactUs(req, res) {
     console.log(req.body);
@@ -14,7 +14,9 @@ async function postContactUs(req, res) {
     }
 }
 /**
- * @getContactUs request all date of the submited review 
+ * @description gets all the data 
+ * @param  req all data of the message posted by the user 
+ * @param  res if error then provide whith error message or provides with 200 status code 
  */
 async function getContactUs(req, res) {
     let data = await contactHandle.getAlldata();
