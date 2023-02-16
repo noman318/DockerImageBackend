@@ -21,8 +21,8 @@ const authService = {
   },
   /**
    *
-   * @param {*} email {string} email - The email address of the user to find.
-   * @returns {Promise<object|false>} - A promise that resolves to the user object if found, false otherwise.
+   * @param  email {string} email - The email address of the user to find.
+   * @returns - A promise that resolves to the user object if found, false otherwise.
    */
   authFindOne: async function (email) {
     let user = Auth.findOne({ email });
@@ -66,7 +66,6 @@ const authService = {
    * @param id get the user id 
    * @param hash password 
    */
-  // Function to update the password of an authentication user
 
   authUpdateOne: async function (id, hash) {
     const user = Auth.updateOne(
@@ -116,6 +115,10 @@ const authService = {
       return errorMsg(msg, 204);
     }
   },
+  /**
+   * @description is used for reset the password if the user has forget the password 
+   * @param userData grts the user details and fetch the email from the detail 
+   */
 
   resetPassword: async function (userData) {
     const user = await this.authFindOne(userData.email);
@@ -141,7 +144,10 @@ const authService = {
       return errorMsg(msg, 204);
     }
   },
-
+  /**
+   * 
+   * @description this function is used for change the exesting password of the user 
+   */
   changePassword: async function (userData) {
     try {
       const user = await this.authFindById(userData.id);

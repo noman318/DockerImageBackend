@@ -13,9 +13,9 @@ const contactValidationRules = () => {
 };
 /**
  *
- * @param {*} req  Express request object.
- * @param {*} res Express response object.
- * @param {*} next Express next middleware function.
+ * @param  req  Express request object.
+ * @param  res Express response object.
+ * @param  next Express next middleware function.
  * @returns Returns the next middleware function if the data is valid, otherwise returns an error response.
  */
 const contactValidate = (req, res, next) => {

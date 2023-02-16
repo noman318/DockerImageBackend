@@ -3,7 +3,7 @@ const { authService } = require("./authService");
 const { errorMsg } = require("../utils/error");
 const { successMsg } = require("../utils/success");
 /**
- * in signup the details of the user are been saved
+ *@description in signup the details of the user are been saved
  * getAllUser it gives all the details of the user
  * the admin can deactivate the user
  * getUserBName the user can be searched by its name
@@ -17,8 +17,8 @@ const userService = {
     return false;
   },
   /**
-   * Create a new user.
-   * @param {*} data - The data for the new user to be created.
+   * @description Create a new user.
+   * @param  data - The data for the new user to be created.
    * @returns - The newly created user data or false if creation fails.
    */
   userCreate: async function (data) {
@@ -26,11 +26,21 @@ const userService = {
     if (userData) return userData;
     return false;
   },
+  /**
+   * @description find a user by email and delete 
+   * @param email get email from the user details 
+   * @returns 
+   */
   userfindOneAndDelete: async function (email) {
     const userData = User.findOneAndDelete(email);
     if (userData) return userData;
     return false;
   },
+  /**
+   * @description register a new user 
+   * @param data object of the users and compare the entered email with existing emails 
+   * @returns if email exist then throw error message 
+   */
   signUp: async function (data) {
     const userData = await authService.authFindOne(data.email);
     if (userData) {
@@ -51,7 +61,9 @@ const userService = {
       return errorMsg(err.message);
     }
   },
-
+  /**
+   * @description fetch all the user details 
+   */
   getAllUser: async function (query) {
     try {
       const userData = await User.find({}).sort({ isActive: 1 });
@@ -63,7 +75,10 @@ const userService = {
       return { err: 1, message: "Something Went wrong" };
     }
   },
-
+  /**
+   * @description get user detail by user id 
+   * @param id find user by id 
+   */
   getUserById: async function (id) {
     try {
       const userData = await User.findById(id);
@@ -76,7 +91,10 @@ const userService = {
       return { err: 1, message: "Something Went wrong" };
     }
   },
-
+  /**
+   * @description the admin can activate 
+   * @param id get user by id 
+   */
   deactivateUser: async function (id) {
     try {
       const userData = await User.findById(id).updateOne({

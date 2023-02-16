@@ -1,10 +1,9 @@
 const sendNotificationToClient = require("./pushNotify");
 /**
  * @description Sends a push notification to a client using the provided title, message, and token.
- * @param {string} title The title of the push notification.
- * @param {string} message The body of the push notification.
- * @param {string} token The unique token identifying the client to receive the push notification.
- * @returns {Promise<void>}
+ * @param  title The title of the push notification.
+ * @param  message The body of the push notification.
+ * @param  token The unique token identifying the client to receive the push notification.
  */
 const addPushNotify = async (title, message, token) => {
   try {

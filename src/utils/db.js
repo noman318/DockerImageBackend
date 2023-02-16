@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 /**
- * this is the connection to mongodb atlas
+ * @description this is the connection to mongodb atlas
  */
 const connectDB = async () => {
   try {

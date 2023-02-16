@@ -25,7 +25,7 @@ async function signUp(req, res) {
 }
 /**
  * @resetPassword this function request object and passes its body to "authService" function if the function returens The data it respond with JSON object or throw an error
- * @param {*} req user data
+ * @param req user data
  */
 async function resetPassword(req, res) {
   let userData = await authService.resetPassword(req.body);
@@ -37,7 +37,7 @@ async function resetPassword(req, res) {
 }
 /**
  * @changePassword this function request object and passes its body to "authService" function if the function returens The data it respond with JSON object or throw an error
- * @param {*} req user data
+ * @param  req user data
  */
 async function changePassword(req, res) {
   console.log(req.body)

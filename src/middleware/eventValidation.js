@@ -1,7 +1,7 @@
 const { body, validationResult, param } = require("express-validator");
 /**
- * Returns an array of validation rules for event creation
- *@returns {Array} Array of validation rules
+ * @description Returns an array of validation rules for event creation
+ *@returns Array of validation rules
  */
 const eventValidation = () => {
   return [
@@ -46,9 +46,9 @@ const getAll = () => {
 };
 /**
  *
- * @param {*} req The request object.
- * @param {*} res The response object.
- * @param {*} next  The next middleware function.
+ * @param  req The request object.
+ * @param  res The response object.
+ * @param  next  The next middleware function.
  * @returns  If there are no validation errors, call the next middleware function, otherwise return an error response.
  */
 const validate = (req, res, next) => {

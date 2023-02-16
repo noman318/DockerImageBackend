@@ -1,9 +1,9 @@
 const eventModel = require("../model/EventModel");
 const firebasePushNotificationModel = require("../model/FirebasePushNotificationModel");
 /**
- * crud operation for all the events
- * filter for ongoing event , past event , upcomming event
- * using firbase token for updating token
+ * @description crud operation for all the events
+ * @description filter for ongoing event , past event , upcomming event
+ * @description using firbase token for updating token
  */
 var fs = require("fs");
 let currentDate = new Date();

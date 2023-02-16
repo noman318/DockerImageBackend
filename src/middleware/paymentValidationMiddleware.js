@@ -13,10 +13,10 @@ const paymentReqBody = () => {
 };
 /**
  *
- * @param {*} req The request object
- * @param {*} res The response object
- * @param {*} next The next function
- * @returns {object} - The error response if validation fails
+ * @param  req The request object
+ * @param  res The response object
+ * @param  next The next function
+ * @returns- The error response if validation fails
  */
 const validate = (req, res, next) => {
   const errors = validationResult(req);

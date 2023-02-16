@@ -4,11 +4,11 @@ const jwt = require("jsonwebtoken");
 const { authService } = require("./authService");
 const Auth = require("../model/Auth");
 /**
- *  Verify the Google token credentials
- *  Get user profile from the verification response
- *  If the user doesn't exist, create a new user
- *  Create a new auth for the user
- *  Return the user data and access token
+ *  @description Verify the Google token credentials
+ *  @description Get user profile from the verification response
+ *  @description If the user doesn't exist, create a new user
+ *  @description Create a new auth for the user
+ *  @description Return the user data and access token
  */
 const googleAuth = {
     googleAuthService: async function (credentials) {

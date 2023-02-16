@@ -4,7 +4,7 @@ const UserModel = require("../model/User");
 const Auth = require("../model/Auth");
 const User = require("../model/User");
 /**
- * log the user id
+ * @description log the user id
  * if no user data found
  * return user data
  * if there is any error while finding user data
@@ -25,9 +25,9 @@ const userProfileService = {
   },
   /**
    * Update a user's profile by ID.
-   * @param {string} id - The ID of the user to update.
-   * @param {Object} requestbody - The updated user information.
-   * @returns {Object} - An object containing information about the updated profile.
+   * @param  id - The ID of the user to update.
+   * @param  requestbody - The updated user information.
+   * @returns - An object containing information about the updated profile.
    */
   updateById: async function (id, requestbody) {
     try {
