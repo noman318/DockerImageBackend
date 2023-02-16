@@ -45,67 +45,95 @@ const userService = {
     }
   },
 
-  getAllUser:async function(query){
+  getAllUser: async function (query) {
     try {
-        const userData = await User.find({}).sort({isActive:1})
-        if(userData){
-            return {err:0,length:userData.length,data:userData}
-        }
-        return {err:1,message:"Something Went wrong"}
-        
-    } catch (error) {
-        return {err:1,message:"Something Went wrong"}
-    }
-  },
-
-  getUserById:async function(id){
-    try{
-
-      const userData = await User.findById(id)
-
-      if(userData){
-        return {err:0,data:userData}
+      const userData = await User.find({}).sort({ isActive: 1 });
+      if (userData) {
+        return { err: 0, length: userData.length, data: userData };
       }
-      return {err:1,message:"Something Went wrong"}
-
-    }catch(e){
-      return {err:1,message:"Something Went wrong"}
-    }
-  },
-
-  deactivateUser:async function(id){
-    try {
-      const userData = await User.findById(id).updateOne({$set:{isActive:0}})
-      return {err:0,data:userData}
-      
+      return { err: 1, message: "Something Went wrong" };
     } catch (error) {
-      return {err:1,message:"Something Went wrong"}
+      return { err: 1, message: "Something Went wrong" };
     }
   },
 
-  getUserByName:async function(query){
-    try{
+  getUserById: async function (id) {
+    try {
+      const userData = await User.findById(id);
 
+      if (userData) {
+        return { err: 0, data: userData };
+      }
+      return { err: 1, message: "Something Went wrong" };
+    } catch (e) {
+      return { err: 1, message: "Something Went wrong" };
+    }
+  },
+
+  updateRole: async function (data) {
+    try {
+      const userData = await this.getUserById(data.id);
+      if (userData) {
+        await User.updateOne(
+          { _id: data.id },
+          { $set: { role: data.role, isActive: data.isActive } },
+          { new: true }
+        );
+        return { err: 0, message: "Updated" };
+      }
+      return { err: 1, message: "id does not exist" };
+    } catch (error) {
+      return { err: 1, message: "Something Went wrong" };
+    }
+  },
+
+  deactivateUser: async function (data) {
+    try {
+      const userData = await User.findById(data.id).updateOne({
+        $set: { isActive: data.isActive },
+      });
+      return { err: 0, data: userData };
+    } catch (error) {
+      return { err: 1, message: "Something Went wrong" };
+    }
+  },
+
+  getUserByName: async function (data) {
+    const perPage = 10;
+
+    try {
       const userData = await User.find({
-        "$expr": {
-          "$regexMatch": {
-            "input": { "$concat": ["$firstName", " ", "$lastName"] },
-            "regex": query,
-            "options": "i"
-          }
-        }
+        $expr: {
+          $regexMatch: {
+            input: { $concat: ["$firstName", " ", "$lastName"] },
+            regex: data.name,
+            options: "i",
+          },
+        },
+      });
+
+      var pageNumber = data.page == 0 ? 1 : data.page;
+      var startFrom = (pageNumber - 1) * perPage;
+      let dataEvent = await User.find({
+        $expr: {
+          $regexMatch: {
+            input: { $concat: ["$firstName", " ", "$lastName"] },
+            regex: data.name,
+            options: "i",
+          },
+        },
       })
+        .skip(Number(startFrom))
+        .limit(Number(perPage));
 
-      if(userData){
-        return {err:0,length:userData.length,data:userData}
+      if (userData) {
+        return { err: 0, pages: userData.length, data: dataEvent };
+      }
+      return { err: 1, message: "Something Went wrong" };
+    } catch (e) {
+      return { err: 1, message: "Something Went wrong" };
     }
-    return {err:1,message:"Something Went wrong"}
-
-    }catch(e){
-      return {err:1,message:"Something Went wrong"}
-    }
-  }
-
+  },
 };
 
 module.exports = { userService };

@@ -20,7 +20,7 @@ const authService = {
 
   authFindOne: async function (email) {
     let user = Auth.findOne({ email });
-    if (user) return user; 
+    if (user) return user;
     return false;
   },
 
@@ -58,32 +58,39 @@ const authService = {
 
   signIn: async function (userData) {
     const user = await this.authFindOne(userData.email);
+    const userInfo = await this.authPopulate(userData.email);
+
     if (user) {
-      const validPassword = await passWord.decruptPassword(
-        userData.password,
-        user.password
-      );
-      if (!validPassword) {
-        const msg = "Invalid Credentials!";
-        return errorMsg(msg, 401);
-      } else {
-        try {
-          const user = await this.authPopulate(userData.email);
-          const token = await authToken.jwtToken(user);
-          await this.authFindOneUpdate(userData.email, token);
-          console.log(user);
-          
-          const data = {
-            _id:user._id,
-            email: user.email,
-            isAuthenticated: true,
-            isAdmin:user.role==="admin",
-            token: token,
-          };
-          return successMsg("successful", data);
-        } catch (err) {
-          return errorMsg(err.message);
+      if (userInfo.userId.isActive == 1) {
+        const validPassword = await passWord.decruptPassword(
+          userData.password,
+          user.password
+        );
+        if (!validPassword) {
+          const msg = "Invalid Credentials!";
+          return errorMsg(msg, 401);
+        } else {
+          try {
+            const user = await this.authPopulate(userData.email);
+            const token = await authToken.jwtToken(user);
+            await this.authFindOneUpdate(userData.email, token);
+
+            const data = {
+              _id: user._id,
+              email: user.email,
+              isAuthenticated: true,
+              isAdmin: user.role === "admin",
+              token: token,
+            };
+
+            return successMsg("Login successful", data);
+          } catch (err) {
+            return errorMsg(err.message);
+          }
         }
+      } else {
+        const msg = "Access denied";
+        return errorMsg(msg, 204);
       }
     } else {
       const msg = "This email has not been registered!";
@@ -92,7 +99,6 @@ const authService = {
   },
 
   resetPassword: async function (userData) {
-    
     const user = await this.authFindOne(userData.email);
     if (user) {
       try {
@@ -102,7 +108,7 @@ const authService = {
           resetToken,
           "Reset Password Link",
           "resetMail",
-           user._id
+          user._id
         );
         if (m1) {
           const msg = "mail sent";
@@ -120,14 +126,14 @@ const authService = {
   changePassword: async function (userData) {
     try {
       const user = await this.authFindById(userData.id);
-      console.log(userData.token)
+      console.log(userData.token);
       console.log(userData.id);
       if (user) {
         const validPassword = await passWord.decruptPassword(
           userData.oldPassword,
           user.password
         );
-        if (!validPassword&&!token) {
+        if (!validPassword && !token) {
           const msg = "Invalid Credentials!";
           return errorMsg(msg, 203);
         } else {
