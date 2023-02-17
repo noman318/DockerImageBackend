@@ -25,7 +25,7 @@ const authService = {
    * @returns - A promise that resolves to the user object if found, false otherwise.
    */
   authFindOne: async function (email) {
-    let user = Auth.findOne({ email });
+    let user = await Auth.findOne({ email });
     if (user) return user;
     return false;
   },
@@ -33,18 +33,18 @@ const authService = {
    * @description  Function to populate an authentication user by email
    * @param email The email address of the user to find.
    */
-  authPopulate: async function (email) {
-    const user = Auth.findOne({ email }).populate("userId");
+  authDataWithUserData: async function (email) {
+    const user = await Auth.findOne({ email }).populate("userId");
     if (user) return user;
     return false;
   },
   /**
    * @description Function to find an authentication user by email and update the token
-   * @param  email fint the user by email 
-   * @param  token idf the user found then update the tocken 
+   * @param  email fint the user by email
+   * @param  token idf the user found then update the tocken
    */
   authFindOneUpdate: async function (email, token) {
-    const user = Auth.findOneAndUpdate(
+    const user = await Auth.findOneAndUpdate(
       { email },
       { $set: { token } },
       { new: true }
@@ -57,18 +57,18 @@ const authService = {
    * @param {*} id  authentication user by ID
    */
   authFindById: async function (id) {
-    const user = Auth.findById(id);
+    const user = await Auth.findById(id);
     if (user) return user;
     return false;
   },
   /**
    * @description Function to update the password of an authentication user
-   * @param id get the user id 
-   * @param hash password 
+   * @param id get the user id
+   * @param hash password
    */
 
   authUpdateOne: async function (id, hash) {
-    const user = Auth.updateOne(
+    const user = await Auth.updateOne(
       { _id: id },
       { $set: { password: hash } },
       { new: true }
@@ -82,33 +82,38 @@ const authService = {
    */
 
   signIn: async function (userData) {
-    const user = await this.authFindOne(userData.email);
-    if (user) {
-      const validPassword = await passWord.decruptPassword(
-        userData.password,
-        user.password
-      );
-      if (!validPassword) {
-        const msg = "Invalid Credentials!";
-        return errorMsg(msg, 401);
-      } else {
-        try {
-          const user = await this.authPopulate(userData.email);
-          const token = await authToken.jwtToken(user);
-          await this.authFindOneUpdate(userData.email, token);
-          console.log(user);
+    const userInfo = await this.authDataWithUserData(userData.email);
 
-          const data = {
-            _id: user._id,
-            email: user.email,
-            isAuthenticated: true,
-            isAdmin: user.role === "admin",
-            token: token,
-          };
-          return successMsg("successful", data);
-        } catch (err) {
-          return errorMsg(err.message);
+    if (userInfo) {
+      if (userInfo.userId.isActive == 1) {
+        const validPassword = await passWord.decruptPassword(
+          userData.password,
+          userInfo.password
+        );
+        if (!validPassword) {
+          const msg = "Invalid Credentials!";
+          return errorMsg(msg, 401);
+        } else {
+          try {
+            const token = await authToken.jwtToken(userInfo);
+            await this.authFindOneUpdate(userData.email, token);
+
+            const data = {
+              _id: userInfo._id,
+              email: userInfo.email,
+              isAuthenticated: true,
+              isAdmin: userInfo.role === "admin",
+              token: token,
+            };
+
+            return successMsg("Login successful", data);
+          } catch (err) {
+            return errorMsg(err.message);
+          }
         }
+      } else {
+        const msg = "Access denied";
+        return errorMsg(msg, 401);
       }
     } else {
       const msg = "This email has not been registered!";
@@ -116,8 +121,8 @@ const authService = {
     }
   },
   /**
-   * @description is used for reset the password if the user has forget the password 
-   * @param userData grts the user details and fetch the email from the detail 
+   * @description is used for reset the password if the user has forget the password
+   * @param userData grts the user details and fetch the email from the detail
    */
 
   resetPassword: async function (userData) {
@@ -145,8 +150,8 @@ const authService = {
     }
   },
   /**
-   * 
-   * @description this function is used for change the exesting password of the user 
+   *
+   * @description this function is used for change the exesting password of the user
    */
   changePassword: async function (userData) {
     try {

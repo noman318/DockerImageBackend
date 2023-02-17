@@ -27,19 +27,20 @@ const userService = {
     return false;
   },
   /**
-   * @description find a user by email and delete 
-   * @param email get email from the user details 
-   * @returns 
+   * @description find a user by email and delete
+   *
+   * @param email get email from the user details
+   * @returns
    */
   userfindOneAndDelete: async function (email) {
-    const userData = User.findOneAndDelete(email);
+    const userData = await User.findOneAndDelete(email);
     if (userData) return userData;
     return false;
   },
   /**
-   * @description register a new user 
-   * @param data object of the users and compare the entered email with existing emails 
-   * @returns if email exist then throw error message 
+   * @description register a new user
+   * @param data object of the users and compare the entered email with existing emails
+   * @returns if email exist then throw error message
    */
   signUp: async function (data) {
     const userData = await authService.authFindOne(data.email);
@@ -62,7 +63,7 @@ const userService = {
     }
   },
   /**
-   * @description fetch all the user details 
+   * @description fetch all the user details
    */
   getAllUser: async function (query) {
     try {
@@ -75,10 +76,12 @@ const userService = {
       return { err: 1, message: "Something Went wrong" };
     }
   },
+
   /**
-   * @description get user detail by user id 
-   * @param id find user by id 
+   * @description get user detail by user id
+   * @param id find user by id
    */
+
   getUserById: async function (id) {
     try {
       const userData = await User.findById(id);
@@ -91,14 +94,33 @@ const userService = {
       return { err: 1, message: "Something Went wrong" };
     }
   },
-  /**
-   * @description the admin can activate 
-   * @param id get user by id 
-   */
-  deactivateUser: async function (id) {
+
+  updateRole: async function (data) {
     try {
-      const userData = await User.findById(id).updateOne({
-        $set: { isActive: 0 },
+      const userData = await this.getUserById(data.id);
+      if (userData) {
+        await User.updateOne(
+          { _id: data.id },
+          { $set: { role: data.role, isActive: data.isActive } },
+          { new: true }
+        );
+        return { err: 0, message: "Updated" };
+      }
+      return { err: 1, message: "id does not exist" };
+    } catch (error) {
+      return { err: 1, message: "Something Went wrong" };
+    }
+  },
+
+  /**
+   * @description the admin can activate
+   * @param id get user by id
+   */
+
+  deactivateUser: async function (data) {
+    try {
+      const userData = await User.findById(data.id).updateOne({
+        $set: { isActive: data.isActive },
       });
       return { err: 0, data: userData };
     } catch (error) {
@@ -106,20 +128,36 @@ const userService = {
     }
   },
 
-  getUserByName: async function (query) {
+  getUserByName: async function (data) {
+    const perPage = 10;
+
     try {
       const userData = await User.find({
         $expr: {
           $regexMatch: {
             input: { $concat: ["$firstName", " ", "$lastName"] },
-            regex: query,
+            regex: data.name,
             options: "i",
           },
         },
       });
 
+      var pageNumber = data.page == 0 ? 1 : data.page;
+      var startFrom = (pageNumber - 1) * perPage;
+      let dataEvent = await User.find({
+        $expr: {
+          $regexMatch: {
+            input: { $concat: ["$firstName", " ", "$lastName"] },
+            regex: data.name,
+            options: "i",
+          },
+        },
+      })
+        .skip(Number(startFrom))
+        .limit(Number(perPage));
+
       if (userData) {
-        return { err: 0, length: userData.length, data: userData };
+        return { err: 0, pages: userData.length, data: dataEvent };
       }
       return { err: 1, message: "Something Went wrong" };
     } catch (e) {
