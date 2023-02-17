@@ -21,7 +21,7 @@ const updateRoleRules = () => {
   return [
     body("id").exists().withMessage("Id is missing"),
     body("role").exists().withMessage("Role is missing"),
-    body("IsActive").exists().withMessage("IsActive is missing"),
+    body("isActive").exists().withMessage("IsActive is missing"),
   ];
 };
 
