@@ -5,25 +5,25 @@ const axios = require("axios");
  * @param token: a string that represents the user's device token to which the notification should be sent.
  */
 const notifier = async (title, message, token) => {
-    try {
-        if (token) {
-            console.log("--token--", token);
-            await axios
-                .post("http://localhost:7899/event/notification", {
-                    title: title,
-                    message: message,
-                    token: token,
-                })
-                .then((res) => {
-                    console.log("");
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-        }
-    } catch (e) {
-        console.log(e);
+  try {
+    if (token) {
+      console.log("--token--", token);
+      await axios
+        .post("http://localhost:7899/event/notification", {
+          title: title,
+          message: message,
+          token: token,
+        })
+        .then((res) => {
+          console.log("");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 module.exports = notifier;

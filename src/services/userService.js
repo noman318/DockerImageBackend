@@ -28,11 +28,12 @@ const userService = {
   },
   /**
    * @description find a user by email and delete
+   *
    * @param email get email from the user details
    * @returns
    */
   userfindOneAndDelete: async function (email) {
-    const userData = User.findOneAndDelete(email);
+    const userData = await User.findOneAndDelete(email);
     if (userData) return userData;
     return false;
   },

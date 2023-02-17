@@ -25,7 +25,7 @@ const authService = {
    * @returns - A promise that resolves to the user object if found, false otherwise.
    */
   authFindOne: async function (email) {
-    let user = Auth.findOne({ email });
+    let user = await Auth.findOne({ email });
     if (user) return user;
     return false;
   },
@@ -33,8 +33,8 @@ const authService = {
    * @description  Function to populate an authentication user by email
    * @param email The email address of the user to find.
    */
-  authPopulate: async function (email) {
-    const user = Auth.findOne({ email }).populate("userId");
+  authDataWithUserData: async function (email) {
+    const user = await Auth.findOne({ email }).populate("userId");
     if (user) return user;
     return false;
   },
@@ -44,7 +44,7 @@ const authService = {
    * @param  token idf the user found then update the tocken
    */
   authFindOneUpdate: async function (email, token) {
-    const user = Auth.findOneAndUpdate(
+    const user = await Auth.findOneAndUpdate(
       { email },
       { $set: { token } },
       { new: true }
@@ -57,7 +57,7 @@ const authService = {
    * @param {*} id  authentication user by ID
    */
   authFindById: async function (id) {
-    const user = Auth.findById(id);
+    const user = await Auth.findById(id);
     if (user) return user;
     return false;
   },
@@ -68,7 +68,7 @@ const authService = {
    */
 
   authUpdateOne: async function (id, hash) {
-    const user = Auth.updateOne(
+    const user = await Auth.updateOne(
       { _id: id },
       { $set: { password: hash } },
       { new: true }
@@ -82,29 +82,27 @@ const authService = {
    */
 
   signIn: async function (userData) {
-    const user = await this.authFindOne(userData.email);
-    const userInfo = await this.authPopulate(userData.email);
+    const userInfo = await this.authDataWithUserData(userData.email);
 
-    if (user) {
+    if (userInfo) {
       if (userInfo.userId.isActive == 1) {
         const validPassword = await passWord.decruptPassword(
           userData.password,
-          user.password
+          userInfo.password
         );
         if (!validPassword) {
           const msg = "Invalid Credentials!";
           return errorMsg(msg, 401);
         } else {
           try {
-            const user = await this.authPopulate(userData.email);
-            const token = await authToken.jwtToken(user);
+            const token = await authToken.jwtToken(userInfo);
             await this.authFindOneUpdate(userData.email, token);
 
             const data = {
-              _id: user._id,
-              email: user.email,
+              _id: userInfo._id,
+              email: userInfo.email,
               isAuthenticated: true,
-              isAdmin: user.role === "admin",
+              isAdmin: userInfo.role === "admin",
               token: token,
             };
 

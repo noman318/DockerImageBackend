@@ -9,7 +9,7 @@ const getAllUserData = async (req, res) => {
     const data = await userService.getAllUser();
     return res.status(200).json(data);
   } catch (e) {
-    console.log(e);
+    res.status(200).json({ messages: e });
   }
 };
 
@@ -25,7 +25,7 @@ const deactivateUser = async (req, res) => {
     const data = await userService.deactivateUser(req.body);
     return res.status(200).json(data);
   } catch (e) {
-    console.log(e);
+    res.status(200).json({ messages: e });
   }
 };
 
@@ -34,7 +34,7 @@ const updateRole = async (req, res) => {
     const data = await userService.updateRole(req.body);
     return res.status(200).json(data);
   } catch (e) {
-    console.log(e);
+    res.status(200).json({ messages: e });
   }
 };
 
@@ -49,7 +49,7 @@ const getUserByName = async (req, res) => {
     const data = await userService.getUserByName(req.body);
     return res.status(200).json(data);
   } catch (e) {
-    console.log(e);
+    res.status(200).json({ messages: e });
   }
 };
 
