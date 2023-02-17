@@ -113,7 +113,7 @@ const authService = {
         }
       } else {
         const msg = "Access denied";
-        return errorMsg(msg, 204);
+        return errorMsg(msg, 401);
       }
     } else {
       const msg = "This email has not been registered!";

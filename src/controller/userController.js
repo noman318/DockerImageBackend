@@ -7,9 +7,12 @@ const { userService } = require("../services/userService");
 const getAllUserData = async (req, res) => {
   try {
     const data = await userService.getAllUser();
+    if (data.length == 0) {
+      return res.status(204).json(data);
+    }
     return res.status(200).json(data);
   } catch (e) {
-    res.status(200).json({ messages: e });
+    res.status(500).json({ messages: e });
   }
 };
 
@@ -23,18 +26,24 @@ const deactivateUser = async (req, res) => {
   try {
     const { id, isActive } = req.body;
     const data = await userService.deactivateUser(req.body);
+    if (data.length == 0) {
+      return res.status(204).json(data);
+    }
     return res.status(200).json(data);
   } catch (e) {
-    res.status(200).json({ messages: e });
+    res.status(500).json({ messages: e });
   }
 };
 
 const updateRole = async (req, res) => {
   try {
     const data = await userService.updateRole(req.body);
+    if (data.length == 0) {
+      return res.status(204).json(data);
+    }
     return res.status(200).json(data);
   } catch (e) {
-    res.status(200).json({ messages: e });
+    res.status(500).json({ messages: e });
   }
 };
 
@@ -47,9 +56,12 @@ const updateRole = async (req, res) => {
 const getUserByName = async (req, res) => {
   try {
     const data = await userService.getUserByName(req.body);
+    if (data.length == 0) {
+      return res.status(204).json(data);
+    }
     return res.status(200).json(data);
   } catch (e) {
-    res.status(200).json({ messages: e });
+    res.status(500).json({ messages: e });
   }
 };
 
