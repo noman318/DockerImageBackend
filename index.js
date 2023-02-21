@@ -17,7 +17,7 @@ const googleAuthRoute = require("./src/routes/googleAuthRouter");
 const userDataRoute = require("./src/routes/userRouter");
 const bodyParser = require("body-parser");
 
-const PORT = process.env.PORT;
+// const PORT = process.env.PORT;
 //  console.log(tokenman)
 mongoose.set("strictQuery", true);
 
@@ -44,7 +44,7 @@ app.use("/contactus", ContactUs);
 app.use("/admin", userDataRoute);
 
 // app.use("*",)
-app.listen(PORT, (err) => {
+app.listen(5000, (err) => {
   if (err) throw err;
-  else console.log(`Server is run on ${PORT}`);
+  else console.log(`Server is run on 5000`);
 });
